@@ -5,7 +5,7 @@
 
 .nav-bar{
     width: 20%;
-    border: 2px solid red;
+    margin-right: 50px;
 }
 
 .Profile_img{
@@ -83,14 +83,13 @@
 }
 
 .content{
-    width: 80%;
-    border: 2px solid red;
+    width: 100%;
 }
 
 .right-container{
     background-color: black;
-    width: 950px;
-    height: 600px;
+    width: 1100px;
+    height: 800px;
     margin: 60px auto;
     border-radius: 15px;
 }
@@ -144,3 +143,142 @@
     margin-top: 18px;
     margin-bottom: auto;
 }
+
+
+/* Temporary Approval Design*/
+.Inner-container
+{
+    width: 1000px;
+    height: 800px;  
+    margin: 0 auto;
+}
+
+.Top-container-Approval {
+    height: 15%;
+    display: flex;
+    align-items: flex-end; 
+    padding: 10px; 
+    justify-content: space-between;
+}
+
+.Top-container-Approval p {
+    font-size: 50px;
+    color: white;
+    margin: 0; 
+    font-family: "Rubik", sans-serif;
+    font-weight: 600;
+}
+.bottom-line {
+    width: 100%;
+    border: none; 
+    border-top: 2px solid rgb(255, 255, 255, 1); 
+    margin-top: 0;
+}
+.Bottom-container-Approval
+{
+    height: 85%;
+}
+.Left-Top
+{
+    flex: 0 1 auto;
+}
+.Right-Top
+{
+    flex: 0 1 auto;
+}
+
+.table-approval {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 5px; 
+}
+
+.table-approval thead {
+    background-color: transparent; 
+}
+
+.table-approval thead th {
+    padding: 10px;
+    color: white;
+    font-size: 16px;
+    font-family: "Rubik", sans-serif;
+    width: 14.2857%; 
+}
+
+.table-approval td {
+    padding: 10px;
+    color: white;
+    font-size: 16px;
+    font-family: "Rubik", sans-serif;
+    width: 14.2857%; 
+}
+
+.table-approval tbody tr:nth-child(even) {
+    background-color: #1b1b1b; 
+}
+
+.table-approval tbody tr:nth-child(odd) {
+    background-color: #28282A; 
+}
+
+.button-container {
+    display: flex; 
+    justify-content: space-between; 
+}
+
+.button-container button {
+    flex: 1; 
+    background-color: #444; 
+    color: white; 
+    border: none; 
+    cursor: pointer; 
+}
+
+.button-container button:hover {
+    background-color: #666; 
+}
+
+/* Temporary POP-UP Display */
+.popup {
+    display: none; 
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+.popup-content {
+    background-color: #282828;
+    margin: auto; /* Center the popup */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Adjust the width as needed */
+    max-width: 600px; /* Optional: Max width for larger screens */
+    color: white;
+    position: relative; /* Position relative for absolute children */
+    top: 50%; /* Move it down 50% of the viewport */
+    transform: translateY(-50%); /* Adjust back by 50% of its height */
+    border-radius: 20px;
+    text-align: center;
+}
+
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #ccc;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* Temporary Approval Design*/  
