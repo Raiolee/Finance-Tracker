@@ -35,24 +35,26 @@ if (isset($_SESSION["user"])) {
             $password = $_POST["password"];
             require_once "connection/config.php";
 
-            if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($password)) {
-                $sql = "SELECT * FROM user_registration_data WHERE email = ?";
-                $stmt = mysqli_prepare($conn, $sql);
-                mysqli_stmt_bind_param($stmt, "s", $email);
-                mysqli_stmt_execute($stmt);
-                $result = mysqli_stmt_get_result($stmt);
-                $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
+            $conn = getDatabaseConnection(); // Use the function to connect to the database
 
-                if ($user && password_verify($password, $user["Password"])) {
-                    $_SESSION["user"] = "yes";
-                    header("Location: User Interface/Dashboard.php");
-                    $_SESSION["name"] = $user["First_Name"] . ' ' . $user["Last_Name"];
-                    exit();
-                } else {
-                    echo "<div class='alert alert-danger'>Invalid email or password.</div>";
-                }
+            if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($password)) {
+          $sql = "SELECT * FROM user_registration_data WHERE email = ?";
+          $stmt = mysqli_prepare($conn, $sql);
+          mysqli_stmt_bind_param($stmt, "s", $email);
+          mysqli_stmt_execute($stmt);
+          $result = mysqli_stmt_get_result($stmt);
+          $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
+
+          if ($user && password_verify($password, $user["Password"])) {
+              $_SESSION["user"] = "yes";
+              header("Location: User Interface/Dashboard.php");
+              $_SESSION["name"] = $user["First_Name"] . ' ' . $user["Last_Name"];
+              exit();
+          } else {
+              echo "<div class='alert alert-danger'>Invalid email or password.</div>";
+          }
             } else {
-                echo "<div class='alert alert-danger'>Invalid email or password.</div>";
+          echo "<div class='alert alert-danger'>Invalid email or password.</div>";
             }
         }
       ?>
