@@ -12,7 +12,7 @@ if (isset($_SESSION["user"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PennyWise</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Styles/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@ if (isset($_SESSION["user"])) {
 
 <body class="container">
     <div class="register-left-section">
-        <img src="logo/PENNY_WISE_Logo.png" alt="Penny Wise Logo" width="200" height="200" class="logo1">
+        <img src="Assets/logo/PENNY_WISE_Logo.png" alt="Penny Wise Logo" width="200" height="200" class="logo1">
     </div>
     <div class="register-right-section">
         <div class="register-container">
