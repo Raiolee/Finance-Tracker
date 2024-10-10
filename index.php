@@ -21,7 +21,7 @@ if (isset($_SESSION["user"])) {
 </head>
 <body class="container">
   <div class="left-section">
-    <img src="Assets/logo/PENNY_WISE_Logo.png" alt="Trulli" width="600" height="600" class="logo">
+    <img src="Assets/PENNY_WISE_Logo.png" alt="Trulli" width="600" height="600" class="logo">
   </div>
 
   <div class="right-section">

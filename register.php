@@ -20,7 +20,7 @@ if (isset($_SESSION["user"])) {
 
 <body class="container">
     <div class="register-left-section">
-        <img src="Assets/logo/PENNY_WISE_Logo.png" alt="Penny Wise Logo" width="200" height="200" class="logo1">
+        <img src="Assets/PENNY_WISE_Logo.png" alt="Penny Wise Logo" width="200" height="200" class="logo1">
     </div>
     <div class="register-right-section">
         <div class="register-container">

@@ -94,7 +94,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
         <div class="Logo-Nav" id="Nav_Side">
             <div class="Penny_Logo">
-                <img src="../Assets/logo/PENNY_WISE_Logo.png" alt="" width="200">
+                <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
             </div>
         </div>
 
