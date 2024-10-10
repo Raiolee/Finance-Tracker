@@ -2,9 +2,6 @@
 // Include the database configuration file
 require_once 'config.php';
 
-// Create a new PDO instance using the function from config.php
-$pdo = getDatabaseConnection();
-
 function addIncomeRecord($pdo) {
     try {
         // Check if the form was submitted

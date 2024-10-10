@@ -2,9 +2,6 @@
 // Include the database configuration file
 require_once 'config.php';
 
-// Create a database connection using the function from config.php
-$pdo = getDatabaseConnection();
-
 function addIncome($pdo) {
     // Check if the form is submitted
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
