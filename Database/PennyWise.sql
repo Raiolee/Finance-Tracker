@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS user_db;
 CREATE DATABASE user_db;
 USE user_db;
 
-CREATE TABLE User_Registration_Data 
+CREATE TABLE user_registration_data 
 (
     UID INT PRIMARY KEY AUTO_INCREMENT,
     First_Name VARCHAR(50),
