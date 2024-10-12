@@ -1,5 +1,3 @@
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'F!nanceTrack3r';
-
 DROP DATABASE IF EXISTS user_db;
 CREATE DATABASE user_db;
 USE user_db;
