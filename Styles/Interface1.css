@@ -1,6 +1,8 @@
 .container{
     background-color: #1b1b1b;
     display: flex;
+    height: 100vh;
+    width: auto;
 }
 
 .nav-bar{
@@ -88,8 +90,8 @@
 
 .right-container{
     background-color: black;
-    width: 1100px;
-    height: 800px;
+    width: 1000px;
+    height: 700px;
     margin: 60px auto;
     border-radius: 15px;
 }
@@ -280,3 +282,221 @@
 
 
 /* Temporary Approval Design*/  
+
+
+/* Travel Design */
+
+.travel-title{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+#travel-title{
+    margin-left: 70px;
+    margin-top: 50px;
+    margin-bottom: auto;
+    color: white;
+    padding: auto, 20px;
+    font-family: "Rubik", sans-serif;
+}
+
+.travel-con{
+    display: flex;
+    flex-direction: row;
+}
+
+.left, .right{
+    width: 50%;
+}
+
+.box{
+    display: flex;
+    flex-direction: row;
+    width: 155px;
+    margin: 45px 0 0 350px;
+}
+
+#logo-new-trip{
+    margin-top: 18px;
+    margin-right: 10px;
+    margin-bottom: auto;
+}
+
+#search{
+    margin-top: 18px;
+    margin-bottom: auto;
+    margin-right: 10px;
+}
+
+hr.new {
+    margin-top: 2px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #848484;
+    width: 870px;
+    margin-bottom: 30px;
+}
+
+hr.new1 {
+    margin-top: 2px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #848484;
+    width: 870px;
+}
+
+.table-travel {
+    width: 86%;
+    border-collapse: separate;
+    border-spacing: 0 5px;
+    border: 2px solid red;
+    margin: 0 70px;
+}
+
+.table-travel thead {
+    background-color: transparent; /* Make the header background transparent */
+}
+
+.table-travel thead th {
+    padding: 10px;
+    color: white;
+    font-size: 12px;
+    font-family: "Rubik", sans-serif;
+}
+
+label{
+    color: white;
+    font-size: 14px;
+}
+
+.con{
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.list{
+    margin: 0 70px;
+}
+
+.list-var{
+    font-size: 18px;
+}
+
+.duration{
+    display: flex;
+    flex-direction: row;
+}
+
+.name-input{
+    margin-left: 100px;
+    width: 700px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5b5b5c;
+}
+
+.mode-btn{
+    margin-left: 100px;
+    margin-right: 10px;
+}
+
+.mode-btn1{
+    margin-left: 30px;
+    margin-right: 10px;
+}
+
+.category-btn{
+    margin-left: 75px;
+    margin-right: 10px;
+}
+
+.category-btn1{
+    margin-left: 32px;
+    margin-right: 10px;
+}
+
+.category-btn2{
+    margin-left: 30px;
+    margin-right: 10px;
+}
+
+.duration-input{
+    margin-top: 5px;
+    margin-left: 82px;
+    width: 310px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5b5b5c;
+}
+
+.duration-input1{
+    margin-top: 5px;
+    width: 310px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5b5b5c;
+}
+
+.duration-input2{
+    margin-top: 5px;
+    margin-left: 162px;
+    width: 310px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5b5b5c;
+}
+
+.student-btn{
+    margin-left: 90px;
+    margin-right: 6px;
+}
+
+.student-btn1{
+    margin-left: 30px;
+    margin-right: 6px;
+}
+
+.from-input{
+    margin-left: 50px;
+    width: 687px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5b5b5c;
+}
+
+.destination-input{
+    margin-left: 60px;
+    width: 687px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5b5b5c;
+}
+
+.budget-input{
+    margin-left: 50px;
+    width: 687px;
+    border: none;
+    border-radius: 5px;
+    background-color: #5b5b5c;
+}
+
+.travel-submit-btn{
+    margin-top: -30px;
+    margin-left: 760px;
+    width: 90px;
+    background-color: #00dac6;
+    border: none;
+    border-radius: 25px;
+    height: 40px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+input{
+    color: white;
+    padding: 0 10px;
+    height: 30px;
+    font-weight: 600;
+}

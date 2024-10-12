@@ -1,9 +1,12 @@
 <?php
+// Disable all error reporting
+error_reporting(0);
 session_start();
 if(!isset($_SESSION["user"]))
 {
-    header("Location: ../Login.php");
+    header("Location: ../index.php");
 }
+$uid = $_SESSION["ID"];
 $username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
@@ -12,12 +15,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Styles/Interface1.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../Styles/Interface.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <title>Dashboard</title>
 </head>
 <body class="container">
@@ -97,7 +97,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
         <div class="Logo-Nav" id="Nav_Side">
             <div class="Penny_Logo">
-                <img src="../Assets/logo/PENNY_WISE_Logo.png" alt="" width="200">
+                <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
             </div>
         </div>
 
@@ -110,13 +110,40 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <h1 id="travel-title">New Trip</h1>
                 </div>        
             </div>
-            <hr class="new">
-            <div class="list">
 
+            <hr class="new">
+
+            <div class="list">
+                <form action="Travels-newtrip.php" method="POST">
+                    <label class="list-var">Name*</label>
+                    <input class="name-input" type="text" name="name"><br><br>
+
+                    <label class="list-var">Mode*</label>
+                    <input class="mode-btn" type="radio" name="public"><label class="list-var" for="">Public Vehicle</label> <input class="mode-btn1" type="radio" name="private"><label class="list-var" for="">Private Vehicle</label><br><br>
+                    
+                    <label class="list-var">Category*</label>
+                    <input class="category-btn" type="radio" name="bussiness-trip"><label class="list-var" for="">Bussiness Trip</label><input  class="category-btn1" type="radio" name="personal-trip"><label class="list-var" for="">Personal Trip</label> <input class="category-btn2" type="radio" name="others"><label class="list-var" for="">Others</label><br><br>
+            
+                    <label class="list-var">Duration*</label>
+                    <input class="duration-input" type="text" name="travelFrom"><img src="../Assets/Icons/right.svg" alt="" width="55px"> <input class="duration-input1" type="text" name="travelTo"><br>
+                    <input class="duration-input2" type="text" name="travelTo2"><img src="../Assets/Icons/left.svg" alt="" width="55px"> <input class="duration-input1" type="text" name="travelFrom2"><br>
+                    
+                    <label class="list-var">Student*</label>
+                    <input class="student-btn" type="radio" name="Yes"><label class="list-var" for="">Yes</label> <input class="student-btn1" type="radio" name="No"> <label class="list-var" for="">No</label><br><br>
+                    
+                    <label class="list-var">Depart From*</label>
+                    <input class="from-input" type="text" name="departFrom"><br><br><br>
+                    
+                    <label class="list-var">Destination*</label>
+                    <input class="destination-input" type="text" name="destination"><br><br><br>
+                    
+                    <label class="list-var">Budget Limit*</label>
+                    <input class="budget-input" type="text" name="budgetLimit"><br><br><br>
+                    
+                    <input class="travel-submit-btn" type="submit" name="submitForm" value="Add">
+                </form>
             </div>
         </div>
     </div>
-
-
 </body>
 </html>
