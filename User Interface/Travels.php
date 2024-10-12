@@ -1,9 +1,12 @@
 <?php
+// Disable all error reporting
+error_reporting(0);
 session_start();
 if(!isset($_SESSION["user"]))
 {
-    header("Location: ../Login.php");
+    header("Location: ../index.php");
 }
+$uid = $_SESSION["ID"];
 $username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
@@ -12,12 +15,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Styles/Interface1.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../Styles/Interface.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
     <title>Dashboard</title>
 </head>
 <body class="container">
@@ -111,22 +111,28 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </div>
                 <div class="right">
                     <div class="box">
-                        <div class="logo-new-trip">
+                        <div class=logo-new-trip">
                             <a href="Travels-newtrip.php"><img src="../Assets/Icons/pen.svg" alt="" width="20px" id="logo-new-trip"></a>
                         </div>
                         <div class="search">
-                            <img src="../Assets/icons/magnifying-glass.svg" alt="" width="20px" id="search">
+                            <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px" id="search">
                         </div>
                         <div class="filter">
-                            <img src="../Assets/icons/filter.svg" alt="" width="20px" id="search">
+                            <img src="../Assets/Icons/filter.svg" alt="" width="20px" id="search">
                         </div>
                     </div>
                 </div>
             </div>
             <hr class="new1">
+            <table class="table-travel">
+                <thead> 
+                    <th class="tab">DETAILS</th>
+                    <th class="tab">CATEGORY</th>
+                    <th class="tab">AMOUNT</th>
+                    <th class="tab">DATE</th>
+                </thead>
+            </table>
         </div>
     </div>
-
-
 </body>
 </html>
