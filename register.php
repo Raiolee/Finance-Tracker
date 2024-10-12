@@ -53,7 +53,7 @@ if (isset($_SESSION["user"])) {
                     require_once "connection/config.php";
 
                     // Check if email exists
-                    $stmt = $conn->prepare("SELECT COUNT(*) FROM user_registration_data WHERE email = ?");
+                    $stmt = $conn->prepare("SELECT COUNT(*) FROM user WHERE email = ?");
                     $stmt->bind_param("s", $email);
                     $stmt->execute();
                     $stmt->bind_result($rowCount);
@@ -70,7 +70,7 @@ if (isset($_SESSION["user"])) {
                             $alertMessage .= "<div class='alert alert-danger'>$error</div>";
                         }
                     } else {
-                        $stmt = $conn->prepare("INSERT INTO user_registration_data (First_Name, Last_Name, Email, Password) VALUES (?, ?, ?, ?)");
+                        $stmt = $conn->prepare("INSERT INTO user (First_Name, Last_Name, Email, Password) VALUES (?, ?, ?, ?)");
                         if ($stmt) {
                             $stmt->bind_param("ssss", $fname, $lname, $email, $passwordHash);
                             $stmt->execute();

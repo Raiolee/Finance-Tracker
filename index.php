@@ -35,10 +35,8 @@ if (isset($_SESSION["user"])) {
             $password = $_POST["password"];
             require_once "connection/config.php";
 
-            $conn = getDatabaseConnection(); // Use the function to connect to the database
-
             if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($password)) {
-          $sql = "SELECT * FROM user_registration_data WHERE email = ?";
+          $sql = "SELECT * FROM user WHERE email = ?";
           $stmt = mysqli_prepare($conn, $sql);
           mysqli_stmt_bind_param($stmt, "s", $email);
           mysqli_stmt_execute($stmt);
