@@ -43,7 +43,7 @@ if (isset($_SESSION["user"])) {
           $result = mysqli_stmt_get_result($stmt);
           $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-          if ($user && password_verify($password, $user["Password"])) {
+          if ($user && password_verify($password, $user["password"])) {
               $_SESSION["user"] = "yes";
               header("Location: User Interface/Dashboard.php");
               $_SESSION["name"] = $user["First_Name"] . ' ' . $user["Last_Name"];
