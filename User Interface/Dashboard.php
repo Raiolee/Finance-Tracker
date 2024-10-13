@@ -15,6 +15,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <link rel="stylesheet" href="../Styles/Interface1.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
     <title>Dashboard</title>
 </head>
 <body class="container">
@@ -99,12 +100,24 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     </div>
 
-    <div class="content">
-        <div class="right-container">
-            <p><a href="../Logout.php">Logout</a></p>
-        </div>
-    </div>
-
-
+ <div class="content">
+     <div class="right-container">
+         <div class="main-content">
+             <!-- Pending Tasks Section -->
+             <div class="task-section">
+                 <h2>Pending Tasks</h2>
+                 <ul>
+                     <li><i class="fas fa-clock"></i> Pending Approvals <span><?php echo htmlspecialchars(isset($pending_approvals) ? $pending_approvals : 0); ?></span></li>
+                     <li><i class="fas fa-plane"></i> New Trips Registered <span><?php echo htmlspecialchars(isset($new_trips) ? $new_trips : 0); ?></span></li>
+                     <li><i class="fas fa-wallet"></i> Unreported Expenses <span><?php echo htmlspecialchars(isset($unreported_expenses) ? $unreported_expenses : 0); ?></span></li>
+                     <li><i class="fas fa-folder"></i> Upcoming Expenses <span><?php echo htmlspecialchars(isset($upcoming_expenses) ? $upcoming_expenses : 0); ?></span></li>
+                 </ul>
+             </div>
+         </div>
+ 
+         <p><a href="../Logout.php">Logout</a></p>
+     </div>
+ </div>
+ 
 </body>
 </html>
