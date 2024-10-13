@@ -1,8 +1,9 @@
-.container{
+.container {
     background-color: #1b1b1b;
     display: flex;
     height: 100vh;
     width: auto;
+    min-height: 100vh; /* Allows the container to expand if needed */
 }
 
 .nav-bar{
@@ -74,6 +75,14 @@
     filter: brightness(1); /* Dimmed default state */
 }
 
+#Nav_Button:hover p a {
+    color: #00dac6; /* Change color on hover */
+}
+
+#Nav_Button.active p a {
+    color: rgba(0, 218, 198, 1); /* Highlight active navigation link */
+}
+
 .Penny_Logo{
     display: flex; /* Use flexbox */
     align-items: center; /* Center items vertically */
@@ -86,29 +95,21 @@
 
 .content {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     height: 100vh; /* Makes sure the content fills the height of the viewport */
-}
-
-.main-content {
-    width: 100%; /* Ensures it takes up available space */
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Centers the task section */
-    flex-direction: column; /* Ensures the logout button stays below */
+    padding-top: 150px; /* Optional: Add some padding from the top */
 }
 
 .right-container {
     background-color: black;
-    width: 1000px;
-    height: 700px;
-    margin: 60px auto;
+    width: 1250px;
+    height: 750px;
+    margin: 20px auto; /* Adjusted to move it down from the top */
     border-radius: 15px;
     display: flex;
-    justify-content: center; /* Centers the content horizontally */
-    align-items: center;     /* Centers the content vertically */
-    padding: 20px;           /* Adds padding around the content */
+    justify-content: space-between; /* Separate sections */
+    padding: 20px;
     box-sizing: border-box;  /* Ensures padding is included in the total size */
 }
 
