@@ -88,12 +88,17 @@
     width: 100%;
 }
 
-.right-container{
+.right-container {
     background-color: black;
     width: 1000px;
     height: 700px;
     margin: 60px auto;
     border-radius: 15px;
+    display: flex;
+    justify-content: center; /* Centers the content horizontally */
+    align-items: center;     /* Centers the content vertically */
+    padding: 20px;           /* Adds padding around the content */
+    box-sizing: border-box;  /* Ensures padding is included in the total size */
 }
 
 .travel-title{
