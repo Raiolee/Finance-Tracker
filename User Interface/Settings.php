@@ -29,7 +29,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <p><?php echo htmlspecialchars($username); ?></p>
         </div>
 
-        <div class="Home-Nav <?php echo ($current_page == 'Dashboard.php') ? 'active' : ''; ?>" id="Nav_Button">
+                <!-- Section for Dashboard -->
+                <div class="Home-Nav <?php echo ($current_page == 'Dashboard.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/home.svg" alt="Icon" width="50px" id="icons">
             </div>
@@ -38,6 +39,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
         </div>
 
+        <!-- Section for Expenses -->
         <div class="Expenses-Nav <?php echo ($current_page == 'Expenses.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/expenses.svg" alt="Icon" width="50px">
@@ -47,15 +49,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
         </div>
 
-        <div class="Travels-Nav <?php echo ($current_page == 'Travels.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/travels.svg" alt="Icon" width="50px">
-            </div>
-            <div>
-                <p><a href="Travels.php">Travels</a></p>
-            </div>
-        </div>
-
+        <!-- Section for Income -->
         <div class="Travels-Nav <?php echo ($current_page == 'Income.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/income.svg" alt="Icon" width="50px">
@@ -65,22 +59,24 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
         </div>
 
+        <!-- Section for Travels -->
+        <div class="Travels-Nav <?php echo ($current_page == 'Travels.php') ? 'active' : ''; ?>" id="Nav_Button">
+            <div>
+                <img src="../Assets/Icons/travels.svg" alt="Icon" width="50px">
+            </div>
+            <div>
+                <p><a href="Travels.php">Savings</a></p>
+            </div>
+        </div>
+
+        <!-- Section for Goals -->
         <div class="Approvals-Nav <?php echo ($current_page == 'Approvals.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/approvals.svg" alt="Icon" width="50px">
             </div>
             <div>
-                <p><a href="Approvals.php">Approval</a></p>
+                <p><a href="Approvals.php">Goals</a></p>
             </div>            
-        </div>
-
-        <div class="Report-Nav <?php echo ($current_page == 'Report.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/reports.svg" alt="Icon" width="50px">
-            </div>
-            <div>
-                <p><a href="Report.php">Report</a></p>
-            </div>
         </div>
 
         <div class="Settings-Nav <?php echo ($current_page == 'Settings.php') ? 'active' : ''; ?>" id="Nav_Button">
@@ -92,6 +88,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
         </div>
 
+        <!-- Logo on the Dashboard -->
         <div class="Logo-Nav" id="Nav_Side">
             <div class="Penny_Logo">
                 <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
