@@ -102,10 +102,125 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <div class="content">
         <div class="right-container">
-            <p>Hello World</p>
+            <div class="Inner-container">
+                <div id="inner_container">
+                    <div class="Top-container-Approval">
+                        <div class="Left-Top">
+                            <p>Expenses</p>
+                        </div>
+                        <div class="Right-Top">
+                            <button id="newExpenseButton">New Expense</button>
+                        </div>
+                    </div>
+
+                    <hr class="bottom-line">
+
+                    <table class="table-approval">
+                        <thead>
+                            <tr>
+                                <th>DETAILS</th>
+                                <th>MERCHANT</th>
+                                <th>AMOUNT</th>
+                                <th>REPORT</th>
+                                <th>STATUS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>    
+                    </table>
+                </div>
+
+                <!-- New Expense Form -->
+                <div id="newExpenseForm" class="new-expense-form" style="display:none;">
+                    <h3>Add New Expense</h3>
+                    <div class="Expense-Outer">
+                    <div class="Expense-Form">
+                        <form id="expenseForm" onsubmit="return handleSubmit(event);">
+                            <div class="Expense-Form-row">
+                                <label for="subjectCategory" id="Expense-text">Subject</label>
+                                <input type="text" id="subjectCategory" name="subjectCategory" required>
+                            </div>
+                            <div class="Expense-Form-row">
+                                <label for="Merchant" id="Expense-text">Merchant</label>
+                                <input type="text" id="Merchant" name="Merchant" required>
+                            </div>
+                            <div class="Expense-Form-row">
+                                <label for="DateCategory" id="Expense-text">Date</label>
+                                <input type="date" id="DateCategory" name="DateCategory" required>
+                            </div>
+                            <div class="Expense-Form-row">
+                                <label for="Total" id="Expense-text">Total</label>
+                                    <div class="Total-Currency">
+                                    <input type="number" id="Total" name="Total" required>
+                                    <select id="Currency" name="Currency" required>
+                                        <option value="" disabled selected>Currency</option>
+                                        <option value="Type1">Type1</option>
+                                        <option value="Type2">Type2</option>
+                                        <option value="Type3">Type3</option>
+                                        <option value="Type4">Type4</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="Expense-Form-row">
+                                <input type="checkbox" id="reimburse" name="reimburse">
+                                <label for="reimburse" id="Expense-text">Reimbursable</label>
+                            </div>
+                            <div class="Expense-Form-row">
+                                <label for="ExpenseCategory" id="Expense-text">Type</label>
+                                <select id="ExpenseCategory" name="ExpenseCategory">
+                                    <option value="Type1">Type1</option>
+                                    <option value="Type2">Type2</option>
+                                    <option value="Type3">Type3</option>
+                                    <option value="Type4">Type4</option>
+                                </select>
+                            </div>
+                            <div class="Expense-Form-row">
+                                <label for="Description" id="Expense-text">Description</label>
+                                <input type="text" id="Description" name="Description" required>
+                            </div>
+                            <div class="Expense-Form-row">
+                                <label for="Employee" id="Expense-text">Employee</label>
+                                <input type="text" id="Employee" name="Employee" required>
+                            </div>
+                            <div class="Expense-Form-row">
+                                <button type="submit">Submit</button>
+                                <button type="button" onclick="closeExpenseForm()">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <script>
+        document.getElementById('newExpenseButton').addEventListener('click', function() {
+            const rightContainer = document.getElementById('inner_container');
+            const form = document.getElementById('newExpenseForm');
+            rightContainer.style.display = 'none'; // Hide the right container
+            form.style.display = 'block'; // Show the new expense form
+        });
 
+        function closeExpenseForm() {
+            const rightContainer = document.getElementById('inner_container');
+            const form = document.getElementById('newExpenseForm');
+
+            form.style.display = 'none'; // Hide the new expense form
+            rightContainer.style.display = 'block'; // Show the right container again
+            clearForm(); // Clear the form fields
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault(); // Prevent the default form submission
+            // Add form submission logic here if needed
+            closeExpenseForm(); // Close the form and return to the right container
+        }
+
+        function clearForm() {
+            document.getElementById('expenseForm').reset(); // Clear all form fields
+        }
+    </script>
 </body>
 </html>

@@ -220,7 +220,7 @@ function deleteEntry(id) {
         }
 
         window.onclick = function(event) {
-            if (event.target == document.getElementById('popup')) {
+            if (event.target == document.getElementById('popup')) {                            
                 closePopup();
             }
         }
