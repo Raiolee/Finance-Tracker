@@ -12,10 +12,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
     <link rel="stylesheet" href="../Styles/Interface1.css">
+    <link rel="stylesheet" href="../Styles/dashboardstyles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="container">
     <div class="nav-bar">
@@ -91,7 +95,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <p><a href="Settings.php">Settings</a></p>
             </div>
         </div>
-
         <div class="Logo-Nav" id="Nav_Side">
             <div class="Penny_Logo">
                 <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
@@ -100,12 +103,43 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     </div>
 
-    <div class="content">
-        <div class="right-container">
-            <p><a href="../Logout.php">Logout</a></p>
+ <div class="content">
+     <div class="right-container">
+         <div class="main-content">
+             <!-- Pending Tasks Section -->
+             <div class="task-section">
+                 <h2>Pending Tasks</h2>
+                 <ul>
+                     <li><i class="fas fa-clock"></i> Pending Approvals <span><?php echo htmlspecialchars(isset($pending_approvals) ? $pending_approvals : 0); ?></span></li>
+                     <li><i class="fas fa-plane"></i> New Trips Registered <span><?php echo htmlspecialchars(isset($new_trips) ? $new_trips : 0); ?></span></li>
+                     <li><i class="fas fa-wallet"></i> Unreported Expenses <span><?php echo htmlspecialchars(isset($unreported_expenses) ? $unreported_expenses : 0); ?></span></li>
+                     <li><i class="fas fa-folder"></i> Upcoming Expenses <span><?php echo htmlspecialchars(isset($upcoming_expenses) ? $upcoming_expenses : 0); ?></span></li>
+                 </ul>
+             </div>
+         </div>
+ 
+        <!-- Quick Report Section -->
+               <div class="report-section">
+            <h2>Quick Report</h2>
+                <div class="chart-container">
+                <canvas id="quickReportChart"></canvas>
+                </div>
+                <ul class="chart-legend">
+                    <li><span class="legend-color" style="background-color: #2c3e50;"></span> Fuel</li>
+                    <li><span class="legend-color" style="background-color: #16a085;"></span> Accommodation</li>
+                    <li><span class="legend-color" style="background-color: #9b59b6;"></span> Travel Expenses</li>
+                     <li><span class="legend-color" style="background-color: #c0392b;"></span> Office Supplies</li>
+                </ul>
+            </div>
         </div>
     </div>
 
+         <p><a href="../Logout.php">Logout</a></p>
+     </div>
+ </div>
+ 
+
+ <script src="../User Interface/quickreport.js"></script>
 
 </body>
 </html>

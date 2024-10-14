@@ -53,7 +53,7 @@ if (isset($_SESSION["user"])) {
                     require_once "connection/config.php";
 
                     // Check if email exists
-                    $stmt = $conn->prepare("SELECT COUNT(*) FROM user_registration_data WHERE email = ?");
+                    $stmt = $conn->prepare("SELECT COUNT(*) FROM user WHERE email = ?");
                     $stmt->bind_param("s", $email);
                     $stmt->execute();
                     $stmt->bind_result($rowCount);
@@ -70,16 +70,39 @@ if (isset($_SESSION["user"])) {
                             $alertMessage .= "<div class='alert alert-danger'>$error</div>";
                         }
                     } else {
-                        $stmt = $conn->prepare("INSERT INTO user_registration_data (First_Name, Last_Name, Email, Password) VALUES (?, ?, ?, ?)");
+                        $stmt = $conn->prepare("INSERT INTO user (First_Name, Last_Name, Email, Password) VALUES (?, ?, ?, ?)");
                         if ($stmt) {
                             $stmt->bind_param("ssss", $fname, $lname, $email, $passwordHash);
                             $stmt->execute();
+
+                            // Get the last inserted user_id
+                            $user_id = $stmt->insert_id;
+                            // Insert into income table
+                            $stmt = $conn->prepare("INSERT INTO income (user_id) VALUES (?)");
+                            $stmt->bind_param("i", $user_id);
+                            $stmt->execute();
+
+                            // Insert into expenses table
+                            $stmt = $conn->prepare("INSERT INTO expenses (user_id) VALUES (?)");
+                            $stmt->bind_param("i", $user_id);
+                            $stmt->execute();
+
+                            // Insert into goals table
+                            $stmt = $conn->prepare("INSERT INTO goals (user_id) VALUES (?)");
+                            $stmt->bind_param("i", $user_id);
+                            $stmt->execute();
+
+                            // Insert into savings table
+                            $stmt = $conn->prepare("INSERT INTO savings (user_id) VALUES (?)");
+                            $stmt->bind_param("i", $user_id);
+                            $stmt->execute();
+
                             $alertMessage .= "<div class='alert alert-success'>You are registered successfully.</div>";
                             $stmt->close();
                         } else {
                             $alertMessage .= "<div class='alert alert-danger'>Something went wrong</div>";
                         }
-                    }  
+                    }
                 }
             ?>
 
