@@ -23,14 +23,14 @@
 
 .task-section ul {
     list-style: none;
-    padding: 0;
+    padding: 10px;
 }
 
 .task-section li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 0; /* Increased padding for better spacing */
+    padding: 10px 0; /* Increased padding for better spacing */
     font-size: 1.1rem;
     border-bottom: 1px solid #333;
     font-family: "Roboto", sans-serif; /* Added consistency with other text */
