@@ -517,3 +517,60 @@ input{
     height: 30px;
     font-weight: 600;
 }
+
+/*Travel End*/
+
+/*Expense Start*/
+.new-expense-form {
+    color: white;
+}
+
+.Expense-Outer {
+    display: flex;
+    justify-content: center;
+}
+
+.Expense-Form {
+    border: 2px solid red;
+    width: 85%;
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+}
+
+#Expense-text {
+    font-size: 20px;
+}
+
+.Expense-Form-row {
+    margin: 15px 0; /* Adjust margin for consistent spacing */
+    color: black;
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: flex-end; /* Align items to the right */
+}
+
+.Expense-Form input,
+.Expense-Form select {
+    color: black;
+    width: 60%; /* Adjust width for better spacing */
+    margin-left: 10px; /* Space between label and input/select */
+    text-align: right; /* Align text inside inputs/selects to the right */
+}
+
+.Total-Currency {
+    display: flex;
+    justify-content: flex-end; /* Align currency row to the right */
+    width: 100%; /* Full width to maintain alignment */
+}
+
+#Currency {
+    width: auto; /* Allow currency select to adjust naturally */
+    margin-left: 10px; /* Space between inputs */
+}
+
+#expenseForm {
+    width: 100%;
+}
+
+
+/*Expense Start End*/

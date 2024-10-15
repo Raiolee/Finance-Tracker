@@ -8,7 +8,8 @@ CREATE TABLE `user`
     `first_name` VARCHAR(50),
     `last_name` VARCHAR(50),
     `email` VARCHAR(50),
-    `password` VARCHAR(255)
+    `password` VARCHAR(255),
+    `user_dp` BLOB
 );
 
 CREATE TABLE `income` (
