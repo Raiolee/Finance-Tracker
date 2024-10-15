@@ -96,10 +96,10 @@
 /* Chart Container */
 .chart-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; /* Align items at the start */
     align-items: flex-start;
-    width: 100%; /* Take up full width */
-    height: 90%; /* Ensure it fills the height of the container */
+    width: 100%; /* Ensure the container takes up full width */
+    height: 90%; /* Ensure it fills most of the container's height */
 }
 
 /* Custom Legend */
@@ -108,21 +108,20 @@
     padding: 0;
     margin: 0;
     display: flex;
-    flex-direction: column;  /* Stack the items vertically */
-    margin-left: 60%;       /* Add space between chart and legend */
-    margin-bottom: 10%;       /* Add space between chart and legend */
+    flex-direction: column;  /* Stack items vertically */
+    margin-left: 20px; /* Adjusted to reduce spacing between chart and legend */
 }
 
 .chart-legend li {
     display: flex;
-    align-items: right;
-    margin-top: 10%;
+    align-items: center;
+    margin-top: 10px; /* Adjusted spacing between legend items */
 }
 
 .legend-color {
     width: 15px;
     height: 15px;
     display: inline-block;
-    margin-right: 60px;
+    margin-right: 10px; /* Adjusted space between the legend color and text */
     border-radius: 50%;
 }
