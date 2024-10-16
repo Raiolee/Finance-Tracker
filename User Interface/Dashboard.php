@@ -144,6 +144,42 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 </div>
             </div>
 
+            <!-- Recent Transactions  Section -->
+            <div class="recent-expenses-section">
+             <h2>Recent Expenses</h2>
+                <table class="expense-table">
+                     <thead>
+                         <tr>
+                            <th>Subject</th>
+                            <th>Employee</th>
+                            <th>Team</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                     <tbody>
+                        <tr>
+                            <td>Office Supplies</td>
+                            <td>John Doe</td>
+                            <td><span class="team marketing">Marketing</span></td>
+                            <td>₱150.00</td>
+                        </tr>
+                        <tr>
+                            <td>Business Lunch</td>
+                            <td>Sarah Jade</td>
+                            <td><span class="team sales">Sales</span></td>
+                            <td>₱150.00</td>
+                        </tr>
+                         <tr>
+                            <td>Travel Expenses</td>
+                            <td>Mike Brown</td>
+                            <td><span class="team operations">Operations</span></td>
+                            <td>₱150.00</td>
+                         </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
         </div>
     </div>
 </div>
