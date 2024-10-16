@@ -1,7 +1,7 @@
 /* Pending Tasks Section */
 
-.task-section, .report-section, .quick-access-section {
-    margin-bottom: 20px; /* Adds spacing between sections */
+.quick-access-section, .recent-expenses-section {
+    margin-top: 20px;
 }
 
 .task-section {
@@ -12,10 +12,11 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 100%;     /* Adjusted to fit better inside the container */
+    width: 73%;     /* Adjusted to fit better inside the container */
     max-width: 800px; /* Limits the maximum width */
-    height: 50%;
-    max-height: 500px; /* Limits the maximum height */
+    height: auto;
+    max-height: 600px; /* Limits the maximum height */
+    flex: 1; /* Same behavior for the task section */
 }
 
 .task-section h2 {
@@ -35,9 +36,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 13px 0; /* Increased padding for better spacing */
+    padding: 25px 0; /* Increased padding for better spacing */
     font-size: 1.1rem;
-    border-bottom: 1px solid #333;
+    border-bottom: 3px solid #333;
     font-family: "Roboto", sans-serif; /* Added consistency with other text */
 }
 
@@ -92,13 +93,13 @@
     padding: 20px;
     color: #a18aff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    margin-top: -375px;
-    margin-bottom: 20px;
-    width: 60%;  /* Adjust the width as needed */
-    max-width: 700px; /* Ensure it doesn't exceed a certain width */
-    height: 70%; /* Allow the height to adjust based on content */
-    margin-left: 120%; /* Adjust the percentage to shift it further right */
+    height: auto; /* Allow the height to adjust based on content */
+    width: 50%;
+    flex: 1; /* Let it grow to fill space, but stay in the same row as the other sections */
+    margin-top: 17px;
+    
 }
+
 
 /* Chart Container */
 .chart-container {
@@ -120,7 +121,10 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     width: 100%;
     max-width: 700px;
-    margin-top: -125px;
+    margin-top: 10%;
+    display: flex;
+    flex-wrap: wrap;  /* Allows buttons to wrap in multiple rows */
+    justify-content: space-between;  /* Adjust space between buttons */
 }
 
 /* Title */
@@ -149,9 +153,10 @@
     color: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s, box-shadow 0.2s;
-    width: 20%;
+    width: calc(50% - 50px);  /* Adjust width to accommodate margins */
     text-align: center;
     cursor: pointer;
+    margin: 10px 0; /* Vertical space between buttons */
 }
 
 .quick-access-item i {
@@ -201,14 +206,15 @@
 
 /* Recent Expenses Section */
 .recent-expenses-section {
-    width: 500%;
-    max-width: 700px;
+    width: 100%;  /* Set the width to 100% to match the container width */
+    max-width: 100%;  /* Remove any restriction on max-width */
     background-color: #222;
     border-radius: 10px;
     padding: 20px;
     color: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     margin-bottom: 20px;
+    box-sizing: border-box;  /* Ensure padding doesn't affect the width */
 }
 
 .recent-expenses-section h2 {
@@ -259,6 +265,7 @@
 .team.operations {
     background-color: #9b59b6;
 }
+
 
 
 

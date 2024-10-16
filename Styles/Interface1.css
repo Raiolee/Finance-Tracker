@@ -93,32 +93,39 @@
     width: 150px;
 }
 
+/* Content Container */
 .content {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    height: 100vh; /* Makes sure the content fills the height of the viewport */
-    padding-top: 150px; /* Optional: Add some padding from the top */
+    height: 100vh; /* Ensure content fills the full viewport height */
+    padding-top: 20px; /* Optional: Adjust padding from the top */
+    width: 100%;
 }
 
+/* Right Container - where sections like task-section and report-section go */
 .right-container {
     background-color: black;
-    width: 100%;
-    max-width: 1250px;
-    height: auto; /* Allow height to adjust based on content */
-    margin: 40px auto;
+    width: 100%; /* Take up full width of content */
+    max-width: 1250px; /* Max width constraint */
+    height: 100%; /* Let it fill the height of the content */
+    margin: 40px auto; /* Centering the container */
     border-radius: 15px;
-    display: flex;
-    flex-direction: column; /* Stack items vertically */
-    justify-content: flex-start; /* Align content from the top */
-    align-items: flex-start;
     padding: 20px;
     box-sizing: border-box;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    gap: 20px; /* Spacing between sections */
 }
 
+/* Main Content Section */
 .main-content {
+    display: flex;
+    flex-direction: column;  /* Stack sections vertically */
+    gap: 20px; /* Add space between sections */
     width: 100%;
+}
+
+.horizontal-sections {
+    display: flex;
+    flex-direction: row;  /* Align items side by side */
+    gap: 20px; /* Add space between sections */
 }
 
 
