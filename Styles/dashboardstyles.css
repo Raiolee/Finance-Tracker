@@ -30,7 +30,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0; /* Increased padding for better spacing */
+    padding: 13px 0; /* Increased padding for better spacing */
     font-size: 1.1rem;
     border-bottom: 1px solid #333;
     font-family: "Roboto", sans-serif; /* Added consistency with other text */
@@ -89,41 +89,25 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 50%;     /* Adjusted width to give it more space */
-    height: 50%;   /* Take up full height of the container */
+    width: 50%;  /* Adjust the width as needed */
+    max-width: 700px; /* Ensure it doesn't exceed a certain width */
+    height: 70%; /* Allow the height to adjust based on content */
 }
 
 /* Chart Container */
 .chart-container {
     display: flex;
-    justify-content: flex-start; /* Align items at the start */
-    align-items: flex-start;
-    width: 100%; /* Ensure the container takes up full width */
-    height: 90%; /* Ensure it fills most of the container's height */
-}
-
-/* Custom Legend */
-.chart-legend {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex; /* Change to flex for horizontal layout */
-    flex-direction: row; /* Align items in a row */
-    margin-left: 20px; /* Space between chart and legend */
-    align-items: center; /* Center legend items vertically */
-}
-
-.chart-legend li {
-    display: flex;
+    justify-content: center; /* Center the chart in the container */
     align-items: center;
-    margin-right: 20px; /* Adjusted spacing between legend items */
+    width: 100%;
+    height: 400px; /* Set a fixed height or max-height */
+    position: relative; /* Keep everything contained within the box */
+    overflow: hidden; /* Prevent any overflow */
 }
 
-.legend-color {
-    width: 15px;
-    height: 15px;
-    display: inline-block;
-    margin-right: 20%; /* Space between the legend color and text */
-    border-radius: 50%;
-}
+
+
+
+
+
 

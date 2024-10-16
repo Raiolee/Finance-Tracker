@@ -25,13 +25,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 }]
             },
             options: {
-                responsive: true
+                responsive: true,
+                maintainAspectRatio: false,  // Allow chart to resize based on container
+                layout: {
+                    padding: {
+                        top: 20,   // Add some top padding for spacing
+                        bottom: 20 // Add some bottom padding
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,  // Ensure the legend is displayed
+                        labels: {
+                            usePointStyle: true  // Use a point style for the legend icons (like circles)
+                        }
+                    }
+                }
             }
         });
     } else {
         console.error("Canvas not found.");
     }
 });
+
 
 
 function handleNewExpense() {

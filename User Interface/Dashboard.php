@@ -116,17 +116,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
  
         <!-- Quick Report Section -->
                <div class="report-section">
-            <h2>Quick Report</h2>
-                <div class="chart-container">
-                <canvas id="quickReportChart"></canvas>
+                    <h2>Quick Report</h2>
+                    <div class="chart-container">
+                        <canvas id="quickReportChart"></canvas>
+                    </div>
                 </div>
-                <ul class="chart-legend">
-                    <li><span class="legend-color" style="background-color: #2c3e50;"></span> Fuel</li>
-                    <li><span class="legend-color" style="background-color: #16a085;"></span> Accommodation</li>
-                    <li><span class="legend-color" style="background-color: #9b59b6;"></span> Travel Expenses</li>
-                     <li><span class="legend-color" style="background-color: #c0392b;"></span> Office Supplies</li>
-                </ul>
-            </div>
         </div>
     </div>
 
