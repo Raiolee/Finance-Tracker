@@ -30,6 +30,8 @@ CREATE TABLE `expenses` (
     `user_id` int not null,
     `subject` varchar(255) not null,
     `date` DATE NOT NULL,
+    `currency` varchar(10) NOT NULL,
+    `reimbursable` enum('yes','no') NOT NULL DEFAULT 'no',
     `merchant` varchar(255) not null,
     `total` decimal(10, 2) not null,
     `description` text not null
