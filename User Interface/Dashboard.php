@@ -99,35 +99,56 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     </div>
 
- <div class="content">
-     <div class="right-container">
-         <div class="main-content">
-             <!-- Pending Tasks Section -->
-             <div class="task-section">
-                 <h2>Pending Tasks</h2>
-                 <ul>
-                     <li><i class="fas fa-clock"></i> Pending Approvals <span><?php echo htmlspecialchars(isset($pending_approvals) ? $pending_approvals : 0); ?></span></li>
-                     <li><i class="fas fa-plane"></i> New Trips Registered <span><?php echo htmlspecialchars(isset($new_trips) ? $new_trips : 0); ?></span></li>
-                     <li><i class="fas fa-wallet"></i> Unreported Expenses <span><?php echo htmlspecialchars(isset($unreported_expenses) ? $unreported_expenses : 0); ?></span></li>
-                     <li><i class="fas fa-folder"></i> Upcoming Expenses <span><?php echo htmlspecialchars(isset($upcoming_expenses) ? $upcoming_expenses : 0); ?></span></li>
-                 </ul>
-             </div>
-         </div>
- 
-        <!-- Quick Report Section -->
-               <div class="report-section">
-                    <h2>Quick Report</h2>
-                    <div class="chart-container">
-                        <canvas id="quickReportChart"></canvas>
-                    </div>
+    <div class="content">
+    <div class="right-container">
+        <div class="main-content">
+            <!-- Pending Tasks Section -->
+            <div class="task-section">
+                <h2>Pending Tasks</h2>
+                <ul>
+                    <li><i class="fas fa-clock"></i> Pending Approvals <span><?php echo htmlspecialchars(isset($pending_approvals) ? $pending_approvals : 0); ?></span></li>
+                    <li><i class="fas fa-plane"></i> New Trips Registered <span><?php echo htmlspecialchars(isset($new_trips) ? $new_trips : 0); ?></span></li>
+                    <li><i class="fas fa-wallet"></i> Unreported Expenses <span><?php echo htmlspecialchars(isset($unreported_expenses) ? $unreported_expenses : 0); ?></span></li>
+                    <li><i class="fas fa-folder"></i> Upcoming Expenses <span><?php echo htmlspecialchars(isset($upcoming_expenses) ? $upcoming_expenses : 0); ?></span></li>
+                </ul>
+            </div>
+
+            <!-- Quick Report Section -->
+            <div class="report-section">
+                <h2>Quick Report</h2>
+                <div class="chart-container">
+                    <canvas id="quickReportChart"></canvas>
                 </div>
+            </div>
+    
+            <!-- Quick Access Section  -->
+            <div class="quick-access-section">
+                <h2>Quick Access</h2>
+                <div class="quick-access-items">
+                    <button class="quick-access-item" onclick="handleNewExpense()">
+                        <i class="icon-credit-card"></i>
+                        <span>+ New Expense</span>
+                    </button>
+                    <button class="quick-access-item" onclick="handleNewReceipt()">
+                        <i class="icon-receipt"></i>
+                        <span>+ Add Receipt</span>
+                    </button>
+                    <button class="quick-access-item" onclick="handleNewReport()">
+                        <i class="icon-report"></i>
+                        <span>+ Create Report</span>
+                    </button>
+                    <button class="quick-access-item" onclick="handleNewTrip()">
+                        <i class="icon-plane"></i>
+                        <span>+ Create Trip</span>
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
 
-         <p><a href="../Logout.php">Logout</a></p>
-     </div>
- </div>
- 
+
 
  <script src="../User Interface/quickreport.js"></script>
 

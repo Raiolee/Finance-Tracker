@@ -103,15 +103,24 @@
 
 .right-container {
     background-color: black;
-    width: 1250px;
-    height: 750px;
-    margin: 20px auto; /* Adjusted to move it down from the top */
+    width: 100%;
+    max-width: 1250px;
+    height: auto; /* Allow height to adjust based on content */
+    margin: 40px auto;
     border-radius: 15px;
     display: flex;
-    justify-content: space-between; /* Separate sections */
+    flex-direction: column; /* Stack items vertically */
+    justify-content: flex-start; /* Align content from the top */
+    align-items: flex-start;
     padding: 20px;
-    box-sizing: border-box;  /* Ensures padding is included in the total size */
+    box-sizing: border-box;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
+
+.main-content {
+    width: 100%;
+}
+
 
 .travel-title{
     margin-top: 20px;

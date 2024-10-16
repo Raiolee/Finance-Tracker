@@ -1,4 +1,9 @@
 /* Pending Tasks Section */
+
+.task-section, .report-section, .quick-access-section {
+    margin-bottom: 20px; /* Adds spacing between sections */
+}
+
 .task-section {
     background-color: #222;
     border-radius: 10px;
@@ -7,7 +12,7 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     margin-top: 20px;
     margin-bottom: 20px;
-    width: 200%;     /* Adjusted to fit better inside the container */
+    width: 100%;     /* Adjusted to fit better inside the container */
     max-width: 800px; /* Limits the maximum width */
     height: 50%;
     max-height: 500px; /* Limits the maximum height */
@@ -87,11 +92,12 @@
     padding: 20px;
     color: #a18aff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    margin-top: 20px;
+    margin-top: -375px;
     margin-bottom: 20px;
-    width: 50%;  /* Adjust the width as needed */
+    width: 60%;  /* Adjust the width as needed */
     max-width: 700px; /* Ensure it doesn't exceed a certain width */
     height: 70%; /* Allow the height to adjust based on content */
+    margin-left: 120%; /* Adjust the percentage to shift it further right */
 }
 
 /* Chart Container */
@@ -104,6 +110,95 @@
     position: relative; /* Keep everything contained within the box */
     overflow: hidden; /* Prevent any overflow */
 }
+
+/* Quick Access Section */
+.quick-access-section {
+    background-color: #222;
+    border-radius: 10px;
+    padding: 20px;
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 700px;
+    margin-top: -125px;
+}
+
+/* Title */
+.quick-access-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #a18aff; /* Title color */
+}
+
+/* Quick Access Items Container */
+.quick-access-items {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Quick Access Buttons */
+.quick-access-item {
+    background-color: #333;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 20%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.quick-access-item i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #a18aff; /* Adjust icon color */
+}
+
+.quick-access-item span {
+    font-size: 1.1rem;
+}
+
+.quick-access-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.quick-access-item:focus {
+    outline: none;
+    box-shadow: 0 0 5px #a18aff; /* Focus outline effect */
+}
+
+/* FontAwesome Icons (or custom icons) */
+.icon-credit-card::before {
+    content: "\f09d"; /* Example FontAwesome icon for credit card */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
+.icon-receipt::before {
+    content: "\f543"; /* Example FontAwesome icon for receipt */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
+.icon-report::before {
+    content: "\f24e"; /* Example FontAwesome icon for report */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
+.icon-plane::before {
+    content: "\f072"; /* Example FontAwesome icon for plane */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+
 
 
 
