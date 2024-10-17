@@ -1,9 +1,12 @@
 <?php
+// Disable all error reporting
+error_reporting(0);
 session_start();
 if(!isset($_SESSION["user"]))
 {
-    header("Location: ../Login.php");
+    header("Location: ../index.php");
 }
+$uid = $_SESSION["ID"];
 $username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
@@ -97,10 +100,34 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <div class="content">
         <div class="right-container">
-
+            <div class="travel-title">
+                <div class="left">
+                    <h1 id="travel-title">Travels</h1>
+                </div>
+                <div class="right">
+                    <div class="box">
+                        <div class=logo-new-trip">
+                            <a href="Travels-newtrip.php"><img src="../Assets/Icons/pen.svg" alt="" width="20px" id="logo-new-trip"></a>
+                        </div>
+                        <div class="search">
+                            <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px" id="search">
+                        </div>
+                        <div class="filter">
+                            <img src="../Assets/Icons/filter.svg" alt="" width="20px" id="search">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="new1">
+            <table class="table-travel">
+                <thead> 
+                    <th class="tab">DETAILS</th>
+                    <th class="tab">CATEGORY</th>
+                    <th class="tab">AMOUNT</th>
+                    <th class="tab">DATE</th>
+                </thead>
+            </table>
         </div>
     </div>
-
-
 </body>
 </html>
