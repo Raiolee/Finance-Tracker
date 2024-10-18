@@ -5,11 +5,9 @@ session_start();
 if(!isset($_SESSION["user"]))
 {
     header("Location: ../index.php");
-}
-$uid = $_SESSION["ID"];
-$username = $_SESSION["name"];
-$current_page = basename($_SERVER['PHP_SELF']);
+}   
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,31 +99,32 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
     <div class="content">
         <div class="right-container">
-            <div class="travel-title">
+            <div class="goals-container">
                 <div class="left">
-                    <h1 id="travel-title">Travels</h1>
+                    <h1 id="goals-title">Goals</h1>
                 </div>
                 <div class="right">
                     <div class="box">
-                        <div class=logo-new-trip">
-                            <a href="Travels-newtrip.php"><img src="../Assets/Icons/pen.svg" alt="" width="20px" id="logo-new-trip"></a>
+                        <div class="add">
+                            <button id="newGoalsBTN" class="new-goal">+ New Goal</button>
                         </div>
-                        <div class="search">
-                            <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px" id="search">
-                        </div>
-                        <div class="filter">
-                            <img src="../Assets/Icons/filter.svg" alt="" width="20px" id="search">
-                        </div>
+                        <form class="goal-form" action="search.php" method="GET">
+                            <input type="search" name="query" placeholder="Search here ...">
+                            <button type="submit">
+                                <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
+                            </button>
+                        </form> 
                     </div>
                 </div>
             </div>
-            <hr class="new1">
-            <table class="table-travel">
+            <hr class="new">
+            
+            <table class="goal-travel">
                 <thead> 
-                    <th class="tab">DETAILS</th>
+                    <th class="tab">SUBJECT</th>
                     <th class="tab">CATEGORY</th>
-                    <th class="tab">AMOUNT</th>
-                    <th class="tab">DATE</th>
+                    <th class="tab">ACCOMPLISHMENT DATE</th>
+                    <th class="tab">PROGRESS</th>
                 </thead>
             </table>
         </div>
