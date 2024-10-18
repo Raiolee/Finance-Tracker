@@ -62,24 +62,24 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
         </div>
 
-        <!-- Section for Travels -->
-        <div class="Travels-Nav <?php echo ($current_page == 'Travels.php') ? 'active' : ''; ?>" id="Nav_Button">
+        <!-- Section for Goals -->
+        <div class="Travels-Nav <?php echo ($current_page == 'Goals.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/travels.svg" alt="Icon" width="50px">
             </div>
             <div>
-                <p><a href="Travels.php">Savings</a></p>
+                <p><a href="Goals.php">Savings</a></p>
             </div>
         </div>
 
-        <!-- Section for Goals -->
-        <div class="Approvals-Nav <?php echo ($current_page == 'Approvals.php') ? 'active' : ''; ?>" id="Nav_Button">
+        <!-- Section for Savings -->
+        <div class="Approvals-Nav <?php echo ($current_page == 'Savings.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/approvals.svg" alt="Icon" width="50px">
             </div>
             <div>
-                <p><a href="Approvals.php">Goals</a></p>
-            </div>
+                <p><a href="Savings.php">Goals</a></p>
+            </div>            
         </div>
 
         <!-- Settings Section -->
@@ -148,44 +148,48 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         </div>
                     </div>
 
-                    <!-- Recent Transactions Section -->
-                    <div class="recent-expenses-section">
-                        <h2>Recent Expenses</h2>
-                        <table class="expense-table">
-                            <thead>
-                                <tr>
-                                    <th>Subject</th>
-                                    <th>Employee</th>
-                                    <th>Team</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Office Supplies</td>
-                                    <td>John Doe</td>
-                                    <td><span class="team marketing">Marketing</span></td>
-                                    <td>₱150.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Business Lunch</td>
-                                    <td>Sarah Jade</td>
-                                    <td><span class="team sales">Sales</span></td>
-                                    <td>₱150.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Travel Expenses</td>
-                                    <td>Mike Brown</td>
-                                    <td><span class="team operations">Operations</span></td>
-                                    <td>₱150.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <!-- Recent Transactions Section -->
+            <div class="recent-expenses-section">
+                <h2>Recent Expenses</h2>
+                <table class="expense-table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Employee</th>
+                            <th>Team</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Office Supplies</td>
+                            <td>John Doe</td>
+                            <td><span class="team marketing">Marketing</span></td>
+                            <td>₱150.00</td>
+                        </tr>
+                        <tr>
+                            <td>Business Lunch</td>
+                            <td>Sarah Jade</td>
+                            <td><span class="team sales">Sales</span></td>
+                            <td>₱150.00</td>
+                        </tr>
+                        <tr>
+                            <td>Travel Expenses</td>
+                            <td>Mike Brown</td>
+                            <td><span class="team operations">Operations</span></td>
+                            <td>₱150.00</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
+
+
+
+
+<script src="../User Interface/quickreport.js"></script>
 
     <script src="../User Interface/quickreport.js"></script>
 </body>

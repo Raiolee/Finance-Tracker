@@ -32,8 +32,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <p><?php echo htmlspecialchars($username); ?></p>
         </div>
 
-                <!-- Section for Dashboard -->
-                <div class="Home-Nav <?php echo ($current_page == 'Dashboard.php') ? 'active' : ''; ?>" id="Nav_Button">
+        <!-- Section for Dashboard -->
+        <div class="Home-Nav <?php echo ($current_page == 'Dashboard.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/home.svg" alt="Icon" width="50px" id="icons">
             </div>
@@ -62,23 +62,23 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
         </div>
 
-        <!-- Section for Travels -->
-        <div class="Travels-Nav <?php echo ($current_page == 'Travels.php') ? 'active' : ''; ?>" id="Nav_Button">
+        <!-- Section for Goals -->
+        <div class="Travels-Nav <?php echo ($current_page == 'Goals.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/travels.svg" alt="Icon" width="50px">
             </div>
             <div>
-                <p><a href="Travels.php">Savings</a></p>
+                <p><a href="Goals.php">Savings</a></p>
             </div>
         </div>
 
-        <!-- Section for Goals -->
-        <div class="Approvals-Nav <?php echo ($current_page == 'Approvals.php') ? 'active' : ''; ?>" id="Nav_Button">
+        <!-- Section for Savings -->
+        <div class="Approvals-Nav <?php echo ($current_page == 'Savings.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/approvals.svg" alt="Icon" width="50px">
             </div>
             <div>
-                <p><a href="Approvals.php">Goals</a></p>
+                <p><a href="Savings.php">Goals</a></p>
             </div>            
         </div>
 
@@ -90,8 +90,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <p><a href="Settings.php">Settings</a></p>
             </div>
         </div>
-
-        <!-- Logo on the Dashboard -->
         <div class="Logo-Nav" id="Nav_Side">
             <div class="Penny_Logo">
                 <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
