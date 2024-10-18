@@ -185,9 +185,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </div>
     </div>
 </div>
-
-
-
+<p><a href="../Logout.php">Logout</a></p>
 
 <script src="../User Interface/quickreport.js"></script>
 
