@@ -22,7 +22,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 </head>
 <body class="container">
     <div class="nav-bar">
-        <div class="Profile"> 
+        <div class="Profile">
             <div class="Profile_img">
                 <img src="https://picsum.photos/100/100" alt="" width="110">
             </div>
@@ -65,23 +65,24 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <!-- Section for Goals -->
         <div class="Travels-Nav <?php echo ($current_page == 'Goals.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
-                <img src="../Assets/Icons/travels.svg" alt="Icon" width="50px">
+                <img src="../Assets/Icons/approvals.svg" alt="Icon" width="50px">
             </div>
             <div>
-                <p><a href="Goals.php">Savings</a></p>
+                <p><a href="Goals.php">Goals</a></p>
             </div>
         </div>
 
         <!-- Section for Savings -->
         <div class="Approvals-Nav <?php echo ($current_page == 'Savings.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
-                <img src="../Assets/Icons/approvals.svg" alt="Icon" width="50px">
+                <img src="../Assets/Icons/reports.svg" alt="Icon" width="50px">
             </div>
             <div>
-                <p><a href="Savings.php">Goals</a></p>
+                <p><a href="Savings.php">Savings</a></p>
             </div>            
         </div>
 
+        <!-- Settings Section -->
         <div class="Settings-Nav <?php echo ($current_page == 'Settings.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/settings.svg" alt="Icon" width="50px">
@@ -90,12 +91,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <p><a href="Settings.php">Settings</a></p>
             </div>
         </div>
+
         <div class="Logo-Nav" id="Nav_Side">
             <div class="Penny_Logo">
                 <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
             </div>
         </div>
-
     </div>
 
     <div class="content">

@@ -65,20 +65,20 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <!-- Section for Goals -->
         <div class="Travels-Nav <?php echo ($current_page == 'Goals.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
-                <img src="../Assets/Icons/travels.svg" alt="Icon" width="50px">
+                <img src="../Assets/Icons/approvals.svg" alt="Icon" width="50px">
             </div>
             <div>
-                <p><a href="Goals.php">Savings</a></p>
+                <p><a href="Goals.php">Goals</a></p>
             </div>
         </div>
 
         <!-- Section for Savings -->
         <div class="Approvals-Nav <?php echo ($current_page == 'Savings.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
-                <img src="../Assets/Icons/approvals.svg" alt="Icon" width="50px">
+                <img src="../Assets/Icons/reports.svg" alt="Icon" width="50px">
             </div>
             <div>
-                <p><a href="Savings.php">Goals</a></p>
+                <p><a href="Savings.php">Savings</a></p>
             </div>            
         </div>
 
