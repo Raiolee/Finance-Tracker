@@ -1,11 +1,31 @@
 <?php
 session_start();
 if (!isset($_SESSION["user"])) {
-    header("Location: ../Login.php");
+    header("Location: ../index.php");
+    exit;
 }
 $username = $_SESSION["name"];
+$user_id = $_SESSION["user_id"];  // Ensure the user ID is set in the session
 $current_page = basename($_SERVER['PHP_SELF']);
+require_once '../connection/config.php';
+
+$sql = "SELECT subject FROM goals WHERE user_id = ?";
+$stmt = $conn->prepare($sql);
+if (!$stmt) {
+    die('MySQL prepare error: ' . $conn->error);
+}
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $pending_goals[] = $row['subject'];
+    }
+} 
+$stmt->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -106,13 +126,16 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <div class="horizontal-sections">
                     <!-- Pending Tasks Section -->
                     <div class="task-section">
-                        <h2>Pending Tasks</h2>
-                        <ul>
-                            <li><i class="fas fa-clock"></i> Pending Approvals <span><?php echo htmlspecialchars(isset($pending_approvals) ? $pending_approvals : 0); ?></span></li>
-                            <li><i class="fas fa-plane"></i> New Trips Registered <span><?php echo htmlspecialchars(isset($new_trips) ? $new_trips : 0); ?></span></li>
-                            <li><i class="fas fa-wallet"></i> Unreported Expenses <span><?php echo htmlspecialchars(isset($unreported_expenses) ? $unreported_expenses : 0); ?></span></li>
-                            <li><i class="fas fa-folder"></i> Upcoming Expenses <span><?php echo htmlspecialchars(isset($upcoming_expenses) ? $upcoming_expenses : 0); ?></span></li>
-                        </ul>
+                    <h2>Pending Goals</h2>
+                    <ul>
+                        <?php if (!empty($pending_goals)): ?>
+                            <?php foreach ($pending_goals as $goal): ?>
+                                <li><i class="fas fa-trophy"></i> <?php echo htmlspecialchars($goal); ?></li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <li>No pending goals found.</li>
+                        <?php endif; ?>
+                    </ul>
                     </div>
 
                     <!-- Quick Report Section -->

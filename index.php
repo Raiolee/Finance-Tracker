@@ -1,8 +1,38 @@
 <?php
 session_start();
+// If the user is already logged in, redirect to the dashboard
 if (isset($_SESSION["user"])) {
     header("Location: User Interface/Dashboard.php");
     exit();
+}
+
+if (isset($_POST["Login"])) {
+    $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
+    $password = $_POST["password"];
+    require_once "../connection/config.php";
+
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($password)) {
+        // Prepare and execute SQL query to fetch user by email
+        $sql = "SELECT * FROM user WHERE email = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "s", $email);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
+
+        // Check if user exists and password matches
+        if ($user && password_verify($password, $user["password"])) {
+          $_SESSION["user"] = "yes"; // Mark user as logged in
+          $_SESSION["user_id"] = $user["user_id"]; // Store the user ID
+          $_SESSION["name"] = $user["First_Name"] . ' ' . $user["Last_Name"]; // Store full name          
+          header("Location: User Interface/Dashboard.php"); // Redirect to Dashboard
+          exit();
+      } else {
+            $error_message = "Invalid email or password.";
+        }
+    } else {
+        $error_message = "Invalid email or password.";
+    }
 }
 ?>
 
@@ -21,42 +51,18 @@ if (isset($_SESSION["user"])) {
 </head>
 <body class="container">
   <div class="left-section">
-    <img src="Assets/PENNY_WISE_Logo.png" alt="Trulli" width="600" height="600" class="logo">
+    <img src="Assets/PENNY_WISE_Logo.png" alt="Penny Wise Logo" width="600" height="600" class="logo">
   </div>
 
   <div class="right-section">
     <div class="login-container">
-    <form action="index.php" method="post">
-      <p class="log-title">LOGIN</p>
+      <form action="index.php" method="post">
+        <p class="log-title">LOGIN</p>
 
-      <?php
-        if (isset($_POST["Login"])) {
-            $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
-            $password = $_POST["password"];
-            require_once "connection/config.php";
+        <?php if (isset($error_message)): ?>
+            <div class='alert alert-danger'><?php echo $error_message; ?></div>
+        <?php endif; ?>
 
-            if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($password)) {
-          $sql = "SELECT * FROM user WHERE email = ?";
-          $stmt = mysqli_prepare($conn, $sql);
-          mysqli_stmt_bind_param($stmt, "s", $email);
-          mysqli_stmt_execute($stmt);
-          $result = mysqli_stmt_get_result($stmt);
-          $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-          if ($user && password_verify($password, $user["password"])) {
-              $_SESSION["user"] = "yes";
-              header("Location: User Interface/Dashboard.php");
-              $_SESSION["name"] = $user["First_Name"] . ' ' . $user["Last_Name"];
-              exit();
-          } else {
-              echo "<div class='alert alert-danger'>Invalid email or password.</div>";
-          }
-            } else {
-          echo "<div class='alert alert-danger'>Invalid email or password.</div>";
-            }
-        }
-      ?>
-      
         <div class="email">
             <input type="email" placeholder="Email" name="email" id="email" required>
         </div>
