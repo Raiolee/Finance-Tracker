@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt) {
             // Bind parameters (adjust according to your data types)
-            $stmt->bind_param("isssdss", $userId, $subject, $startDate, $endDate, $category, (float)$budgetLimit, $description);
+            $stmt->bind_param("isssdss", $userId, $subject, $startDate, $endDate, $category, $budgetLimit, $description);
 
             // Execute the statement
             if (!$stmt->execute()) {

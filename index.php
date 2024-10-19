@@ -9,7 +9,7 @@ if (isset($_SESSION["user"])) {
 if (isset($_POST["Login"])) {
     $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
     $password = $_POST["password"];
-    require_once "../connection/config.php";
+    require_once "connection/config.php";
 
     if (filter_var($email, FILTER_VALIDATE_EMAIL) && !empty($password)) {
         // Prepare and execute SQL query to fetch user by email

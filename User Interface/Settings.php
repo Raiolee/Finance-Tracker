@@ -126,7 +126,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
             <!-- Sign Out Button -->
             <div class="sign-out">
-                <button class="sign-out-button"><a href=""></a>Sign Out</button>
+                <a href="../logout.php">
+                    <button class="sign-out-button">Sign Out</button>
+                </a>
             </div>
         </div>
     </section>
