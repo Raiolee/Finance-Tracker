@@ -43,7 +43,7 @@ create table `goals` (
     `subject` varchar(255) not null,
     `start_date` date not null,
     `end_date`date not null,
-    `category` ENUM('Savings', 'Travels', 'Miscellaneous', 'Others') not null,
+    `category` varchar(255) not null,
     `budget_limit` decimal(10,2) not null,
     `description` text not null
 );

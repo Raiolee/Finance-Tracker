@@ -1,52 +1,63 @@
 <?php
-error_reporting(0);
+// Include the database connection file
+include '../connection/config.php';
+
+// Start the session
 session_start();
+
+// Check if the user is logged in
 if (!isset($_SESSION["user"])) {
     header("Location: ../index.php");
     exit();
 }
-$username = isset($_SESSION["name"]) ? $_SESSION["name"] : "Guest";
+// Retrieve the user's first and last names from the session, defaulting to an empty string if not set
+$firstName = $_SESSION["first_name"] ?? '';
+$lastName = $_SESSION["last_name"] ?? '';
+
+// Create the username by concatenating first and last names
+$username = trim("{$firstName} {$lastName}");
+
+// Get the current page name
 $current_page = basename($_SERVER['PHP_SELF']);
 
-include '../connection/config.php';
+// Get the user ID
+$userId = $_SESSION['user_id'] ?? null;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data
-    $startDate = $_POST['Start-Date'];
-    $endDate = $_POST['End-Date'];
-    $subject = $_POST['Subject'];
-    $category = $_POST['GoalsCategory'];
-    $description = $_POST['Description'];
-    $budgetLimit = $_POST['Target-Amount'];
-    $userId = isset($_SESSION['user']['id']) ? $_SESSION['user']['id'] : null;
+if (empty($userId)) {
+    $error_message = "User ID is not set. Please log in again.";
+} else {
+    if (isset($_POST['submit-form'])) {
+        $startDate = $_POST['Start-Date'];
+        $endDate = $_POST['End-Date'];
+        $subject = $_POST['Subject'];
+        $category = $_POST['GoalsCategory'];
+        $description = $_POST['Description'];
+        $budgetLimit = $_POST['Target-Amount'];
 
-    if (empty($userId)) {
-        $error_message = "User ID is not set. Please log in again.";
-    } else {
-        // Prepare and bind the SQL statement
-        $sql = "INSERT INTO goals (user_id, subject, start_date, end_date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-
-        if ($stmt) {
-            // Bind parameters (adjust according to your data types)
-            $stmt->bind_param("isssdss", $userId, $subject, $startDate, $endDate, $category, $budgetLimit, $description);
-
-            // Execute the statement
-            if (!$stmt->execute()) {
-                $error_message = "Error executing statement: " . $stmt->error;
-                echo $error_message; // For debugging
-            } else {
-                header("Location: Goals.php?success=1");
-                exit();
-            }
+        if (empty($startDate) || empty($endDate) || empty($subject) || empty($category) || empty($description) || empty($budgetLimit)) {
+            $error_message = "Please fill in all fields.";
         } else {
-            $error_message = "Error preparing statement: " . $conn->error;
-            echo $error_message; // For debugging
+            try {
+                $sql = "INSERT INTO goals (user_id, subject, start_date, end_date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+
+                $stmt->bind_param("issssds", $userId, $subject, $startDate, $endDate, $category, $budgetLimit, $description);
+
+                if (!$stmt->execute()) {
+                    $error_message = "Error executing statement: {$stmt->error}";
+                } else {
+                    header("Location: Goals.php?success=1");
+                    exit();
+                }
+            } catch (Exception $e) {
+                $error_message = "An error occurred: " . $e->getMessage();
+            }
         }
     }
 }
-?>
 
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -212,7 +223,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                     <div class="Goal-Form" id="Button-Row">
                         <div class="button-div-row">
-                            <button type="submit" class="button-goals">Save</button>
+                            <button type="submit" name="submit-form" class="button-goals">Save</button>
                             <button type="button" class="button-goals" onclick="closeGoalForm()">Cancel</button>
                         </div>
                     </div>
