@@ -223,8 +223,8 @@ $conn->close();
                     </div>
                     <div class="Goal-Form" id="Button-Row">
                         <div class="button-div-row">
-                            <button type="submit" name="submit-form" class="button-goals">Save</button>
                             <button type="button" class="button-goals" onclick="closeGoalForm()">Cancel</button>
+                            <button type="submit" name="submit-form" class="button-goals">Save</button>
                         </div>
                     </div>
                 </form>
