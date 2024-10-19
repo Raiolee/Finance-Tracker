@@ -176,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div id="newGoalForm" class="new-goal-form" style="display:none;">
                 <div class="newform">
-                    <h1 id="goals-title">New Goals</h1>
+                    <h1 id="goals-title">New Goal</h1>
                 </div>
                 <hr class="new1">
                 <form id="GoalForm" method="post">
