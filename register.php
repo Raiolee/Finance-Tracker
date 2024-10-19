@@ -77,25 +77,6 @@ if (isset($_SESSION["user"])) {
 
                             // Get the last inserted user_id
                             $user_id = $stmt->insert_id;
-                            // Insert into income table
-                            $stmt = $conn->prepare("INSERT INTO income (user_id) VALUES (?)");
-                            $stmt->bind_param("i", $user_id);
-                            $stmt->execute();
-
-                            // Insert into expenses table
-                            $stmt = $conn->prepare("INSERT INTO expenses (user_id) VALUES (?)");
-                            $stmt->bind_param("i", $user_id);
-                            $stmt->execute();
-
-                            // Insert into goals table
-                            $stmt = $conn->prepare("INSERT INTO goals (user_id) VALUES (?)");
-                            $stmt->bind_param("i", $user_id);
-                            $stmt->execute();
-
-                            // Insert into savings table
-                            $stmt = $conn->prepare("INSERT INTO savings (user_id) VALUES (?)");
-                            $stmt->bind_param("i", $user_id);
-                            $stmt->execute();
 
                             $alertMessage .= "<div class='alert alert-success'>You are registered successfully.</div>";
                             $stmt->close();
