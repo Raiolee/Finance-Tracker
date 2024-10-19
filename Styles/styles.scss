@@ -18,14 +18,15 @@
             align-items: center;
             justify-content: flex-start;
             margin-top: 20px;
-            height: 80%;
+            padding: 8px 0 8px 0;
+            height: 87%;
             width: 50vw;
             .top-bar {
                 margin: 0 0 5px 0;
                 width: 100%;
                 border-bottom: 1px solid #383838;
                 .settings {
-                    margin: 5px 0 5px 20px;
+                    margin: 0 0 5px 20px;
                     font: 30px 'Cabin Condensed', sans-serif;
                     color: #EEEEEE;
                 }
@@ -34,6 +35,7 @@
                 display: flex;
                 margin: 5px 0 5px 0;
                 padding: 5px;
+                height: 7%;
                 width: 95%;
                 background-color: #28282A;
                 border-radius: 10px;
