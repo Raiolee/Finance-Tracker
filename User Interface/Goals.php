@@ -1,11 +1,50 @@
 <?php
-// Disable all error reporting
 error_reporting(0);
 session_start();
-if(!isset($_SESSION["user"]))
-{
+if (!isset($_SESSION["user"])) {
     header("Location: ../index.php");
-}   
+    exit();
+}
+$username = isset($_SESSION["name"]) ? $_SESSION["name"] : "Guest";
+$current_page = basename($_SERVER['PHP_SELF']);
+
+include '../connection/config.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data
+    $startDate = $_POST['Start-Date'];
+    $endDate = $_POST['End-Date'];
+    $subject = $_POST['Subject'];
+    $category = $_POST['GoalsCategory'];
+    $description = $_POST['Description'];
+    $budgetLimit = $_POST['Target-Amount'];
+    $userId = isset($_SESSION['user']['id']) ? $_SESSION['user']['id'] : null;
+
+    if (empty($userId)) {
+        $error_message = "User ID is not set. Please log in again.";
+    } else {
+        // Prepare and bind the SQL statement
+        $sql = "INSERT INTO goals (user_id, subject, start_date, end_date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+
+        if ($stmt) {
+            // Bind parameters (adjust according to your data types)
+            $stmt->bind_param("isssdss", $userId, $subject, $startDate, $endDate, $category, (float)$budgetLimit, $description);
+
+            // Execute the statement
+            if (!$stmt->execute()) {
+                $error_message = "Error executing statement: " . $stmt->error;
+                echo $error_message; // For debugging
+            } else {
+                header("Location: Goals.php?success=1");
+                exit();
+            }
+        } else {
+            $error_message = "Error preparing statement: " . $conn->error;
+            echo $error_message; // For debugging
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +55,7 @@ if(!isset($_SESSION["user"]))
     <link rel="stylesheet" href="../Styles/Interface1.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <title>Dashboard</title>
+    <title>Goals</title>
 </head>
 <body class="container">
     <div class="nav-bar">
@@ -99,35 +138,114 @@ if(!isset($_SESSION["user"]))
 
     <div class="content">
         <div class="right-container">
-            <div class="goals-container">
-                <div class="left">
-                    <h1 id="goals-title">Goals</h1>
-                </div>
-                <div class="right">
-                    <div class="box">
-                        <div class="add">
-                            <button id="newGoalsBTN" class="new-goal">+ New Goal</button>
+            <div class="inner">
+                <div class="goals-container">
+                    <div class="left">
+                        <h1 id="goals-title">Goals</h1>
+                    </div>
+                    <div class="right">
+                        <div class="box">
+                            <div class="add">
+                                <button id="newGoalsBTN" class="new-goal">+ New Goal</button>
+                            </div>
+                            <form class="goal-form" action="search.php" method="GET">
+                                <input type="search" name="query" placeholder="Search here ...">
+                                <button type="submit">
+                                    <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
+                                </button>
+                            </form> 
                         </div>
-                        <form class="goal-form" action="search.php" method="GET">
-                            <input type="search" name="query" placeholder="Search here ...">
-                            <button type="submit">
-                                <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
-                            </button>
-                        </form> 
                     </div>
                 </div>
+                <hr class="new">
+                
+                <table class="goal-travel">
+                    <thead> 
+                        <tr>
+                            <th class="tab">SUBJECT</th>
+                            <th class="tab">CATEGORY</th>
+                            <th class="tab">ACCOMPLISHMENT DATE</th>
+                            <th class="tab">PROGRESS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Add PHP code to fetch and display goals here -->
+                    </tbody>
+                </table>
             </div>
-            <hr class="new">
-            
-            <table class="goal-travel">
-                <thead> 
-                    <th class="tab">SUBJECT</th>
-                    <th class="tab">CATEGORY</th>
-                    <th class="tab">ACCOMPLISHMENT DATE</th>
-                    <th class="tab">PROGRESS</th>
-                </thead>
-            </table>
+
+            <div id="newGoalForm" class="new-goal-form" style="display:none;">
+                <div class="newform">
+                    <h1 id="goals-title">New Goals</h1>
+                </div>
+                <hr class="new1">
+                <form id="GoalForm" method="post">
+                    <div class="Goal-Form-Format" id="Start-Date-Row">
+                        <label for="Start-Date" class="Goals-Label">Start Date*</label>
+                        <input type="date" id="Start-Date" name="Start-Date" required>
+                    </div>
+                    <div class="Goal-Form-Format" id="End-Date-Row">
+                        <label for="End-Date" class="Goals-Label">End Date*</label>
+                        <input type="date" id="End-Date" name="End-Date" required>
+                    </div>
+                    <div class="Goal-Form-Format" id="Subject-Row">
+                        <label for="Subject" class="Goals-Label">Subject*</label>
+                        <input type="text" id="Subject" name="Subject" required>
+                    </div>
+                    <div class="Goal-Form-Format" id="Category-Row">
+                        <label for="GoalsCategory" class="Goals-Label">Category*</label>
+                        <select id="GoalsCategory" name="GoalsCategory" required>
+                            <option value="" disabled selected>Category</option>
+                            <option value="Savings">Savings</option>
+                            <option value="Travels">Travels</option>
+                            <option value="Miscellaneous">Miscellaneous</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                    <div class="Goal-Form-Format" id="Description-Row">
+                        <label for="Description" class="Goals-Label">Description*</label>
+                        <textarea id="Description" name="Description" required></textarea>
+                    </div>
+                    <div class="Goal-Form-Format" id="Target-Amount-Row">
+                        <label for="Target-Amount" class="Goals-Label">Target Amount*</label>
+                        <input type="text" id="Target-Amount" name="Target-Amount" required>
+                    </div>
+                    <div class="Goal-Form" id="Button-Row">
+                        <div class="button-div-row">
+                            <button type="submit" class="button-goals">Save</button>
+                            <button type="button" class="button-goals" onclick="closeGoalForm()">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+
+                <?php if (isset($error_message)): ?>
+                    <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('newGoalsBTN').addEventListener('click', function() {
+            const rightContainer = document.querySelector('.inner');
+            const form = document.getElementById('newGoalForm');
+
+            rightContainer.style.display = 'none'; // Hide the right container
+            form.style.display = 'block'; // Show the new goal form
+        });
+
+        function closeGoalForm() {
+            const rightContainer = document.querySelector('.inner');
+            const form = document.getElementById('newGoalForm');
+
+            form.style.display = 'none'; // Hide the new goal form
+            rightContainer.style.display = 'block'; // Show the right container again
+            clearForm(); // Clear the form fields
+        }
+
+        function clearForm() {
+            document.getElementById('GoalForm').reset(); // Clear all form fields
+        }
+    </script>
 </body>
 </html>
