@@ -1,14 +1,70 @@
 <?php
-// Disable all error reporting
-error_reporting(0);
+// Enable error reporting for development
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 session_start();
-if (!isset($_SESSION["user"])) {
+
+if (!isset($_SESSION["user_id"])) {
     header("Location: ../index.php");
+    exit();
 }
-$uid = $_SESSION["ID"];
-$username = $_SESSION["name"];
+
+$uid = $_SESSION["user_id"];
+$username = $_SESSION["name"] ?? 'Guest';
 $current_page = basename($_SERVER['PHP_SELF']);
+
+// Include database connection
+include '../connection/config.php';
+
+// Check if the connection was successful
+if ($conn->connect_error) {
+    die(sprintf("Connection failed: %s", $conn->connect_error));
+}
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data
+    $date = $_POST['Date'];
+    $bank = $_POST['Bank'];
+    $balance = $_POST['Balance'];
+    $category = $_POST['SavingsCategory'];
+    $subject = $_POST['Subject'];
+    $description = $_POST['Description'];
+
+    // Prepare and bind the SQL statement
+    $sql = "INSERT INTO user_db.savings (user_id, date, bank, balance, category, subject, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+
+    if ($stmt) {
+        // Bind parameters
+        $stmt->bind_param("issdsss", $uid, $date, $bank, $balance, $category, $subject, $description);
+        
+        // Execute the statement
+        if ($stmt->execute()) {
+            // Redirect back to the dashboard with success message
+            header("Location: Savings.php?success=1");
+            exit();
+        } else {
+            $error_message = "Error executing statement: {$stmt->error}";
+        }
+    } else {
+        $error_message = "Error preparing statement: {$conn->error}";
+    }
+}
+
+// Fetch existing savings for the user
+$sql = "SELECT subject, balance, bank, category, date FROM user_db.savings WHERE user_id = ?";
+$stmt = $conn->prepare($sql);
+
+if ($stmt) {
+    $stmt->bind_param("i", $uid);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    $error_message = "Error preparing statement: {$conn->error}";
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -103,123 +159,121 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <div class="content">
         <div class="right-container">
             <div class="Inner-container">
-                <div class="Top-container-Approval">
-                    <div class="Left-Top">
-                        <p>Approvals</p>
-                    </div>
-                    <div class="Right-Top">
-                        <img src="../Assets/Icons/home.svg" alt="Icon" width="30px" id="icons">
-                        <img src="../Assets/Icons/home.svg" alt="Icon" width="30px" id="icons">
-                        <img src="../Assets/Icons/home.svg" alt="Icon" width="30px" id="icons">
-                    </div>
-                </div>
-
-                <hr class="bottom-line">
-
-                <?php
-                include '../connection/config.php'; // Include the database connection
-
-                // Fetch data from the User_Approvals_Data table based on the user UID
-                $sql = "SELECT Order_ID, Owner_Name, Position, Category, Amount, Frequency FROM User_Approvals_Data WHERE UID= ?"; // Use placeholder for UID
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $uid); // Assuming UID is an integer; change to "s" if it's a string
-                $stmt->execute();
-                $result = $stmt->get_result();
-                ?>
-
-                <table class="table-approval">
-                    <thead>
-                        <tr>
-                            <th>OWNER</th>
-                            <th>CATEGORY</th>
-                            <th>AMOUNT</th>
-                            <th>FREQUENCY</th>
-                            <th>ACTION</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        if ($result->num_rows > 0) {
-                            // Output data of each row
-                            while ($row = $result->fetch_assoc()) {
-                                echo "<tr>
-                                    <td>{$row['Owner_Name']}<br>{$row['Position']}</td>
-                                    <td>{$row['Category']}</td>
-                                    <td>\${$row['Amount']}</td>
-                                    <td>{$row['Frequency']}</td>
-                                    <td>
-                                        <div class='button-container'>
-                                            <button>Edit</button>
-                                            <button onclick=\"showPopup('{$row['Owner_Name']}', '{$row['Position']}', '{$row['Category']}', '\${$row['Amount']}', '{$row['Frequency']}')\">Edit</button>
-                                            <button onclick=\"deleteEntry({$row['Order_ID']})\">Delete</button>
-                                        </div>
-                                    </td>
-                                </tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='5'>No results found</td></tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-                <?php
-                $stmt->close(); // Close the statement
-                $conn->close(); // Close the connection
-                ?>
-
-
-                <div id="popup" class="popup" style="display:none;">
-                    <div class="popup-content">
-                        <span class="close" onclick="closePopup()">&times;</span>
-                        <h2 id="popup-title"></h2>
-                        <p id="popup-description"></p>
-                        <div class="popup-buttons">
-                            <button id="confirm-btn" onclick="handleConfirm()">Decline</button>
-                            <button id="cancel-btn" onclick="closePopup()">Confirm</button>
+                <div id="inner-container">
+                    <div class="Top-container-Approval">
+                        <div class="Left-Top">
+                            <p>Savings</p>
+                        </div>
+                        <div class="Right-Top"> 
+                            <button class="New-Saving" id="newSavingButton">+ New Saving</button>
                         </div>
                     </div>
+                    <div class="Lower-container">
+                        <hr class="bottom-line">
+                    </div>
+
+                    <div class="Lower-container">
+                        <table class="table-approval">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Balance</th>
+                                    <th>Bank</th>
+                                    <th>Category</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                if (isset($result) && $result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>
+                                                <td>" . htmlspecialchars($row['subject']) . "</td>
+                                                <td>" . htmlspecialchars($row['balance']) . "</td>
+                                                <td>" . htmlspecialchars($row['bank']) . "</td>
+                                                <td>" . htmlspecialchars($row['category']) . "</td>
+                                                <td>" . htmlspecialchars($row['date']) . "</td>
+                                            </tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='5'>No results found</td></tr>";
+                                }
+                                ?>
+                            </tbody>    
+                        </table>
+                    </div>
                 </div>
-            </div>
-        </div>
+
+                <div id="newSavingForm" class="new-expense-form" style="display:none;">
+                    <h3>New Saving</h3>
+                    <hr class="bottom-line">
+                    <form id="SavingForm" method="post">
+                        <div class="Saving-Form-Format" id="Date-Row">
+                            <label for="Date" class="Savings-Label">Date</label>
+                            <input type="date" id="Date" name="Date" required>
+                        </div>
+                        <div class="Saving-Form-Format" id="Bank-Row">
+                            <label for="Bank" class="Savings-Label">Bank</label>
+                            <input type="text" id="Bank" name="Bank" required>
+                        </div>
+                        <div class="Saving-Form-Format" id="Balance-Row">
+                            <label for="Balance" class="Savings-Label">Balance</label>
+                            <input type="number" id="Balance" name="Balance" required>
+                        </div>
+                        <div class="Saving-Form-Format" id="Category-Row">
+                            <label for="SavingsCategory" class="Savings-Label">Category</label>
+                            <select id="SavingsCategory" name="SavingsCategory" required>
+                                <option value="" disabled selected>Category</option>
+                                <option value="Type1">Type1</option>
+                                <option value="Type2">Type2</option>
+                                <option value="Type3">Type3</option>
+                                <option value="Type4">Type4</option>
+                            </select>
+                        </div>
+                        <div class="Saving-Form-Format" id="Subject-Row">
+                            <label for="Subject" class="Savings-Label">Subject</label>
+                            <input type="text" id="Subject" name="Subject" required>
+                        </div>
+                        <div class="Saving-Form-Format" id="Description-Row">
+                            <label for="Description" class="Savings-Label">Description</label>
+                            <textarea id="Description" name="Description" required></textarea>
+                        </div>
+                        <div class="Saving-Form-Format" id="Button-Row">
+                            <div class="button-div-row">
+                                <button type="submit" class="button-savings">Save</button>
+                                <button type="button" class="button-savings" onclick="closeExpenseForm()">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <?php if (isset($error_message)): ?>
+                    <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
+                <?php endif; ?>
+            </div> <!-- Closing Inner-container -->
+        </div> <!-- Closing right-container -->
     </div>
 
     <script>
-        function deleteEntry(id) {
-            if (confirm("Are you sure you want to delete this entry?")) { // Optional: This confirmation can be kept or removed
-                const xhr = new XMLHttpRequest();
-                xhr.open("POST", "delete_entry.php", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        // Handle successful deletion
-                        console.log(xhr.responseText);
-                        location.reload(); // Reload the page to see the changes
-                    } else {
-                        // Handle error
-                        alert("Error deleting entry.");
-                    }
-                };
-                xhr.send("id=" + id); // Send the ID to delete
-            }
-        }
-    </script>
+        document.getElementById('newSavingButton').addEventListener('click', function() {
+            const rightContainer = document.getElementById('inner-container');
+            const form = document.getElementById('newSavingForm');
 
+            rightContainer.style.display = 'none'; // Hide the right container
+            form.style.display = 'block'; // Show the new saving form
+        });
 
-    <script>
-        function showPopup(owner, position, category, amount, frequency) {
-            document.getElementById('popup-title').innerText = `Expense Request`;
-            document.getElementById('popup-description').innerText = `Category: ${category}\nAmount: ${amount}\nFrequency: ${frequency}`;
-            document.getElementById('popup').style.display = 'block';
+        function closeExpenseForm() {
+            const rightContainer = document.getElementById('inner-container');
+            const form = document.getElementById('newSavingForm');
+
+            form.style.display = 'none'; // Hide the new expense form
+            rightContainer.style.display = 'block'; // Show the right container again
+            clearForm(); // Clear the form fields
         }
 
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none';
-        }
-
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('popup')) {
-                closePopup();
-            }
+        function clearForm() {
+            document.getElementById('SavingForm').reset(); // Clear all form fields
         }
     </script>
 

@@ -5,7 +5,7 @@ if (!isset($_SESSION["user"])) {
     exit;
 }
 $username = $_SESSION["name"];
-$user_id = $_SESSION["user_id"];  // Ensure the user ID is set in the session
+$user_id = $_SESSION["user_id"];
 $current_page = basename($_SERVER['PHP_SELF']);
 require_once '../connection/config.php';
 
@@ -158,15 +158,15 @@ $stmt->close();
                             </button>
                             <button class="quick-access-item" onclick="handleNewReceipt()">
                                 <i class="icon-receipt"></i>
-                                <span>+ Add Receipt</span>
+                                <span>+ Add Income</span>
                             </button>
                             <button class="quick-access-item" onclick="handleNewReport()">
                                 <i class="icon-report"></i>
-                                <span>+ Create Report</span>
+                                <span>+ New Goal</span>
                             </button>
                             <button class="quick-access-item" onclick="handleNewTrip()">
                                 <i class="icon-plane"></i>
-                                <span>+ Create Trip</span>
+                                <span>+ Add Saving</span>
                             </button>
                         </div>
                     </div>

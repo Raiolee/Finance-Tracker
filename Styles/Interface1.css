@@ -646,3 +646,111 @@
     margin: 8px 0; /* Add some vertical spacing */
 }
 /*Goals Design End*/
+
+
+/*Saving Design*/
+.Lower-container {
+    display: flex; /* Use flexbox for centering */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+    margin: 0px 20px; /* Optional margin around the container */
+}
+
+.table-approval {
+    width: 100%; /* Set a width for the table */
+    border-collapse: collapse; /* Optional: for cleaner borders */
+}
+
+.table-approval th,
+.table-approval td {
+    padding: 10px 0px; /* Add some padding for better spacing */
+}
+
+.bottom-line {
+    width: 100%; /* Make the horizontal line full width */
+    margin-bottom: 20px; /* Space below the line */
+}
+
+hr
+{
+    margin: 0px;
+}
+.New-Saving
+{
+    border: 1px solid rgba(0, 218, 198, 1);
+    border-radius: 20px;
+    background-color: rgba(0, 218, 198, 1);
+    color: white;
+    font-size: small;
+}
+
+.Saving-Form-Format
+{
+    margin: 20px 0px;
+    
+}
+.Saving-Form-Format input, select
+{
+    height: 5vh;
+    border-radius: 10px;
+}
+.Savings-Label
+{
+    width: 50px;
+    margin-right: 10%;
+    margin-left: 5%;
+    font-size: 20px;
+    font-weight: 500;
+    color: #908F8F;
+}
+#Date, #SavingsCategory
+{
+    width: 218px;
+}
+#Subject, #Description
+{
+    width: 70%;
+}
+#Description
+{
+    height: 15vh;
+    vertical-align: text-top;
+    border-radius: 10px;
+}
+#Description-Row
+{
+    vertical-align: text-top;
+}
+.Saving-Form-Format input, select, textarea, button
+{
+    background-color: #383838;
+    color: white;
+}
+.button-savings
+{
+    margin-top: 5%;
+    width: 100px;
+    height: 40px;
+}
+#Button-Row {
+    display: flex;
+    justify-content: center; 
+    margin-top: 20px; 
+}
+
+.button-div-row {
+    display: flex; 
+    gap: 10px; 
+}
+
+.new-expense-form h3{
+    color: white;
+    padding-top: 20px;
+}
+
+.new-expense-form
+{
+    padding-left: 5%;
+    padding-right: 5%;
+}
+/*Saving Design End*/
