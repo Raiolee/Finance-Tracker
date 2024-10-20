@@ -48,10 +48,13 @@ create table `goals` (
     `description` text not null
 );
 
-create table `savings` (
-	`savings_id` int primary key auto_increment,
-    `user_id` int not null,
-    `subject` varchar(255) not null,
-    `category` varchar(255) not null,
-    `description` text not null
+CREATE TABLE `savings` (
+    `savings_id` INT PRIMARY KEY AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `subject` VARCHAR(255) NOT NULL,
+    `category` VARCHAR(255) NOT NULL,
+    `description` TEXT NOT NULL,
+    `balance` DECIMAL(10, 2) NOT NULL,
+    `date` DATE NOT NULL,
+    `bank` VARCHAR(255) NOT NULL
 );

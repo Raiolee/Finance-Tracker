@@ -27,64 +27,85 @@ if (isset($_SESSION["user"])) {
             <p class="reg-title">REGISTER</p>
 
             <?php
-                $alertMessage = '';
+            $alertMessage = '';
 
-                if (isset($_POST["submit"])) {
-                    $fname = trim($_POST["fname"]);
-                    $lname = trim($_POST["lname"]);
-                    $email = trim($_POST["email"]);
-                    $password = $_POST["password"];
-                    $confirmPassword = $_POST["Confirmpassword"];
-                    
-                    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-                    $errors = [];
+            if (isset($_POST["submit"])) {
+                $fname = trim($_POST["fname"]);
+                $lname = trim($_POST["lname"]);
+                $email = trim($_POST["email"]);
+                $password = $_POST["password"];
+                $confirmPassword = $_POST["Confirmpassword"];
+                
+                $errors = [];
 
-                    // Validate inputs
-                    if (empty($fname) || empty($lname) || empty($email) || empty($password) || empty($confirmPassword)) {
-                        $errors[] = "All fields are required";
-                    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                        $errors[] = "Email is not valid";
-                    } elseif (strlen($password) < 8) {
-                        $errors[] = "Password must be at least 8 characters";
-                    } elseif ($password !== $confirmPassword) {
-                        $errors[] = "Passwords do not match";
-                    }
+                // Validate inputs
+                if (empty($fname) || empty($lname) || empty($email) || empty($password) || empty($confirmPassword)) {
+                    $errors[] = "All fields are required";
+                } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $errors[] = "Email is not valid";
+                } elseif (strlen($password) < 8) {
+                    $errors[] = "Password must be at least 8 characters";
+                } elseif ($password !== $confirmPassword) {
+                    $errors[] = "Passwords do not match";
+                }
 
-                    require_once "connection/config.php";
+                require_once "connection/config.php";
 
-                    // Check if email exists
-                    $stmt = $conn->prepare("SELECT COUNT(*) FROM user WHERE email = ?");
-                    $stmt->bind_param("s", $email);
-                    $stmt->execute();
-                    $stmt->bind_result($rowCount);
-                    $stmt->fetch();
-                    $stmt->close();
+                if (empty($errors)) {
+                    // Check if email already exists
+                    if ($stmt = $conn->prepare("SELECT COUNT(*) FROM user WHERE email = ?")) {
+                        $stmt->bind_param("s", $email);
+                        $stmt->execute();
+                        $stmt->bind_result($rowCount);
+                        $stmt->fetch();
+                        $stmt->close();
 
-                    if ($rowCount > 0) {
-                        $errors[] = "Email already exists!";
-                    }
-
-                    // Handle errors or insert user
-                    if ($errors) {
-                        foreach ($errors as $error) {
-                            $alertMessage .= "<div class='alert alert-danger'>$error</div>";
+                        if ($rowCount > 0) {
+                            $errors[] = "Email already exists!";
                         }
                     } else {
-                        $stmt = $conn->prepare("INSERT INTO user (First_Name, Last_Name, Email, Password) VALUES (?, ?, ?, ?)");
-                        if ($stmt) {
-                            $stmt->bind_param("ssss", $fname, $lname, $email, $passwordHash);
-                            $stmt->execute();
+                        $errors[] = "Database error: Unable to prepare statement";
+                    }
+                }
 
-                            // Get the last inserted user_id
-                            $user_id = $stmt->insert_id;
+                // Handle errors or insert user
+                if ($errors) {
+                    foreach ($errors as $error) {
+                        $alertMessage .= "<div class='alert alert-danger'>$error</div>";
+                    }
+                } else {
+                    // Insert new user
+                    if ($stmt = $conn->prepare("INSERT INTO user (First_Name, Last_Name, Email, Password) VALUES (?, ?, ?, ?)")) {
+                        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+                        $stmt->bind_param("ssss", $fname, $lname, $email, $passwordHash);
+                        $stmt->execute();
+                        $stmt->close();
 
-                            $alertMessage .= "<div class='alert alert-success'>You are registered successfully.</div>";
-                            $stmt->close();
+                        $sql = "SELECT * FROM user WHERE email = ?";
+                        $stmt = mysqli_prepare($conn, $sql);
+                        mysqli_stmt_bind_param($stmt, "s", $email);
+                        mysqli_stmt_execute($stmt);
+                        $result = mysqli_stmt_get_result($stmt);
+                        $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
+
+                        // Check if user exists and password matches
+                        if ($user && password_verify($password, $user["password"])) {
+                            $_SESSION["user"] = "yes"; // Mark user as logged in
+                            $_SESSION["user_id"] = $user["user_id"]; // Store the user ID
+                            $_SESSION["name"] = $user["First_Name"] . ' ' . $user["Last_Name"]; // Store full name          
+                            header("Location: User Interface/Dashboard.php"); // Redirect to Dashboard
+                            exit();
                         } else {
                             $alertMessage .= "<div class='alert alert-danger'>Something went wrong</div>";
                         }
+                    } else {
+                        $alertMessage .= "<div class='alert alert-danger'>Something went wrong</div>";
                     }
                 }
+
+                // Close the database connection
+                $conn->close();
+            }
             ?>
 
             

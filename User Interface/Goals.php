@@ -1,5 +1,4 @@
 <?php
-// Include the database connection file
 include '../connection/config.php';
 
 // Start the session
@@ -10,15 +9,6 @@ if (!isset($_SESSION["user"])) {
     header("Location: ../index.php");
     exit();
 }
-// Retrieve the user's first and last names from the session, defaulting to an empty string if not set
-$firstName = $_SESSION["first_name"] ?? '';
-$lastName = $_SESSION["last_name"] ?? '';
-
-// Create the username by concatenating first and last names
-$username = trim("{$firstName} {$lastName}");
-
-// Get the current page name
-$current_page = basename($_SERVER['PHP_SELF']);
 
 // Get the user ID
 $userId = $_SESSION['user_id'] ?? null;
@@ -77,7 +67,6 @@ $conn->close();
         </div>
 
         <div class="user-name">
-            <p><?php echo htmlspecialchars($username); ?></p>
         </div>
 
         <!-- Section for Dashboard -->
@@ -223,8 +212,8 @@ $conn->close();
                     </div>
                     <div class="Goal-Form" id="Button-Row">
                         <div class="button-div-row">
-                            <button type="submit" name="submit-form" class="button-goals">Save</button>
                             <button type="button" class="button-goals" onclick="closeGoalForm()">Cancel</button>
+                            <button type="submit" name="submit-form" class="button-goals">Save</button>
                         </div>
                     </div>
                 </form>

@@ -5,11 +5,11 @@ if (!isset($_SESSION["user"])) {
     exit;
 }
 $username = $_SESSION["name"];
-$user_id = $_SESSION["user_id"];  // Ensure the user ID is set in the session
+$user_id = $_SESSION["user_id"];
 $current_page = basename($_SERVER['PHP_SELF']);
 require_once '../connection/config.php';
 
-$sql = "SELECT subject FROM goals WHERE user_id = ?";
+$sql = "SELECT subject FROM goals WHERE user_id = ? LIMIT 5";
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die('MySQL prepare error: ' . $conn->error);
