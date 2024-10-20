@@ -158,15 +158,15 @@ $stmt->close();
                             </button>
                             <button class="quick-access-item" onclick="handleNewReceipt()">
                                 <i class="icon-receipt"></i>
-                                <span>+ Add Receipt</span>
+                                <span>+ Add Income</span>
                             </button>
                             <button class="quick-access-item" onclick="handleNewReport()">
                                 <i class="icon-report"></i>
-                                <span>+ Create Report</span>
+                                <span>+ New Goal</span>
                             </button>
                             <button class="quick-access-item" onclick="handleNewTrip()">
                                 <i class="icon-plane"></i>
-                                <span>+ Create Trip</span>
+                                <span>+ Add Saving</span>
                             </button>
                         </div>
                     </div>
