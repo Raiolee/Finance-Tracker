@@ -152,10 +152,10 @@ $stmt->close();
                     <div class="quick-access-section">
                         <h2>Quick Access</h2>
                         <div class="quick-access-items">
-                            <button class="quick-access-item" onclick="handleNewExpense()">
+                            <button class="quick-access-item" onclick="window.location.href='Expenses.php#newExpenseForm'">
                                 <i class="icon-credit-card"></i>
                                 <span>+ New Expense</span>
-                            </button>
+                           </button>
                             <button class="quick-access-item" onclick="handleNewReceipt()">
                                 <i class="icon-receipt"></i>
                                 <span>+ Add Income</span>
