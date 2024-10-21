@@ -150,6 +150,7 @@
     gap: 20px; /* Add space between sections */
     width: 100%;
     flex-grow: 1; 
+    max-width: 1200px;
 }
 
 .horizontal-sections {
