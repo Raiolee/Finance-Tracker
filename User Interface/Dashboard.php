@@ -210,7 +210,7 @@ $stmt->close();
     </div>
     </div>
 
-
+    <p><a href="../Logout.php">Logout</a></p>
 
 
 <script src="../User Interface/quickreport.js"></script>
