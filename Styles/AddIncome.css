@@ -1,0 +1,196 @@
+.container {
+    background-color: #1b1b1b;
+    display: flex;
+    height: 100vh;
+    width: auto;
+    min-height: 100vh; /* Allows the container to expand if needed */
+}
+        
+h2 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 25px; /* Adjust size as needed */
+    font-weight: 200; /* 700 makes it bold; you can adjust to 400 or 500 for a lighter weight */
+    color: #ffffff; /* Optional: Adjust color as needed */
+    margin-bottom: 50px;
+    margin-top: -50px;
+}
+
+
+        .main-holder {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            margin: 0;
+            background-color:#1c1c1c;
+        }
+
+        .Nav-Bar {
+            width: 20%;
+            margin-right: 50px;
+        }
+
+        .content {
+            height: 100vh;
+            width: 100vw;
+            padding: 20px;
+            background-color: #1c1c1c;
+            color: white;
+        }
+
+        
+        #Nav_Button {
+   
+            display: flex;
+            justify-content: flex-start; /* Aligns the items to the left */
+            align-items: center; /* Vertically center the icon and text */
+            gap: 30px; /* Adds space between the icon and the text */
+            padding-left: 15px;
+        }
+
+        #Nav_Button a {
+            text-decoration: none;
+            color: rgba(216, 255, 251, 1);
+            font-size: 20px;
+  
+         font-family: 'Roboto', sans-serif;
+         margin-top: 6px; 
+        line-height: 1; 
+        display: block; 
+    
+}
+        
+
+#Nav_Button p {
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+    margin: 5px; /* Ensure no extra margin around the text */
+    color: rgba(216, 255, 251, 1); /* Text color */
+}
+
+        #Nav_Button img {
+        width: 35px; 
+        height: 50px;
+        filter: brightness(0.2);
+        margin: 0; 
+        filter: brightness(0) invert(1);
+}
+
+        #Nav_Button.active p a {
+            color: rgba(0, 218, 198, 1);
+            font-weight: bold;
+            filter: brightness(1);
+        }
+
+        #Nav_Button.active img {
+            filter: brightness(1);
+        }
+
+        .Profile_img img {
+            border-radius: 50%;
+        }
+
+        .Profile, .User-name {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #A4A4A4;
+        }
+        
+            .form-container {
+        margin-top: 20px;
+        background-color: #0b0b0a;
+        padding: 100px; 
+        border-radius: 10px;
+        width: 100%; 
+        max-width: 1000px; 
+        margin: 20px auto; 
+        margin-bottom: 50px;
+    }
+        .icon-line {
+        display: block; /* Makes the SVG behave like a block element */
+        
+        width: 90%; /* Adjust the length here as needed (e.g., 80%) */
+        height: auto; /* Maintain aspect ratio */
+        margin-bottom: 30px; /* Space below the icon */
+    margin-top: -40px; 
+    }
+
+
+        .form-label {
+            font-size: 15px;
+            font-weight: 400;
+            color: #908F8F;
+        }
+
+        .Penny_Logo {
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin-top: 20px; 
+            overflow: hidden; 
+        }
+        
+
+        .Penny_Logo img {
+            max-width: 100%; 
+            height: auto; 
+            display: block; 
+        }
+  
+        .form-control, .form-select {
+            background-color: #2c2c2c;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            box-shadow: none;
+            border-color: #00DAC6;
+        }
+        .custom-date {
+     width: 180px; 
+    }
+
+        .submit {
+        background-color: #00DAC6;
+        color: #000000;
+        border: none;
+        padding: 5px 10px;
+        font-size: 16px; /* Increased font size */
+        border-radius: 1px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-save {
+        background-color: #00DAC6; /* Make sure to include this for the default state */
+        color: white;
+        border: none;
+        padding: 5px 25px;
+        font-size: 12px; /* Increased font size */
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+       
+        margin-left: auto; /* Moves the button to the right */
+        display: block; /* Ensure the button is block-level if needed */
+
+
+    }
+    .button-container {
+    display: flex;
+    justify-content: flex-end; /* Aligns items to the right */
+    padding: 10px; /* Optional padding for spacing */
+}
+
+
+    .btn-save:hover {
+        background-color: #00b8a5;
+    }
+
+
+        .input-group {
+            max-width: 300px; /* Adjust input width */
+        }
+
+        textarea {
+    resize: none; /* Prevent resizing */
+}
