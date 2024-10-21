@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-include 'config.php';
+include '../connection/config.php';
 
 $message = ''; // Variable to store success/error messages
 
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
    
 </head>
-<body>
+<body class="container">
     <div class="main-holder">
         <div class="Nav-Bar">
             <div class="Profile"> 
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="Home-Nav <?php echo ($current_page == 'Dashboard.php') ? 'active' : ''; ?>" id="Nav_Button">
                 <div>
-                    <img src="Assets/Icons/home.svg" alt="Icon" width="50px" >
+                    <img src="..Assets/Icons/home.svg" alt="Icon" width="50px" >
                 </div>
                 <div>
                     <p><a href="Dashboard.php">Home</a></p>
@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="Expenses-Nav <?php echo ($current_page == 'Expenses.php') ? 'active' : ''; ?>" id="Nav_Button">
                 <div>
-                    <img src="Expenses.svg" alt="Icon" width="50px" height="50px">
+                    <img src="..Assets/Icons/Expenses.svg" alt="Icon" width="50px" height="50px">
                 </div>
                 <div>
                     <p><a href="Expenses.php">Expenses</a></p>
@@ -92,18 +92,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <p><a href="Travels.php">Travels</a></p>
                 </div>
             </div>
-            <div class="NewIncome-Nav active" id="Nav_Button">
+            <div class="NewIncome-Nav active <?php echo ($current_page == 'Income.php') ? 'active' : ''; ?>" id="Nav_Button">
                 <div>
                     <img src="income2.svg" alt="New Income Icon" width="70px" height="50px"> <!-- Replace with your SVG icon -->
                 </div>
                 <div>
-                    <p><a href="ViewIncome.php">Income</a></p>
+                    <p><a href="Income.php">Income</a></p>
                 </div>
             </div>
 
             <div class="Approvals-Nav <?php echo ($current_page == 'Savings.php') ? 'active' : ''; ?>" id="Nav_Button">>
                 <div>
-                    <img src="Aprrovals.svg" alt="Icon" width="40px" height="50px">
+                    <img src="..Assets/Icons/reports.svg" alt="Icon" width="40px" height="50px">
                 </div>
                 <div>
                     <p><a href="Savings.php">Savings</a></p>
@@ -112,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="Settings-Nav <?php echo ($current_page == 'Settings.php') ? 'active' : ''; ?>" id="Nav_Button">
                 <div>
-                    <img src="Assets/Icons/settings.svg" alt="Icon" width="50px" >
+                    <img src="..Assets/Icons/settings.svg" alt="Icon" width="50px" >
                 </div>
                 <div>
                     <p><a href="Settings.php">Report</a></p>
@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="Logo-Nav" id="Nav_Side">
                 <div class="Penny_Logo">
-                    <img src="PENNY_WISE_Logo.png" alt="" width="145px" >
+                    <img src="Assets/PENNY_WISE_Logo.png" alt="" width="200" >
                     
                 </div>
     
