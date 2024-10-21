@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel ="stylesheet" href="AddIncome.css">
+    <link rel ="stylesheet" href="Styles/AddIncome.css">
     
    
 </head>
@@ -63,30 +63,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
 
             <div class="User-name">
-                <p>Username</p>
+                
             </div>
 
-            <div class="Home-Nav " id="Nav_Button">
+            <div class="Home-Nav <?php echo ($current_page == 'Dashboard.php') ? 'active' : ''; ?>" id="Nav_Button">
                 <div>
-                    <img src="Home.svg" alt="Icon" width="70px" height="50px">
+                    <img src="Assets/Icons/home.svg" alt="Icon" width="50px" >
                 </div>
                 <div>
                     <p><a href="Dashboard.php">Home</a></p>
                 </div>
             </div>
 
-            <div class="Expenses-Nav" id="Nav_Button">
+            <div class="Expenses-Nav <?php echo ($current_page == 'Expenses.php') ? 'active' : ''; ?>" id="Nav_Button">
                 <div>
-                    <img src="Expenses.svg" alt="Icon" width="70px" height="50px">
+                    <img src="Expenses.svg" alt="Icon" width="50px" height="50px">
                 </div>
                 <div>
                     <p><a href="Expenses.php">Expenses</a></p>
                 </div>
             </div>
 
-            <div class="Travels-Nav " id="Nav_Button">
+            <div class="Travels-Nav <?php echo ($current_page == 'Income.php') ? 'active' : ''; ?>" id="Nav_Button">
                 <div>
-                    <img src="Travels.svg" alt="Icon" width="70px" height="50px">
+                    <img src="Travels.svg" alt="Icon" width="50px" height="50px">
                 </div>
                 <div>
                     <p><a href="Travels.php">Travels</a></p>
@@ -97,25 +97,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <img src="income2.svg" alt="New Income Icon" width="70px" height="50px"> <!-- Replace with your SVG icon -->
                 </div>
                 <div>
-                    <p><a href="NewIncome.php">Income</a></p>
+                    <p><a href="ViewIncome.php">Income</a></p>
                 </div>
             </div>
 
-            <div class="Approvals-Nav" id="Nav_Button">
+            <div class="Approvals-Nav <?php echo ($current_page == 'Savings.php') ? 'active' : ''; ?>" id="Nav_Button">>
                 <div>
                     <img src="Aprrovals.svg" alt="Icon" width="40px" height="50px">
                 </div>
                 <div>
-                    <p><a href="Approvals.php">Approvals</a></p>
+                    <p><a href="Savings.php">Savings</a></p>
                 </div>
             </div>
 
-            <div class="Report-Nav" id="Nav_Button">
+            <div class="Settings-Nav <?php echo ($current_page == 'Settings.php') ? 'active' : ''; ?>" id="Nav_Button">
                 <div>
-                    <img src="report.svg" alt="Icon" width="40px" >
+                    <img src="Assets/Icons/settings.svg" alt="Icon" width="50px" >
                 </div>
                 <div>
-                    <p><a href="Report.php">Report</a></p>
+                    <p><a href="Settings.php">Report</a></p>
                 </div>
             </div>
 
