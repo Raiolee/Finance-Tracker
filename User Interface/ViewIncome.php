@@ -1,3 +1,38 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+include 'dbconnect.php';
+
+// Initialize an empty variable for the search keyword
+$searchKeyword = '';
+
+// Check if the form has been submitted and set the search keyword
+if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['searchKeyword'])) {
+    $searchKeyword = htmlspecialchars($_POST['searchKeyword']);
+}
+
+// Prepare the SQL query based on whether a search keyword exists
+if ($searchKeyword) {
+    // Use prepared statements to prevent SQL injection
+    $stmt = $conn->prepare("SELECT id, source, total, currency, category, investment FROM incomes WHERE source LIKE ? OR category LIKE ?");
+    $likeKeyword = "%$searchKeyword%";
+    $stmt->bind_param("ss", $likeKeyword, $likeKeyword);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Check for errors
+    if ($stmt->error) {
+        echo "Error: " . $stmt->error;
+        exit();
+    }
+} else {
+    // Default SQL query to get all records
+    $sql = "SELECT id, source, total, currency, category, investment FROM incomes";
+    $result = $conn->query($sql);
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +41,7 @@
     <title>Income List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="ViewIncome.css">
     <style>
         body {
     background-color: #1a1a1a;
@@ -13,166 +49,7 @@
 }
 
 
-.table-header {
-    flex: 1; /* Allow each header to grow equally */
-    text-align: center; /* Center align the text */
-    padding: 10px; /* Add padding for spacing */
-    color: #ffffff; /* Match table text color */
-    background-color: #0B0B0B; /* Match the card background */
-    border-bottom: 5px solid #444; /* Optional: add a border below each header */
-    font-size: 15px;
-    border: none;
-  
-    
-}
 
-.card {
-    background-color: #2a2a2a;
-    border: none;
-}
-
-.table {
-    color: #ffffff;
-    border-collapse: collapse; /* This ensures there are no gaps between cells */
-}
-
-.table thead th {
-    border: none; /* No borders on the header */
-}
-.table td {
-    height: 50px; /* Set a fixed height for table cells */
-    padding: 10px; /* Add padding for table cells */
-}
- .table th {
-    border: none; /* No borders on table cells */
-    height: 50px; /* Set a fixed height for table cells */
-}
-
-
-/* Alternating row colors */
-.table tr:nth-child(odd) {
-    background-color: #1B1B1B; /* Black */
-}
-
-.table tr:nth-child(even) {
-    background-color: #28282A; /* Gray */
-}
-
-.btn-outline-light {
-    border-color: #444;
-}
-
-        .main-holder {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            margin: 0;
-            background-color:#1c1c1c;
-        }
-
-        .Nav-Bar {
-            height: 100vh;
-            width: 25vw;
-            background-color:#1c1c1c;
-            padding: 20px;
-            margin-left: 20px;
-        }
-
-        .content {
-            height: 100vh;
-            width: 100vw;
-            padding: 20px;
-            background-color: #1c1c1c;
-            color: white;
-        }
-
-        
-        #Nav_Button {
-   
-            display: flex;
-            justify-content: flex-start; /* Aligns the items to the left */
-            align-items: center; /* Vertically center the icon and text */
-            gap: 30px; /* Adds space between the icon and the text */
-            padding-left: 15px;
-        }
-
-        #Nav_Button a {
-            text-decoration: none;
-            color: rgba(216, 255, 251, 1);
-            font-size: 20px;
-  
-         font-family: 'Roboto', sans-serif;
-         margin-top: 6px; 
-        line-height: 1; 
-        display: block; 
-    
-}
-        
-
-#Nav_Button p {
-    font-size: 20px;
-    font-family: 'Roboto', sans-serif;
-    margin: 5px; /* Ensure no extra margin around the text */
-    color: rgba(216, 255, 251, 1); /* Text color */
-}
-
-        #Nav_Button img {
-        width: 35px; 
-        height: 50px;
-        filter: brightness(0.2);
-        margin: 0; 
-        filter: brightness(0) invert(1);
-}
-
-        #Nav_Button.active p a {
-            color: rgba(0, 218, 198, 1);
-            font-weight: bold;
-            filter: brightness(1);
-        }
-
-        #Nav_Button.active img {
-            filter: brightness(1);
-        }
-
-        .Profile_img img {
-            border-radius: 50%;
-        }
-
-        .Profile, .User-name {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #A4A4A4;
-        }
-        .modal-content {
-            background-color: #2a2a2a;
-            color: #ffffff;
-        }
-
-        .modal-header {
-            border-bottom: 1px solid #444;
-        }
-
-        .modal-footer {
-            border-top: 1px solid #444;
-        }
-
-        .btn-confirm {
-            background-color: #00DAC6;
-            color: #000000;
-        }
-
-        .btn-decline {
-            background-color: #444;
-            color: #ffffff;
-        }
-
-        .modal-body .row {
-            margin-bottom: 10px;
-        }
-
-        .modal-body .col-4 {
-            font-weight: bold;
-        }
         
     </style>
 </head>
@@ -207,14 +84,7 @@
                 </div>
             </div>
 
-            <div class="Travels-Nav " id="Nav_Button">
-                <div>
-                    <img src="Travels.svg" alt="Icon" width="70px" height="50px">
-                </div>
-                <div>
-                    <p><a href="Travels.php">Travels</a></p>
-                </div>
-            </div>
+           
             <div class="NewIncome-Nav active" id="Nav_Button">
                 <div>
                     <img src="income2.svg" alt="New Income Icon" width="70px" height="50px"> <!-- Replace with your SVG icon -->
@@ -224,21 +94,24 @@
                 </div>
             </div>
 
-            <div class="Approvals-Nav" id="Nav_Button">
-                <div>
-                    <img src="Aprrovals.svg" alt="Icon" width="40px" height="50px">
-                </div>
-                <div>
-                    <p><a href="Approvals.php">Approvals</a></p>
-                </div>
-            </div>
+           
 
-            <div class="Report-Nav" id="Nav_Button">
+            <div class="Goals-Nav" id="Nav_Button">
                 <div>
                     <img src="report.svg" alt="Icon" width="40px" >
                 </div>
                 <div>
-                    <p><a href="Report.php">Report</a></p>
+                    <p><a href="Report.php">Goals</a></p>
+                </div>
+            </div>
+
+
+            <div class="Goals-Nav" id="Nav_Button">
+                <div>
+                    <img src="report.svg" alt="Icon" width="40px" >
+                </div>
+                <div>
+                    <p><a href="Report.php">Savings</a></p>
                 </div>
             </div>
 
@@ -265,12 +138,13 @@
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h2 class="card-title">Income List</h2>
                     <div>
-                        <a href="Income.html">
+                        <a href="AddIncome.php">
                             <button class="btn btn-outline-light me-2">+ New Income</button>
                         </a>
-                        <button class="btn btn-outline-light me-2"><i class="fas fa-sort"></i></button>
-                        <button class="btn btn-outline-light" >
-                            <i class="fas fa-ellipsis-v"></i>
+                        <button class="btn btn-outline-light me-2" id="sortBtn">
+                                <i class="fas fa-search"></i>
+                            </button>
+                         
                         </button>
                     </div>
                 </div>
@@ -285,22 +159,24 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <?php
-                            if ($result->num_rows > 0) {
-                                // Output data for each row
-                                while($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . $row['source'] . "</td>";
-                                    echo "<td>" . $row['total'] . " " . $row['currency'] . "</td>";
-                                    echo "<td>" . $row['category'] . "</td>";
-                                    echo "<td>" . $row['investment'] . "</td>";
-                                    echo "</tr>";
-                                }
-                            } else {
-                                echo "<tr><td colspan='4'>No income records found</td></tr>";
-                            }
-                            ?>
-                    </tr>
+                        <?php
+                     if ($result->num_rows > 0) {
+                       
+                    while($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . htmlspecialchars($row['source']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['total']) . " " . htmlspecialchars($row['currency']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['investment']) . "</td>";
+                        echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    
+                    echo "<tr><td colspan='4'>No income records found</td></tr>";
+                }
+                ?>
+                    
                     </tbody>
                    
                 </table>
@@ -308,6 +184,37 @@
             
         </div>
     </div>
+    <div id="sortModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Search Income Records</h2>
+            <form method="POST" action="">
+                <input type="text" name="searchKeyword" class="form-control" placeholder="Enter keyword (e.g., Work)" required>
+                <br>
+                <button type="submit" class="btn-search">Search</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var modal = document.getElementById("sortModal");
+        var btn = document.getElementById("sortBtn");
+        var span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
    
 </body>
 </html>
