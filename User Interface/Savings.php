@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt) {
         // Bind parameters
         $stmt->bind_param("issdsss", $uid, $date, $bank, $balance, $category, $subject, $description);
-        
+
         // Execute the statement
         if ($stmt->execute()) {
             // Redirect back to the dashboard with success message
@@ -136,7 +136,7 @@ if ($stmt) {
             </div>
             <div>
                 <p><a href="Savings.php">Savings</a></p>
-            </div>            
+            </div>
         </div>
 
         <!-- Settings Section -->
@@ -164,7 +164,7 @@ if ($stmt) {
                         <div class="Left-Top">
                             <p>Savings</p>
                         </div>
-                        <div class="Right-Top"> 
+                        <div class="Right-Top">
                             <button class="New-Saving" id="newSavingButton">+ New Saving</button>
                         </div>
                     </div>
@@ -199,7 +199,7 @@ if ($stmt) {
                                     echo "<tr><td colspan='5'>No results found</td></tr>";
                                 }
                                 ?>
-                            </tbody>    
+                            </tbody>
                         </table>
                     </div>
                 </div>
