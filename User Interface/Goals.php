@@ -1,6 +1,14 @@
 <?php
 include '../connection/config.php';
 
+// Create a connection
+$conn = mysqli_connect($DB_Host, $DB_User, $DB_Password, $DB_Name);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
 // Start the session
 session_start();
 
@@ -14,7 +22,7 @@ if (!isset($_SESSION["user"])) {
 $userId = $_SESSION['user_id'] ?? null;
 
 if (empty($userId)) {
-    $error_message = "User ID is not set. Please log in again.";
+    $error_message = "User  ID is not set. Please log in again.";
 } else {
     if (isset($_POST['submit-form'])) {
         $startDate = $_POST['Start-Date'];
@@ -24,13 +32,16 @@ if (empty($userId)) {
         $description = $_POST['Description'];
         $budgetLimit = $_POST['Target-Amount'];
 
+        // Validate required fields
         if (empty($startDate) || empty($endDate) || empty($subject) || empty($category) || empty($description) || empty($budgetLimit)) {
             $error_message = "Please fill in all fields.";
         } else {
             try {
+                // Prepare and execute the insert statement
                 $sql = "INSERT INTO goals (user_id, subject, start_date, end_date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql);
 
+                // Use 'd' for double (for budget limit) and 'i' for integer (for user_id)
                 $stmt->bind_param("issssds", $userId, $subject, $startDate, $endDate, $category, $budgetLimit, $description);
 
                 if (!$stmt->execute()) {
@@ -45,9 +56,19 @@ if (empty($userId)) {
         }
     }
 }
+    $sql = "SELECT subject, category, start_date FROM user_db.goals WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
 
+    if ($stmt) {
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+    } else {
+        $error_message = "Error preparing statement: {$conn->error}";
+    }
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -169,7 +190,19 @@ $conn->close();
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Add PHP code to fetch and display goals here -->
+                        <?php
+
+                            if (isset($result) && $result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>
+                                        <td>" . htmlspecialchars($row['subject']) . "</td>
+                                        <td>" . htmlspecialchars($row['category']) . "</td>
+                                    </tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='5'>No results found</td></tr>";
+                            }
+                        ?>
                     </tbody>
                 </table>
             </div>
