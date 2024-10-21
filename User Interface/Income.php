@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-include 'dbconnect.php';
+include '../connection/config.php';
 
 // Initialize an empty variable for the search keyword
 $searchKeyword = '';
