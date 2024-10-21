@@ -150,6 +150,7 @@
     gap: 20px; /* Add space between sections */
     width: 100%;
     flex-grow: 1; 
+    max-width: 1200px;
 }
 
 .horizontal-sections {
@@ -647,28 +648,27 @@
 }
 /*Goals Design End*/
 
-
 /*Saving Design*/
 .Lower-container {
-    display: flex; /* Use flexbox for centering */
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center children horizontally */
-    margin: 0px 20px; /* Optional margin around the container */
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    margin: 0px 20px; 
 }
 
 .table-approval {
-    width: 100%; /* Set a width for the table */
-    border-collapse: collapse; /* Optional: for cleaner borders */
+    width: 100%; 
+    border-collapse: collapse; 
 }
 
 .table-approval th,
 .table-approval td {
-    padding: 10px 0px; /* Add some padding for better spacing */
+    padding: 10px 0px; 
 }
 
 .bottom-line {
-    width: 100%; /* Make the horizontal line full width */
-    margin-bottom: 20px; /* Space below the line */
+    width: 100%; 
+    margin-bottom: 20px; 
 }
 
 hr
@@ -680,8 +680,13 @@ hr
     border: 1px solid rgba(0, 218, 198, 1);
     border-radius: 20px;
     background-color: rgba(0, 218, 198, 1);
-    color: white;
+    color: black;
     font-size: small;
+    height: 30px;
+}
+.New-Saving:hover {
+    background-color: #00bfa5; /* Slightly darker shade for hover */
+    transform: translateY(-2px); /* Slight lift effect on hover */
 }
 
 .Saving-Form-Format
@@ -703,15 +708,15 @@ hr
     font-weight: 500;
     color: #908F8F;
 }
-#Date, #SavingsCategory
+#SavingsDate, #SavingsCategory, #Bank, #Balance
 {
     width: 218px;
 }
-#Subject, #Description
+#SavingsSubject, #SavingsDescription
 {
     width: 70%;
 }
-#Description
+#SavingsDescription
 {
     height: 15vh;
     vertical-align: text-top;
@@ -724,23 +729,31 @@ hr
 .Saving-Form-Format input, select, textarea, button
 {
     background-color: #383838;
-    color: white;
+    color: rgb(187, 182, 182);
 }
 .button-savings
 {
-    margin-top: 5%;
-    width: 100px;
-    height: 40px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    background-color: #00DAC6;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
 }
-#Button-Row {
+#Savings-Button-Row {
     display: flex;
     justify-content: center; 
     margin-top: 20px; 
 }
 
-.button-div-row {
+.Savings-button-div-row {
     display: flex; 
-    gap: 10px; 
+    gap: 20px; 
+    margin-top: 40px;
 }
 
 .new-expense-form h3{
@@ -752,5 +765,9 @@ hr
 {
     padding-left: 5%;
     padding-right: 5%;
+}
+.button-savings:hover {
+    background-color: #00bfa5; /* Slightly darker shade for hover */
+    transform: translateY(-2px); /* Slight lift effect on hover */
 }
 /*Saving Design End*/

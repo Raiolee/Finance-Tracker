@@ -192,6 +192,22 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 
     <script>
+        window.onload = function() {
+        // Check if the URL hash is set to #newExpenseForm when the page loads
+        if (window.location.hash === '#newExpenseForm') {
+            const form = document.getElementById('newExpenseForm');
+            const rightContainer = document.getElementById('inner_container');
+
+            rightContainer.style.display = 'none'; // Hide the right container
+            form.style.display = 'block'; // Show the new expense form
+
+            // Prevent default hash jump
+            window.scrollTo(0, 0);
+
+            // Remove the hash from the URL without refreshing the page
+            window.history.pushState("", document.title, window.location.pathname);
+        }};
+
         document.getElementById('newExpenseButton').addEventListener('click', function() {
             const rightContainer = document.getElementById('inner_container');
             const form = document.getElementById('newExpenseForm');

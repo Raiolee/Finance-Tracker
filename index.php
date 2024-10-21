@@ -24,7 +24,7 @@ if (isset($_POST["Login"])) {
         if ($user && password_verify($password, $user["password"])) {
           $_SESSION["user"] = "yes"; // Mark user as logged in
           $_SESSION["user_id"] = $user["user_id"]; // Store the user ID
-          $_SESSION["name"] = $user["First_Name"] . ' ' . $user["Last_Name"]; // Store full name          
+          $_SESSION["name"] = $user["first_name"] . ' ' . $user["last_name"]; // Store full name          
           header("Location: User Interface/Dashboard.php"); // Redirect to Dashboard
           exit();
       } else {

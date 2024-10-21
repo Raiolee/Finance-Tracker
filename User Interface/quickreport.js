@@ -48,18 +48,3 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-
-
-function handleNewExpense() {
-    window.location.href = '/add-expense'; // Redirect or perform another action
-}
-
-function handleNewReceipt() {
-    window.location.href = '/add-expense'; // Redirect or perform another action
-}
-function handleNewReport() {
-    window.location.href = '/add-expense'; // Redirect or perform another action
-}
-function handleNewTrip() {
-    window.location.href = '/add-expense'; // Redirect or perform another action
-}
