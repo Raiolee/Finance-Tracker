@@ -7,6 +7,7 @@ if (isset($_SESSION["user"])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,7 +36,7 @@ if (isset($_SESSION["user"])) {
                 $email = trim($_POST["email"]);
                 $password = $_POST["password"];
                 $confirmPassword = $_POST["Confirmpassword"];
-                
+
                 $errors = [];
 
                 // Validate inputs
@@ -74,10 +75,15 @@ if (isset($_SESSION["user"])) {
                         $alertMessage .= "<div class='alert alert-danger'>$error</div>";
                     }
                 } else {
+                    // Set default profile picture
+                    $defaultProfilePicturePath = 'Assets/blank-profile.webp';
+                    $profilePicture = file_get_contents($defaultProfilePicturePath);
+
                     // Insert new user
-                    if ($stmt = $conn->prepare("INSERT INTO user (First_Name, Last_Name, Email, Password) VALUES (?, ?, ?, ?)")) {
+                    if ($stmt = $conn->prepare("INSERT INTO user (first_name, last_name, email, password, user_dp) VALUES (?, ?, ?, ?, ?)")) {
                         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-                        $stmt->bind_param("ssss", $fname, $lname, $email, $passwordHash);
+                        $stmt->bind_param("sssss", $fname, $lname, $email, $passwordHash, $profilePicture);
+                        $stmt->send_long_data(4, $profilePicture); // Send profile picture as BLOB
                         $stmt->execute();
                         $stmt->close();
 
@@ -90,9 +96,10 @@ if (isset($_SESSION["user"])) {
 
                         // Check if user exists and password matches
                         if ($user && password_verify($password, $user["password"])) {
+                            session_start();
                             $_SESSION["user"] = "yes"; // Mark user as logged in
                             $_SESSION["user_id"] = $user["user_id"]; // Store the user ID
-                            $_SESSION["name"] = $user["First_Name"] . ' ' . $user["Last_Name"]; // Store full name          
+                            $_SESSION["name"] = $user["first_name"] . ' ' . $user["last_name"]; // Store full name          
                             header("Location: User Interface/Dashboard.php"); // Redirect to Dashboard
                             exit();
                         } else {
@@ -108,7 +115,7 @@ if (isset($_SESSION["user"])) {
             }
             ?>
 
-            
+
             <div class="alert-area">
                 <?php echo $alertMessage; ?>
             </div>
@@ -142,4 +149,5 @@ if (isset($_SESSION["user"])) {
     </div>
     <div class="section"></div>
 </body>
+
 </html>
