@@ -1,0 +1,20 @@
+@media (min-width: 425px) and (max-width: 767px) {
+    .container {
+        background-color: #1b1b1b;
+        display: flex;
+        height: auto;  /* Allows the height to adjust based on content */
+        width: 100%;
+        flex-direction: column;  /* Items stacked vertically */
+        flex-shrink: 1;  /* Allows navbar to shrink when space is limited */
+        padding: 10px;  /* Add some padding for smaller screens */
+    }
+}
+
+
+
+
+
+
+
+
+
