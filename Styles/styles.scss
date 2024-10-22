@@ -1,6 +1,7 @@
 body {
     background-color: #1b1b1b;
-
+    height: 98vh;
+    width: auto;
     .login{
         display: flex;
         .left-section {
@@ -149,6 +150,102 @@ body {
         }
     }
 
+    .container {
+        background-color: #1b1b1b;
+        display: flex;
+        justify-content: center;
+        height: 98vh;
+        width: 70vw;
+        margin-left: 15%;
+        .navbar {
+            width: 30%;
+            margin-right: 50px;
+            .navbar-div {
+                display: flex;
+                justify-content: start;
+                flex-direction: row;
+                margin: 12% 0 12% 5%;
+                .navbar-icon {
+                    width: 50px;
+                    height: 40px;
+                    margin-top: 3%;
+                    filter: brightness(0.2);
+                }
+                .navbar-items {
+                    margin: 0 10%;
+                    text-align: end;
+                    text-decoration: none;
+                    font-family: "Roboto", sans-serif;
+                    font-size: 20px;
+                    color: white;
+                }
+            }
+            .Penny_Logo {
+                display: flex; /* Use flexbox */
+                justify-content: center; /* Center items horizontally */
+                margin-left: 20px;
+                height: 150px;
+                width: 150px;
+            }
+            .Profile {
+                .Profile_img {
+                    display: flex; /* Use flexbox */
+                    align-items: center; /* Center items vertically */
+                    justify-content: center; /* Center items horizontally */
+
+                    height: 120px;
+                    width: 120px;
+                    margin: auto; /* Center the container itself */
+                    margin-top: 2.5vh;
+                    margin-bottom: 2vh;
+
+                    img{
+                    border-radius: 50%;   
+                    };
+                }
+                #Nav_Button{
+                    height: 8vh;
+                    display: flex;
+                    margin-left: 35px;
+                
+                    a{
+                    text-decoration: none;
+                    color: rgba(216, 255, 251, 1);
+                    };
+                
+                    p{
+                    padding: 7px 0;
+                    font-size: 20px;
+                    width: 12vw;
+                    font-family: 'Roboto', sans-serif;
+                    };
+                
+                    img{ 
+                    padding: 5px 17px 7px 0;
+                    filter: brightness(0.2);
+                    };
+                }
+            }
+        }
+        .user-name{
+            height: 5vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(164, 164, 164, 1);
+            margin-bottom: 10px;
+        
+            p
+            {
+                font-size: clamp(16px, 4vw, 25px); /* Adjusts font size between 16px and 20px based on viewport width */
+                font-family: 'Roboto', sans-serif;
+                white-space: nowrap; /* Prevents text from wrapping to the next line */
+                overflow: hidden; /* Ensures the text does not overflow */
+                text-overflow: ellipsis; /* Adds ellipsis (...) when text is too long */
+                max-width: 100%; /* Ensures the text doesn't exceed the container width */
+            };
+        }
+    }
     .main-section {
         width: 80vw;
         height: 80vh;
@@ -162,6 +259,7 @@ body {
             align-items: center;
             height: 100%;
             width: auto;
+
             .content {
                 display: flex;
                 flex-direction: column;
@@ -169,9 +267,9 @@ body {
                 border-radius: 10px;
                 align-items: center;
                 justify-content: flex-start;
-                margin-top: 20px;
+                margin-top: 2.5%;
                 padding: 8px 0 8px 0;
-                height: 87%;
+                height: 90%;
                 width: 95%;
                 .top-bar {
                     margin: 0 0 5px 0;
@@ -187,9 +285,11 @@ body {
                     display: flex;
                     margin: 5px 0 5px 0;
                     padding: 5px;
-                    height: 7%;
+                    height: 6%;
                     width: 95%;
+                    border: 1px solid #626262;
                     background-color: #28282a;
+                    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
                     border-radius: 10px;
                         &:hover {
                             background-color: #383838;
@@ -220,13 +320,15 @@ body {
                         display: flex;
                         flex-direction: column;
                         padding: 0 5px;
+                        height: 100%;
                         input {
                             border-radius: 10px;
                             background-color: #383838;
                             border: 1px solid #626262;
                             box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
                             color: white;
-                            height: 50px;
+                            height: 1.7rem;
+                            width: 70%;
                             padding: 0 10px;
                         }
                         .row-form {
@@ -236,7 +338,7 @@ body {
                         }
                         .form-labels {
                             margin: 5px 0 10px 0;
-                            text-align: center;
+                            text-align: left;
                             font: 20px "Cabin Condensed", sans-serif;
                             color: #eeeeee;
                         }
@@ -247,14 +349,31 @@ body {
                         width: 20%;
                         .change-pfp-button {
                             border: 1px solid #626262;
+                            background-color: #484848;
+                            color: white;
                             border-radius: 10px;
                             box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-                            height: 30px;
+                            height: 12%;
                             &:hover {
                                 background-color: #383838;
                                 transition: background-color 0.3s ease;
                                 cursor: pointer;
                             }
+                        }
+                        .Profile_img {
+                            display: flex; /* Use flexbox */
+                            align-items: center; /* Center items vertically */
+                            justify-content: center; /* Center items horizontally */
+        
+                            height: 120px;
+                            width: 120px;
+                            margin: auto; /* Center the container itself */
+                            margin-top: 2.5vh;
+                            margin-bottom: 2vh;
+        
+                            img{
+                            border-radius: 50%;   
+                            };
                         }
                     }
                 }
@@ -285,25 +404,25 @@ body {
         .sign-out {
             display: flex;
             justify-content: end;
-            margin: 15px 125px 15px 5px;
-            font: 20px "Cabin Condensed", sans-serif;
             color: red;
-            width: 100%;
+            margin: 2% 0;
+            width: 92%;
             .sign-out-button {
                 background-color: red;
+                font: 20px "Cabin Condensed", sans-serif;
                 color: #eeeeee;
                 border-radius: 10px;
+                border: none;
                 padding: 5px;
-                border: 1px solid red;
                 width: 120%;
+                &:hover {
+                    background-color: darkred;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                }
             }
         }
     }
 }
 
-.navbar-items {
-    text-decoration: none;
-    font-family: "Roboto", sans-serif;
-    font-size: 20px;
-    color: white;
-}
+
