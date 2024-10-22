@@ -212,8 +212,6 @@ $stmt->close();
         </div>
 
         <script src="../User Interface/quickreport.js"></script>
-
-        <script src="../User Interface/quickreport.js"></script>
 </body>
 
 </html>
