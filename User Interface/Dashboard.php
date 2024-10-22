@@ -22,12 +22,13 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $pending_goals[] = $row['subject'];
     }
-} 
+}
 $stmt->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,6 +42,7 @@ $stmt->close();
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body class="container">
     <div class="nav-bar">
         <div class="Profile">
@@ -100,7 +102,7 @@ $stmt->close();
             </div>
             <div>
                 <p><a href="Savings.php">Savings</a></p>
-            </div>            
+            </div>
         </div>
 
         <!-- Settings Section -->
@@ -127,16 +129,16 @@ $stmt->close();
                 <div class="horizontal-sections">
                     <!-- Pending Tasks Section -->
                     <div class="task-section">
-                    <h2>Pending Goals</h2>
-                    <ul>
-                        <?php if (!empty($pending_goals)): ?>
-                            <?php foreach ($pending_goals as $goal): ?>
-                                <li><i class="fas fa-trophy"></i> <?php echo htmlspecialchars($goal); ?></li>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <li>No pending goals found.</li>
-                        <?php endif; ?>
-                    </ul>
+                        <h2>Pending Goals</h2>
+                        <ul>
+                            <?php if (!empty($pending_goals)): ?>
+                                <?php foreach ($pending_goals as $goal): ?>
+                                    <li><i class="fas fa-trophy"></i> <?php echo htmlspecialchars($goal); ?></li>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <li>No pending goals found.</li>
+                            <?php endif; ?>
+                        </ul>
                     </div>
 
                     <!-- Quick Report Section -->
@@ -156,7 +158,7 @@ $stmt->close();
                             <button class="quick-access-item" onclick="window.location.href='Expenses.php#newExpenseForm'">
                                 <i class="icon-credit-card"></i>
                                 <span>+ New Expense</span>
-                           </button>
+                            </button>
                             <button class="quick-access-item" onclick="handleNewReceipt()">
                                 <i class="icon-receipt"></i>
                                 <span>+ Add Income</span>
@@ -172,49 +174,47 @@ $stmt->close();
                         </div>
                     </div>
 
-            <!-- Recent Transactions Section -->
-            <div class="recent-expenses-section">
-                <h2>Recent Expenses</h2>
-                <table class="expense-table">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Employee</th>
-                            <th>Team</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Office Supplies</td>
-                            <td>John Doe</td>
-                            <td><span class="team marketing">Marketing</span></td>
-                            <td>₱150.00</td>
-                        </tr>
-                        <tr>
-                            <td>Business Lunch</td>
-                            <td>Sarah Jade</td>
-                            <td><span class="team sales">Sales</span></td>
-                            <td>₱150.00</td>
-                        </tr>
-                        <tr>
-                            <td>Travel Expenses</td>
-                            <td>Mike Brown</td>
-                            <td><span class="team operations">Operations</span></td>
-                            <td>₱150.00</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <!-- Recent Transactions Section -->
+                    <div class="recent-expenses-section">
+                        <h2>Recent Expenses</h2>
+                        <table class="expense-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Employee</th>
+                                    <th>Team</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Office Supplies</td>
+                                    <td>John Doe</td>
+                                    <td><span class="team marketing">Marketing</span></td>
+                                    <td>₱150.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Business Lunch</td>
+                                    <td>Sarah Jade</td>
+                                    <td><span class="team sales">Sales</span></td>
+                                    <td>₱150.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Travel Expenses</td>
+                                    <td>Mike Brown</td>
+                                    <td><span class="team operations">Operations</span></td>
+                                    <td>₱150.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    </div>
 
+        <script src="../User Interface/quickreport.js"></script>
 
-
-
-<script src="../User Interface/quickreport.js"></script>
-
-    <script src="../User Interface/quickreport.js"></script>
+        <script src="../User Interface/quickreport.js"></script>
 </body>
+
 </html>

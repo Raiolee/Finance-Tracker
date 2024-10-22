@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmt) {
         // Bind parameters
         $stmt->bind_param("issdsss", $uid, $date, $bank, $balance, $category, $subject, $description);
-        
+
         // Execute the statement
         if ($stmt->execute()) {
             // Redirect back to the dashboard with success message
@@ -136,7 +136,7 @@ if ($stmt) {
             </div>
             <div>
                 <p><a href="Savings.php">Savings</a></p>
-            </div>            
+            </div>
         </div>
 
         <!-- Settings Section -->
@@ -164,7 +164,7 @@ if ($stmt) {
                         <div class="Left-Top">
                             <p>Savings</p>
                         </div>
-                        <div class="Right-Top"> 
+                        <div class="Right-Top">
                             <button class="New-Saving" id="newSavingButton">+ New Saving</button>
                         </div>
                     </div>
@@ -199,7 +199,7 @@ if ($stmt) {
                                     echo "<tr><td colspan='5'>No results found</td></tr>";
                                 }
                                 ?>
-                            </tbody>    
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -210,7 +210,7 @@ if ($stmt) {
                     <form id="SavingForm" method="post">
                         <div class="Saving-Form-Format" id="Date-Row">
                             <label for="Date" class="Savings-Label">Date</label>
-                            <input type="date" id="Date" name="Date" required>
+                            <input type="date" id="SavingsDate" name="Date" required>
                         </div>
                         <div class="Saving-Form-Format" id="Bank-Row">
                             <label for="Bank" class="Savings-Label">Bank</label>
@@ -224,22 +224,22 @@ if ($stmt) {
                             <label for="SavingsCategory" class="Savings-Label">Category</label>
                             <select id="SavingsCategory" name="SavingsCategory" required>
                                 <option value="" disabled selected>Category</option>
-                                <option value="Type1">Type1</option>
-                                <option value="Type2">Type2</option>
-                                <option value="Type3">Type3</option>
-                                <option value="Type4">Type4</option>
+                                <option value="Type1">Daily</option>
+                                <option value="Type2">Weekly</option>
+                                <option value="Type3">Monthly</option>
+                                <option value="Type4">Yearly</option>
                             </select>
                         </div>
                         <div class="Saving-Form-Format" id="Subject-Row">
                             <label for="Subject" class="Savings-Label">Subject</label>
-                            <input type="text" id="Subject" name="Subject" required>
+                            <input type="text" id="SavingsSubject" name="Subject" required>
                         </div>
                         <div class="Saving-Form-Format" id="Description-Row">
                             <label for="Description" class="Savings-Label">Description</label>
-                            <textarea id="Description" name="Description" required></textarea>
+                            <textarea id="SavingsDescription" name="Description" required></textarea>
                         </div>
-                        <div class="Saving-Form-Format" id="Button-Row">
-                            <div class="button-div-row">
+                        <div class="Saving-Form-Format" id="Savings-Button-Row">
+                            <div class="Savings-button-div-row">
                                 <button type="submit" class="button-savings">Save</button>
                                 <button type="button" class="button-savings" onclick="closeExpenseForm()">Cancel</button>
                             </div>

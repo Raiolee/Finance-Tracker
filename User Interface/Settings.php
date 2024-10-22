@@ -12,11 +12,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../Styles/styles.scss">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../Styles/Interface1.css">
     <link href='https://fonts.googleapis.com/css?family=Cabin Condensed' rel='stylesheet'>
+    <link rel="stylesheet" href="../Styles/Interface1.css">
+    <link rel="stylesheet" href="../Styles/styles.scss">
     <title>Dashboard</title>
 </head>
 
@@ -98,17 +98,17 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </div>
         </div>
     </div>
+    
     <!-- Settings Page -->
     <section class="main-section">
         <div class="main-container">
             <div class="content">
                 <div class="top-bar">
-                    <h1 class="settings">Settings</h1>
+                    <h1 class="header">Settings</h1>
                 </div>
                 <!-- Profile Button -->
                 <div class="buttons">
-                    <h2 class="pfp-labels">Profile</h2>
-
+                    <h2 class="pfp-labels"><a href="profile.php">Profile</a></h2>
                 </div>
                 <!-- Notifications Button -->
                 <div class="buttons">
