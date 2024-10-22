@@ -23,6 +23,7 @@ if ($result->num_rows > 0) {
         $pending_goals[] = $row['subject'];
     }
 }
+
 $stmt->close();
 ?>
 
@@ -173,44 +174,48 @@ $stmt->close();
                         </div>
                     </div>
 
-                    <!-- Recent Transactions Section -->
-                    <div class="recent-expenses-section">
-                        <h2>Recent Expenses</h2>
+              <!-- Recent Transactions Section -->
+                <div class="recent-expenses-section">
+                    <h2>Recent Expenses</h2>
                         <table class="expense-table">
-                            <thead>
-                                <tr>
-                                    <th>Subject</th>
-                                    <th>Employee</th>
-                                    <th>Team</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Office Supplies</td>
-                                    <td>John Doe</td>
-                                    <td><span class="team marketing">Marketing</span></td>
-                                    <td>₱150.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Business Lunch</td>
-                                    <td>Sarah Jade</td>
-                                    <td><span class="team sales">Sales</span></td>
-                                    <td>₱150.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Travel Expenses</td>
-                                    <td>Mike Brown</td>
-                                    <td><span class="team operations">Operations</span></td>
-                                    <td>₱150.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Merchant</th>
+                                <th>Amount</th>
+                            </tr>
+                         </thead>
+                        <tbody>
+                        <?php
+                         // SQL query to fetch recent expenses for the logged-in user
+                         $sql = "SELECT subject, merchant, total FROM expenses WHERE user_id = ? ORDER BY date DESC LIMIT 5";
 
+                         // Prepare and bind the SQL statement
+                            $stmt = $conn->prepare($sql);
+                            $stmt->bind_param("i", $user_id);  // Bind the user_id as an integer
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+
+                         // Check if there are results and loop through them
+                             if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . $row['subject'] . "</td>";
+                                echo "<td>" . $row['merchant'] . "</td>";
+                                echo "<td>₱" . number_format($row['total'], 2) . "</td>";
+                                echo "</tr>";
+                             }
+                    } else {
+                         echo "<tr><td colspan='4'>No recent expenses found</td></tr>";
+                 }
+
+                        // Close the statement and connection
+                            $stmt->close();
+                             $conn->close();
+                        ?>
+                    </tbody>
+             </table>
+        </div>
         <script src="../User Interface/quickreport.js"></script>
 </body>
 
