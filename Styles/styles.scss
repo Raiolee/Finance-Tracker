@@ -283,6 +283,7 @@ body {
                 }
                 .buttons {
                     display: flex;
+                    justify-content: space-between;
                     margin: 5px 0 5px 0;
                     padding: 5px;
                     height: 6%;
@@ -310,6 +311,46 @@ body {
                         text-decoration: none;
                         color: white;
                     }
+                    .toggle-notification {
+                        display: flex;
+                        align-items: center;
+                        margin-right: 5px;
+                    }
+                    
+                    .toggle-checkbox {
+                        display: none; /* Hide the checkbox */
+                    }
+                    
+                    .toggle-label {
+                        position: relative;
+                        display: inline-block;
+                        width: 60px;
+                        height: 30px;
+                        background-color: #ccc;
+                        border-radius: 30px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+                    }
+                    
+                    .toggle-label .toggle-button {
+                        position: absolute;
+                        content: "";
+                        width: 26px;
+                        height: 26px;
+                        background-color: #fff;
+                        border-radius: 50%;
+                        top: 2px;
+                        left: 2px;
+                        transition: transform 0.3s ease;
+                    }
+                    
+                    .toggle-checkbox:checked + .toggle-label {
+                        background-color: #00DAC6; /* Active color for the toggle when notifications are ON */
+                    }
+                    
+                    .toggle-checkbox:checked + .toggle-label .toggle-button {
+                        transform: translateX(30px); /* Moves the button to the right when active */
+                    }
                 }
                 .pfp-form {
                     display: flex;
@@ -327,7 +368,7 @@ body {
                             border: 1px solid #626262;
                             box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
                             color: white;
-                            height: 1.7rem;
+                            height: 2rem;
                             width: 70%;
                             padding: 0 10px;
                         }

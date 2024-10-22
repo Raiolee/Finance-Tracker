@@ -14,6 +14,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../Styles/styles.scss">
     <link href='https://fonts.googleapis.com/css?family=Cabin Condensed' rel='stylesheet'>
+    <script src="../User Interface/notifications.js" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Dashboard</title>
@@ -89,6 +90,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <!-- Notifications Button -->
                     <div class="buttons">
                         <h2 class="pfp-labels">Notifications</h2>
+                        <div class="toggle-notification">
+                            <input type="checkbox" id="notificationToggle" class="toggle-checkbox">
+                            <label for="notificationToggle" class="toggle-label">
+                                <span class="toggle-button"></span>
+                            </label>
+                        </div>
                     </div>
                     <!-- Back up and Sync Button -->
                     <div class="buttons">
