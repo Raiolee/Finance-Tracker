@@ -1,17 +1,10 @@
 .table-header {
     flex: 1; /* Allow each header to grow equally */
     text-align: center; /* Center align the text */
-    padding: 10px; /* Add padding for spacing */
+    padding: 20px; /* Add padding for spacing */
     color: #ffffff; /* Match table text color */
     background-color: #0B0B0B; /* Match the card background */
-    border-bottom: 5px solid #444; /* Optional: add a border below each header */
-    font-size: 15px;
-    border: none;
-    width: 50px;
-  
-    
 }
-
 .card {
     background-color: #2a2a2a;
     border: none;
@@ -49,91 +42,161 @@
     border-color: #444;
 }
 
-        .main-holder {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            margin: 0;
-            background-color:#1c1c1c;
-        }
-
-        .Nav-Bar {
-            height: 100vh;
-            width: 25vw;
-            background-color:#1c1c1c;
-            padding: 20px;
-            margin-left: 20px;
-        }
-
-        .content {
-            height: 100vh;
-            width: 100vw;
-            padding: 20px;
-            background-color: #1c1c1c;
-            color: white;
-        }
-
-        
-        #Nav_Button {
-   
-            display: flex;
-            justify-content: flex-start; /* Aligns the items to the left */
-            align-items: center; /* Vertically center the icon and text */
-            gap: 30px; /* Adds space between the icon and the text */
-            padding-left: 15px;
-        }
-
-        #Nav_Button a {
-            text-decoration: none;
-            color: rgba(216, 255, 251, 1);
-            font-size: 20px;
-  
-         font-family: 'Roboto', sans-serif;
-         margin-top: 6px; 
-        line-height: 1; 
-        display: block; 
-    
+.container {
+    background-color: #1b1b1b;
+    display: flex;
+    height: 100vh;
+    width: auto;
+    min-height: 100vh;
+   /* Allows the container to expand if needed */
 }
-        
-
-#Nav_Button p {
-    font-size: 20px;
+.nav-bar {
+    width: 20%;
+    margin-right: 50px;
+}
+.Profile_img {
+    display: flex;
+   /* Use flexbox */
+    align-items: center;
+   /* Center items vertically */
+    justify-content: center;
+   /* Center items horizontally */
+    height: 120px;
+    width: 120px;
+    margin: auto;
+   /* Center the container itself */
+    margin-top: 2.5vh;
+    margin-bottom: 2vh;
+}
+.Profile_img img {
+    border-radius: 50%;
+}
+.user-name {
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgba(164, 164, 164, 1);
+    margin-bottom: 10px;
+}
+.user-name p {
+    font-size: 25px;
     font-family: 'Roboto', sans-serif;
-    margin: 5px; /* Ensure no extra margin around the text */
-    color: rgba(216, 255, 251, 1); /* Text color */
+}
+#Nav_Button {
+    height: 8vh;
+    display: flex;
+    margin-left: 35px;
+}
+#Nav_Button a {
+    text-decoration: none;
+    color: rgba(216, 255, 251, 1);
+}
+#Nav_Button p {
+    padding: 7px 0;
+    font-size: 20px;
+    width: 12vw;
+    font-family: 'Roboto', sans-serif;
+}
+#Nav_Button img {
+    padding: 5px 17px 7px 0;
+    filter: brightness(0.2);
+}
+#Nav_Button.active p a {
+    color: rgba(0, 218, 198, 1);
+   /* Change this to the desired active color */
+    font-weight: bold;
+   /* Optional: make it bold */
+    filter: brightness(1);
+}
+#Nav_Button.active img {
+    filter: brightness(1);
+   /* Dimmed default state */
+}
+#Nav_Button:hover p a {
+    color: #00dac6;
+   /* Change color on hover */
+}
+#Nav_Button.active p a {
+    color: rgba(0, 218, 198, 1);
+   /* Highlight active navigation link */
+}
+.Penny_Logo {
+    display: flex;
+   /* Use flexbox */
+    align-items: center;
+   /* Center items vertically */
+    justify-content: center;
+   /* Center items horizontally */
+    margin-left: auto;
+    margin-right: auto;
+    height: 150px;
+    width: 150px;
+}
+.content {
+    height: 100vh;
+   /* Ensure content fills the full viewport height */
+    padding-top: 20px;
+   /* Optional: Adjust padding from the top */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+   /* Centers the content */
+}
+.right-container {
+    background-color: black;
+    width: 100%;
+   /* Scales relative to viewport */
+    max-width: 1250px;
+   /* Prevents it from growing beyond this size */
+    height: auto;
+   /* Adjusts height based on content */
+    margin: 40px auto;
+   /* Centers the container */
+    border-radius: 15px;
+    padding: 20px;
+    box-sizing: border-box;
+   /* Ensures padding is included in width */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    gap: 20px;
+   /* Spacing between sections */
+    overflow: auto;
+   /* Ensures content is contained */
+    overflow-y: scroll;
+   /* Enable vertical scrolling */
+    position: relative;
+}
+.right-container::-webkit-scrollbar {
+    width: 5px;
+   /* Width of the scrollbar */
+    height: 8px;
+   /* Height of horizontal scrollbar */
+}
+/* Customize the thumb (draggable part of the scrollbar) */
+.right-container::-webkit-scrollbar-thumb {
+    background-color: #888;
+   /* Thumb color */
+    border-radius: 10px;
+   /* Round the corners of the thumb */
+    border: 3px solid #888;
+   /* Adds a border around the thumb */
+}
+/* Customize the track (the area the thumb slides in) */
+.right-container::-webkit-scrollbar-track {
+    background: #000;
+   /* Track color */
+    border-radius: 10px;
+   /* Round the corners of the track */
+}
+/* Customize the track when hovering over the thumb */
+.right-container::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+   /* Darker thumb color when hovering */
 }
 
-        #Nav_Button img {
-        width: 35px; 
-        height: 50px;
-        filter: brightness(0.2);
-        margin: 0; 
-        filter: brightness(0) invert(1);
-}
-
-        #Nav_Button.active p a {
-            color: rgba(0, 218, 198, 1);
-            font-weight: bold;
-            filter: brightness(1);
-        }
-
-        #Nav_Button.active img {
-            filter: brightness(1);
-        }
-
-        .Profile_img img {
-            border-radius: 50%;
-        }
-
-        .Profile, .User-name {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #A4A4A4;
-        }
-    
 
        
-
+/* MODAL FOR SEARCH FUNCTIONs */
       
 .modal {
     display: none; 
@@ -185,3 +248,4 @@
 .btn-search:hover {
     background-color: #00c1ae;
 }
+
