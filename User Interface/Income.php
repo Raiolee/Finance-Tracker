@@ -41,98 +41,95 @@ if ($searchKeyword) {
     <title>Income List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="ViewIncome.css">
+    <link rel="stylesheet" href="../Styles/ViewIncome.css">
     <style>
         body {
     background-color: #1a1a1a;
     color: #ffffff;
-}
-
-
-
+        }
         
     </style>
 </head>
-<body>
-    <div class="main-holder">
-        <div class="Nav-Bar">
-            <div class="Profile"> 
-                <div class="Profile_img">
-                    <img src="https://picsum.photos/100/100" alt="" width="140">
-                </div>
-            </div>
-
-            <div class="User-name">
-                <p>Username</p>
-            </div>
-
-            <div class="Home-Nav " id="Nav_Button">
-                <div>
-                    <img src="Home.svg" alt="Icon" width="70px" height="50px">
-                </div>
-                <div>
-                    <p><a href="Dashboard.php">Home</a></p>
-                </div>
-            </div>
-
-            <div class="Expenses-Nav" id="Nav_Button">
-                <div>
-                    <img src="Expenses.svg" alt="Icon" width="70px" height="50px">
-                </div>
-                <div>
-                    <p><a href="Expenses.php">Expenses</a></p>
-                </div>
-            </div>
-
-           
-            <div class="NewIncome-Nav active" id="Nav_Button">
-                <div>
-                    <img src="income2.svg" alt="New Income Icon" width="70px" height="50px"> <!-- Replace with your SVG icon -->
-                </div>
-                <div>
-                    <p><a href="NewIncome.php">Income</a></p>
-                </div>
-            </div>
-
-           
-
-            <div class="Goals-Nav" id="Nav_Button">
-                <div>
-                    <img src="report.svg" alt="Icon" width="40px" >
-                </div>
-                <div>
-                    <p><a href="Report.php">Goals</a></p>
-                </div>
-            </div>
-
-
-            <div class="Goals-Nav" id="Nav_Button">
-                <div>
-                    <img src="report.svg" alt="Icon" width="40px" >
-                </div>
-                <div>
-                    <p><a href="Report.php">Savings</a></p>
-                </div>
-            </div>
-
-            <div class="Settings-Nav" id="Nav_Button">
-                <div>
-                    <img src="Setting.svg" alt="Icon" width="40px" height="50px">
-                </div>
-                <div>
-                    <p><a href="Settings.php">Settings</a></p>
-                </div>
-            </div>
-            <div class="Logo-Nav" id="Nav_Side">
-                <div class="Penny_Logo">
-                    <img src="PENNY_WISE_Logo.png" alt="" width="145px" >
-                    
-                </div>
-    
+<body class="container">
+    <div class="nav-bar">
+        <div class="Profile">
+            <div class="Profile_img">
+                <img src="https://picsum.photos/100/100" alt="" width="110">
             </div>
         </div>
 
-    <div class="container mt-5">
+        <div class="user-name">
+            
+        </div>
+
+        <div class="Home-Nav <?php echo ($current_page == 'Dashboard.php') ? 'active' : ''; ?>" id="Nav_Button">
+            <div>
+                <img src="../Assets/Icons/home.svg" alt="Icon" width="50px" id="icons">
+            </div>
+            <div>
+                <p><a href="Dashboard.php">Home</a></p>
+            </div>
+        </div>
+
+        <!-- Section for Expenses -->
+        <div class="Expenses-Nav <?php echo ($current_page == 'Expenses.php') ? 'active' : ''; ?>" id="Nav_Button">
+            <div>
+                <img src="../Assets/Icons/expenses.svg" alt="Icon" width="50px">
+            </div>
+            <div>
+                <p><a href="Expenses.php">Expenses</a></p>
+            </div>
+        </div>
+
+        <!-- Section for Income -->
+        <div class="Travels-Nav <?php echo ($current_page == 'Income.php') ? 'active' : ''; ?>" id="Nav_Button">
+            <div>
+                <img src="../Assets/Icons/income.svg" alt="Icon" width="50px">
+            </div>
+            <div>
+                <p><a href="Income.php">Income</a></p>
+            </div>
+        </div>
+
+        <!-- Section for Goals -->
+        <div class="Travels-Nav <?php echo ($current_page == 'Goals.php') ? 'active' : ''; ?>" id="Nav_Button">
+            <div>
+                <img src="../Assets/Icons/approvals.svg" alt="Icon" width="50px">
+            </div>
+            <div>
+                <p><a href="Goals.php">Goals</a></p>
+            </div>
+        </div>
+
+        <!-- Section for Savings -->
+        <div class="Approvals-Nav <?php echo ($current_page == 'Savings.php') ? 'active' : ''; ?>" id="Nav_Button">
+            <div>
+                <img src="../Assets/Icons/reports.svg" alt="Icon" width="50px">
+            </div>
+            <div>
+                <p><a href="Savings.php">Savings</a></p>
+            </div>            
+        </div>
+
+        <!-- Settings Section -->
+        <div class="Settings-Nav <?php echo ($current_page == 'Settings.php') ? 'active' : ''; ?>" id="Nav_Button">
+            <div>
+                <img src="../Assets/Icons/settings.svg" alt="Icon" width="50px">
+            </div>
+            <div>
+                <p><a href="Settings.php">Settings</a></p>
+            </div>
+        </div>
+
+        <div class="Logo-Nav" id="Nav_Side">
+            <div class="Penny_Logo">
+                <img src="PENNY_WISE_Logo.png" alt="" width="200">
+            </div>
+        </div>
+    </div>
+
+<div class="content">
+    <div class="right-container mt-5">
         <div class="card">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -160,28 +157,34 @@ if ($searchKeyword) {
                     <tbody>
                         <tr>
                         <?php
+                 $sql = "SELECT * FROM income";
+                 $result = $conn->query($sql);
+                 
+                 if ($result === false) {
+                     echo "Error: " . $conn->error;
+                 } else {
                      if ($result->num_rows > 0) {
-                       
-                    while($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['source']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['total']) . " " . htmlspecialchars($row['currency']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                        echo "<td>" . htmlspecialchars($row['investment']) . "</td>";
-                        echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
-                        echo "</tr>";
-                    }
-                } else {
-                    
-                    echo "<tr><td colspan='4'>No income records found</td></tr>";
-                }
+                         while ($row = $result->fetch_assoc()) {
+                             echo "<tr>";
+                             echo "<td>" . htmlspecialchars($row['source']) . "</td>";
+                             echo "<td>" . htmlspecialchars($row['total']) . " " . htmlspecialchars($row['currency']) . "</td>";
+                             echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+                             echo "<td>" . htmlspecialchars($row['investment']) . "</td>";
+                             echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
+                             echo "</tr>";
+                         }
+                     } else {
+                         echo "<tr><td colspan='4'>No income records found</td></tr>";
+                     }
+                 }
+                 
                 ?>
                     
                     </tbody>
                    
                 </table>
             </div>
-            
+            </div>
         </div>
     </div>
     <div id="sortModal" class="modal">
