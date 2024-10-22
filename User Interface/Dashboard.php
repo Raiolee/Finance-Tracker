@@ -170,7 +170,7 @@ $stmt->close();
                                 <i class="icon-receipt"></i>
                                 <span>+ Add Income</span>
                             </button>
-                            <button class="quick-access-item" onclick="handleNewReport()">
+                            <button class="quick-access-item" onclick="window.location.href='Goals.php#newGoalForm'">
                                 <i class="icon-report"></i>
                                 <span>+ New Goal</span>
                             </button>
