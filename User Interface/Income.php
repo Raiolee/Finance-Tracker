@@ -27,7 +27,7 @@ if ($searchKeyword) {
     }
 } else {
     // Default SQL query to get all records
-    $sql = "SELECT id, source, total, currency, category, investment FROM incomes";
+    $sql = "SELECT id, source, total, currency, category, investment FROM income";
     $result = $conn->query($sql);
 }
 
