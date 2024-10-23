@@ -38,7 +38,7 @@ if (empty($userId)) {
         } else {
             try {
                 // Prepare and execute the insert statement
-                $sql = "INSERT INTO goals (user_id, subject, start_date, end_date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO goals (user_id, subject, start_date, date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql);
 
                 // Use 'd' for double (for budget limit) and 'i' for integer (for user_id)
@@ -56,7 +56,7 @@ if (empty($userId)) {
         }
     }
 }
-    $sql = "SELECT subject, category, start_date FROM user_db.goals WHERE user_id = ?";
+    $sql = "SELECT subject, category, date FROM user_db.goals WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
@@ -197,6 +197,7 @@ $conn->close();
                                     echo "<tr>
                                         <td>" . htmlspecialchars($row['subject']) . "</td>
                                         <td>" . htmlspecialchars($row['category']) . "</td>
+                                        <td>" . htmlspecialchars($row['date']) . "</td>
                                     </tr>";
                                 }
                             } else {
