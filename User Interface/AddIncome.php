@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = $_POST['description'];
 
     // Prepare the SQL statement
-    $stmt = $conn->prepare("INSERT INTO incomes (date, investment, source, total, currency, category, description) 
+    $stmt = $conn->prepare("INSERT INTO income (date, investment, source, total, currency, category, description) 
     VALUES (?, ?, ?, ?, ?, ?, ?)");
 
     if ($stmt === false) {
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel ="stylesheet" href="AddIncome.scss">
+    <link rel ="stylesheet" href="../Styles/AddIncome.css">
     
    
 </head>
@@ -136,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="right-container">
                 <div class ="income-header">
                 <h2>New Income</h2>
-                <img src="Line 9.svg" alt="Line Icon" class="icon-line" />
+                <img src="../Assets/Icons/Line 9.svg" alt="Line Icon" class="icon-line" />
                 </div>
                 <form method="POST">
                     <div class="mb-3 row">

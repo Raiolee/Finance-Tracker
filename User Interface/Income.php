@@ -178,7 +178,8 @@ if ($searchKeyword) {
                              echo "<td>" . htmlspecialchars($row['total']) . " " . htmlspecialchars($row['currency']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['investment']) . "</td>";
-                             echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
+                             echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['income_id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
+;
                              echo "</tr>";
                          }
                      } else {
