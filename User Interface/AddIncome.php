@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Execute the statement and check for errors
 
-        header("Income.php");
+        header("Location:Income.php");
 
         if ($stmt->execute()) {
             $message = 'Record saved successfully!';
