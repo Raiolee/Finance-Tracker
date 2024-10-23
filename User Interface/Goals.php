@@ -63,9 +63,52 @@ if (empty($userId)) {
         $stmt->bind_param("i", $userId);
         $stmt->execute();
         $result = $stmt->get_result();
+        $goalsAndSavings = getGoalsAndSavings($conn, $userId);
     } else {
         $error_message = "Error preparing statement: {$conn->error}";
     }
+
+    function getGoalsAndSavings($conn, $userId) {
+        // Fetch goals
+        $goalsSql = "SELECT subject, budget_limit FROM goals WHERE user_id = ?";
+        $stmt = $conn->prepare($goalsSql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $goalsResult = $stmt->get_result();
+        $goals = $goalsResult->fetch_all(MYSQLI_ASSOC);
+    
+        // Fetch savings
+        $savingsSql = "SELECT subject, balance FROM savings WHERE user_id = ?";
+        $stmt = $conn->prepare($savingsSql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $savingsResult = $stmt->get_result();
+        $savings = $savingsResult->fetch_all(MYSQLI_ASSOC);
+    
+        // Calculate total balance for each subject
+        $totalBalances = [];
+        foreach ($savings as $saving) {
+            $totalBalances[$saving['subject']] = ($totalBalances[$saving['subject']] ?? 0) + $saving['balance'];
+        }
+    
+        // Calculate the percentage of total balance to budget limit for each goal
+        $results = [];
+        foreach ($goals as $goal) {
+            $totalBalance = $totalBalances[$goal['subject']] ?? 0;
+            $percentage = $goal['budget_limit'] ? ($totalBalance / $goal['budget_limit']) * 100 : 0;
+            $results[] = [
+                'subject' => $goal['subject'],
+                'totalBalance' => $totalBalance,
+                'budgetLimit' => $goal['budget_limit'],
+                'percentage' => $percentage
+            ];
+        }
+        
+        return $results;
+    }
+
+    
+
 $conn->close();
 ?>
 
@@ -191,13 +234,20 @@ $conn->close();
                     </thead>
                     <tbody>
                         <?php
-
                             if (isset($result) && $result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
+                                    $percentage = 0;
+                                    foreach ($goalsAndSavings as $goal) {
+                                        if ($goal['subject'] === $row['subject']) {
+                                            $percentage = $goal['percentage'];
+                                            break;
+                                        }
+                                    }
                                     echo "<tr>
                                         <td>" . htmlspecialchars($row['subject']) . "</td>
                                         <td>" . htmlspecialchars($row['category']) . "</td>
                                         <td>" . htmlspecialchars($row['date']) . "</td>
+                                        <td>" . htmlspecialchars(number_format($percentage)) . "%</td>
                                     </tr>";
                                 }
                             } else {
