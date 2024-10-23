@@ -28,6 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("sssssss", $date, $investment, $source, $total, $currency, $category, $description);
 
         // Execute the statement and check for errors
+
+        header("Income.php");
+
         if ($stmt->execute()) {
             $message = 'Record saved successfully!';
         } else {
