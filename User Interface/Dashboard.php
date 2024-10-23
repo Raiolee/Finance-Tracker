@@ -174,7 +174,7 @@ $stmt->close();
                                 <i class="icon-report"></i>
                                 <span>+ New Goal</span>
                             </button>
-                            <button class="quick-access-item" onclick="handleNewTrip()">
+                            <button class="quick-access-item" onclick="window.location.href='Savings.php#newSavingForm'">
                                 <i class="icon-plane"></i>
                                 <span>+ Add Saving</span>
                             </button>
