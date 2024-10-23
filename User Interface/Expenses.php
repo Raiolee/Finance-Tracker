@@ -1,11 +1,11 @@
 <?php
 session_start();
-if(!isset($_SESSION["user"]))
-{
+if(!isset($_SESSION["user"])) {
     header("Location: ../Login.php");
 }
 $username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +24,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <img src="https://picsum.photos/100/100" alt="" width="110">
             </div>
         </div>
-
         <div class="user-name">
             <p><?php echo htmlspecialchars($username); ?></p>
         </div>

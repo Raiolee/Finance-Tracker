@@ -1,159 +1,469 @@
 body {
-  .main-section {
-    width: 80vw;
-    height: 80vh;
-    background-color: #0b0b0b;
-    border-radius: 10px;
-    margin-top: 5%;
-    .main-container {
-      display: flex;
-      justify-content: flex-start;
-      flex-direction: column;
-      align-items: center;
-      height: 100%;
-      width: auto;
-      .content {
+    background-color: #1b1b1b;
+    height: 98vh;
+    width: auto;
+    .login{
+        display: flex;
+        .left-section {
+            width: 60%;
+    
+            .logo {
+            margin: 60px 100px;
+            }
+        }
+    
+        .right-section {
+            width: 40%;
+    
+            .login-container {
+            background-color: black;
+            height: 480px;
+            margin: 135px 75px 0;
+            border-radius: 15px;
             display: flex;
             flex-direction: column;
-            background-color: #1b1b1b;
-            border-radius: 10px;
             align-items: center;
-            justify-content: flex-start;
-            margin-top: 20px;
-            padding: 8px 0 8px 0;
-            height: 87%;
-            width: 95%;
-            .top-bar {
-                margin: 0 0 5px 0;
-                width: 100%;
-                border-bottom: 1px solid #383838;
-                h1.header {
-                    margin: 0 0 5px 20px;
-                    font: 30px "Cabin Condensed", sans-serif;
-                    color: #eeeeee;
+            }
+    
+            .log-title{
+            color: white;
+            font-family: "Roboto", sans-serif;
+            font-weight: 300;
+            font-size: 35px;
+            text-align: center;
+            margin-top: 60px;
+            }
+    
+            #email, #password, .login-btn {
+            font-size: 15px;
+            color: white;
+            padding: 7px 15px;
+            width: 250px;
+            margin-bottom: 20px;
+            background-color: #383838;
+            transition: 0.2s ease;
+            border-radius: 7px;
+            border: none;
+            }
+    
+            #email::placeholder, #password::placeholder {
+            color: white;
+            font-family: "Playfair Display", serif;
+            text-align: left;
+            }
+    
+            .dont-have{
+            color: white;
+            font-family: "Playfair Display", serif;
+            }
+        }
+    }
+
+    .register {
+        display: flex;
+
+        .register-left-section {
+            width: 15%;
+        }
+
+        .register-right-section {
+            width: 70%;
+
+            .register-container {
+                background-color: black;
+                height: 600px;
+                border-radius: 15px;
+                display: flex;
+                margin: 60px 120px;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+
+                .reg-title {
+                    color: white;
+                    font-family: "Roboto", sans-serif;
+                    font-weight: 300;
+                    font-size: 35px;
+                    text-align: center;
+                    margin-top: 60px;
+                }
+
+                .alert-area {
+                    width: 100%;
+                    margin-bottom: 20px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .first {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 20px;
+
+                    #fname, #lname {
+                        font-size: 17px;
+                        color: white;
+                        padding: 7px 20px;
+                        width: 250px;
+                        margin-bottom: 20px;
+                        background-color: #383838;
+                        transition: 0.2s ease;
+                        border-radius: 7px;
+                        border: none;
+                    }
+                }
+
+                #reg-email, #reg-password {
+                    font-size: 17px;
+                    color: white;
+                    padding: 7px 20px;
+                    width: 520px;
+                    margin-bottom: 20px;
+                    background-color: #383838;
+                    transition: 0.2s ease;
+                    border-radius: 7px;
+                    border: none;
+                }
+
+                #register {
+                    font-size: 22px;
+                    color: white;
+                    padding: 4px 0;
+                    width: 522px;
+                    margin-bottom: 20px;
+                    background-color: #383838;
+                    transition: 0.2s ease;
+                    border-radius: 7px;
+                    border: none;
+                }
+
+                .already-have {
+                    color: white;
+                    font-family: "Playfair Display", serif;
                 }
             }
-            .buttons {
-                display: flex;
-                margin: 5px 0 5px 0;
-                padding: 5px;
-                height: 7%;
-                width: 95%;
-                background-color: #28282a;
-                border-radius: 10px;
-                    &:hover {
-                        background-color: #383838;
-                        transition: background-color 0.3s ease;
-                    }
-                    &:active {
-                        background-color: #484848;
-                        transition: background-color 0.1s ease;
-                    }
+        }
 
-                .pfp-labels {
-                    margin: 2px 2px 2px 10px;
-                    text-align: center;
-                    font: 20px "Cabin Condensed", sans-serif;
-                    color: #eeeeee;
+        .section {
+            width: 15%;
+        }
+    }
+
+    .container {
+        background-color: #1b1b1b;
+        display: flex;
+        justify-content: center;
+        height: 98vh;
+        width: 70vw;
+        margin-left: 15%;
+        .navbar {
+            width: 30%;
+            margin-right: 50px;
+            .navbar-div {
+                display: flex;
+                justify-content: start;
+                flex-direction: row;
+                margin: 12% 0 12% 5%;
+                .navbar-icon {
+                    width: 50px;
+                    height: 40px;
+                    margin-top: 3%;
+                    filter: brightness(0.2);
                 }
-                a {
+                .navbar-items {
+                    margin: 0 10%;
+                    text-align: end;
                     text-decoration: none;
+                    font-family: "Roboto", sans-serif;
+                    font-size: 20px;
                     color: white;
                 }
             }
-            .pfp-form {
-                display: flex;
-                flex-direction: row;
-                width: 95%;
-                .big-divider {
-                    width: 80%;
+            .Penny_Logo {
+                display: flex; /* Use flexbox */
+                justify-content: center; /* Center items horizontally */
+                margin-left: 20px;
+                height: 150px;
+                width: 150px;
+            }
+            .Profile {
+                .Profile_img {
+                    display: flex; /* Use flexbox */
+                    align-items: center; /* Center items vertically */
+                    justify-content: center; /* Center items horizontally */
+
+                    height: 120px;
+                    width: 120px;
+                    margin: auto; /* Center the container itself */
+                    margin-top: 2.5vh;
+                    margin-bottom: 2vh;
+
+                    img{
+                    border-radius: 50%;   
+                    };
+                }
+                #Nav_Button{
+                    height: 8vh;
                     display: flex;
-                    flex-direction: column;
-                    padding: 0 5px;
-                    input {
-                        border-radius: 10px;
-                        background-color: #383838;
-                        border: 1px solid #626262;
-                        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-                        color: white;
-                        height: 50px;
-                        padding: 0 10px;
+                    margin-left: 35px;
+                
+                    a{
+                    text-decoration: none;
+                    color: rgba(216, 255, 251, 1);
+                    };
+                
+                    p{
+                    padding: 7px 0;
+                    font-size: 20px;
+                    width: 12vw;
+                    font-family: 'Roboto', sans-serif;
+                    };
+                
+                    img{ 
+                    padding: 5px 17px 7px 0;
+                    filter: brightness(0.2);
+                    };
+                }
+            }
+        }
+        .user-name{
+            height: 5vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(164, 164, 164, 1);
+            margin-bottom: 10px;
+        
+            p
+            {
+                font-size: clamp(16px, 4vw, 25px); /* Adjusts font size between 16px and 20px based on viewport width */
+                font-family: 'Roboto', sans-serif;
+                white-space: nowrap; /* Prevents text from wrapping to the next line */
+                overflow: hidden; /* Ensures the text does not overflow */
+                text-overflow: ellipsis; /* Adds ellipsis (...) when text is too long */
+                max-width: 100%; /* Ensures the text doesn't exceed the container width */
+            };
+        }
+    }
+    .main-section {
+        width: 80vw;
+        height: 80vh;
+        background-color: #0b0b0b;
+        border-radius: 10px;
+        margin-top: 5%;
+        .main-container {
+            display: flex;
+            justify-content: flex-start;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            width: auto;
+
+            .content {
+                display: flex;
+                flex-direction: column;
+                background-color: #1b1b1b;
+                border-radius: 10px;
+                align-items: center;
+                justify-content: flex-start;
+                margin-top: 2.5%;
+                padding: 8px 0 8px 0;
+                height: 90%;
+                width: 95%;
+                .top-bar {
+                    margin: 0 0 5px 0;
+                    width: 100%;
+                    border-bottom: 1px solid #383838;
+                    h1.header {
+                        margin: 0 0 5px 20px;
+                        font: 30px "Cabin Condensed", sans-serif;
+                        color: #eeeeee;
                     }
-                    .row-form {
-                        display: flex;
-                        flex-direction: column;
-                        margin-right: 20px;
-                    }
-                    .form-labels {
-                        margin: 5px 0 10px 0;
+                }
+                .buttons {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: 5px 0 5px 0;
+                    padding: 5px;
+                    height: 6%;
+                    width: 95%;
+                    border: 1px solid #626262;
+                    background-color: #28282a;
+                    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+                    border-radius: 10px;
+                        &:hover {
+                            background-color: #383838;
+                            transition: background-color 0.3s ease;
+                        }
+                        &:active {
+                            background-color: #484848;
+                            transition: background-color 0.1s ease;
+                        }
+
+                    .pfp-labels {
+                        margin: 2px 2px 2px 10px;
                         text-align: center;
                         font: 20px "Cabin Condensed", sans-serif;
                         color: #eeeeee;
                     }
-                }
-                .small-divider {
-                    display: flex;
-                    flex-direction: column;
-                    width: 20%;
-                    .change-pfp-button {
-                        border: 1px solid #626262;
-                        border-radius: 10px;
-                        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+                    a {
+                        text-decoration: none;
+                        color: white;
+                    }
+                    .toggle-notification {
+                        display: flex;
+                        align-items: center;
+                        margin-right: 5px;
+                    }
+                    
+                    .toggle-checkbox {
+                        display: none; /* Hide the checkbox */
+                    }
+                    
+                    .toggle-label {
+                        position: relative;
+                        display: inline-block;
+                        width: 60px;
                         height: 30px;
-                        &:hover {
+                        background-color: #ccc;
+                        border-radius: 30px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease;
+                    }
+                    
+                    .toggle-label .toggle-button {
+                        position: absolute;
+                        content: "";
+                        width: 26px;
+                        height: 26px;
+                        background-color: #fff;
+                        border-radius: 50%;
+                        top: 2px;
+                        left: 2px;
+                        transition: transform 0.3s ease;
+                    }
+                    
+                    .toggle-checkbox:checked + .toggle-label {
+                        background-color: #00DAC6; /* Active color for the toggle when notifications are ON */
+                    }
+                    
+                    .toggle-checkbox:checked + .toggle-label .toggle-button {
+                        transform: translateX(30px); /* Moves the button to the right when active */
+                    }
+                }
+                .pfp-form {
+                    display: flex;
+                    flex-direction: row;
+                    width: 95%;
+                    .big-divider {
+                        width: 80%;
+                        display: flex;
+                        flex-direction: column;
+                        padding: 0 5px;
+                        height: 100%;
+                        input {
+                            border-radius: 10px;
                             background-color: #383838;
-                            transition: background-color 0.3s ease;
-                            cursor: pointer;
+                            border: 1px solid #626262;
+                            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+                            color: white;
+                            height: 2rem;
+                            width: 70%;
+                            padding: 0 10px;
+                        }
+                        .row-form {
+                            display: flex;
+                            flex-direction: column;
+                            margin-right: 20px;
+                        }
+                        .form-labels {
+                            margin: 5px 0 10px 0;
+                            text-align: left;
+                            font: 20px "Cabin Condensed", sans-serif;
+                            color: #eeeeee;
+                        }
+                    }
+                    .small-divider {
+                        display: flex;
+                        flex-direction: column;
+                        width: 20%;
+                        .change-pfp-button {
+                            border: 1px solid #626262;
+                            background-color: #484848;
+                            color: white;
+                            border-radius: 10px;
+                            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+                            height: 12%;
+                            &:hover {
+                                background-color: #383838;
+                                transition: background-color 0.3s ease;
+                                cursor: pointer;
+                            }
+                        }
+                        .Profile_img {
+                            display: flex; /* Use flexbox */
+                            align-items: center; /* Center items vertically */
+                            justify-content: center; /* Center items horizontally */
+        
+                            height: 120px;
+                            width: 120px;
+                            margin: auto; /* Center the container itself */
+                            margin-top: 2.5vh;
+                            margin-bottom: 2vh;
+        
+                            img{
+                            border-radius: 50%;   
+                            };
+                        }
+                    }
+                }
+                .save-div {
+                    display: flex;
+                    width: 95%;
+                    justify-content: end;
+                    margin-top: 20px;
+                
+                    button {
+                        background-color: #00DAC6;
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        transition: background-color 0.3s;
+                        width: 100px;
+                        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+                        
+                        &:hover {
+                            background-color: #009B95;
                         }
                     }
                 }
             }
-            .save-div {
-                display: flex;
-                width: 95%;
-                justify-content: end;
-                margin-top: 20px;
-            
-                button {
-                    background-color: #00DAC6;
-                    color: white;
-                    border: none;
-                    padding: 10px 20px;
-                    border-radius: 10px;
+        }
+        .sign-out {
+            display: flex;
+            justify-content: end;
+            color: red;
+            margin: 2% 0;
+            width: 92%;
+            .sign-out-button {
+                background-color: red;
+                font: 20px "Cabin Condensed", sans-serif;
+                color: #eeeeee;
+                border-radius: 10px;
+                border: none;
+                padding: 5px;
+                width: 120%;
+                &:hover {
+                    background-color: darkred;
                     cursor: pointer;
-                    transition: background-color 0.3s;
-                    width: 100px;
-                    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-                    
-                    &:hover {
-                        background-color: #009B95;
-                    }
+                    transition: background-color 0.3s ease;
                 }
             }
         }
     }
-    .sign-out {
-      display: flex;
-      justify-content: end;
-      margin: 15px 125px 15px 5px;
-      font: 20px "Cabin Condensed", sans-serif;
-      color: red;
-      width: 100%;
-      .sign-out-button {
-        background-color: red;
-        color: #eeeeee;
-        border-radius: 10px;
-        padding: 5px;
-        border: 1px solid red;
-        width: 120%;
-      }
-    }
-  }
 }
 
-.navbar-items {
-  text-decoration: none;
-  font-family: "Roboto", sans-serif;
-  font-size: 20px;
-  color: white;
-}
+

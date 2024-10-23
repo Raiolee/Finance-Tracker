@@ -44,37 +44,39 @@ if (isset($_POST["Login"])) {
   <meta name="PENNY WISE" content="A Finance Tracker">
   <title>Penny Wise</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="Styles/style.css">
+  <link rel="stylesheet" href="Styles/styles.scss">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 </head>
 <body class="container">
-  <div class="left-section">
-    <img src="Assets/PENNY_WISE_Logo.png" alt="Penny Wise Logo" width="600" height="600" class="logo">
-  </div>
+  <div class="login">
+    <div class="left-section">
+      <img src="Assets/PENNY_WISE_Logo.png" alt="Penny Wise Logo" width="600" height="600" class="logo">
+    </div>
 
-  <div class="right-section">
-    <div class="login-container">
-      <form action="index.php" method="post">
-        <p class="log-title">LOGIN</p>
+    <div class="right-section">
+      <div class="login-container">
+        <form action="index.php" method="post">
+          <p class="log-title">LOGIN</p>
 
-        <?php if (isset($error_message)): ?>
-            <div class='alert alert-danger'><?php echo $error_message; ?></div>
-        <?php endif; ?>
+          <?php if (isset($error_message)): ?>
+              <div class='alert alert-danger'><?php echo $error_message; ?></div>
+          <?php endif; ?>
 
-        <div class="email">
-            <input type="email" placeholder="Email" name="email" id="email" required>
-        </div>
-        <div class="password">
-            <input type="password" placeholder="Password" name="password" id="password" required>
-        </div>
-        <div class="form-btn">
-            <input type="submit" value="Login" name="Login" class="login-btn">
-        </div>
-      </form>    
-      <p class="dont-have">Don't have an account? <a class="forgot" href="register.php">Register</a></p>
-      <a class="forgot" href="forgot-password.php">Forgot Password</a>
+          <div class="email">
+              <input type="email" placeholder="Email" name="email" id="email" required>
+          </div>
+          <div class="password">
+              <input type="password" placeholder="Password" name="password" id="password" required>
+          </div>
+          <div class="form-btn">
+              <input type="submit" value="Login" name="Login" class="login-btn">
+          </div>
+        </form>    
+        <p class="dont-have">Don't have an account? <a class="forgot" href="register.php">Register</a></p>
+        <a class="forgot" href="forgot-password.php">Forgot Password</a>
+      </div>
     </div>
   </div>
 </body>

@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = $_POST['description'];
 
     // Prepare the SQL statement
-    $stmt = $conn->prepare("INSERT INTO incomes (date, investment, source, total, currency, category, description) 
+    $stmt = $conn->prepare("INSERT INTO income (date, investment, source, total, currency, category, description) 
     VALUES (?, ?, ?, ?, ?, ?, ?)");
 
     if ($stmt === false) {
