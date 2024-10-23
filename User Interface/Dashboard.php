@@ -9,7 +9,7 @@ $user_id = $_SESSION["user_id"];
 $current_page = basename($_SERVER['PHP_SELF']);
 require_once '../connection/config.php';
 
-$sql = "SELECT subject, end_date FROM goals WHERE user_id = ? AND end_date > CURDATE() ORDER BY date ASC LIMIT 5";
+$sql = "SELECT subject, date FROM goals WHERE user_id = ? AND date > CURDATE() ORDER BY date ASC LIMIT 5";
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die('MySQL prepare error: ' . $conn->error);
@@ -22,7 +22,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $pending_goals[] = [
             'subject' => $row['subject'],
-            'date' => $row['end_date'],
+            'date' => $row['date'],
         ];
     }
 }
