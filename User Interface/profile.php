@@ -2,17 +2,31 @@
 // Include database connection
 include('../connection/config.php');
 
-// Fetch user data from the database (assuming user_id is stored in session)
+// Start session and fetch user data from session
 session_start();
 $username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);
 $user_id = $_SESSION['user_id'];
+
+// Fetch user data, including the profile picture (user_dp) from the database
 $query = "SELECT first_name, last_name, email, user_dp FROM user WHERE user_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
+$stmt->close();
+
+// Prepare the profile picture for display
+if ($user['user_dp']) {
+    // Convert BLOB to base64-encoded image
+    $profile_pic = 'data:image/jpeg;base64,' . base64_encode($user['user_dp']);
+} else {
+    // If no profile picture is found, use a placeholder image
+    $profile_pic = 'https://picsum.photos/100/100';
+}
+
+$current_page = 'Profile.php';
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +47,7 @@ $user = $result->fetch_assoc();
         <div class="navbar">
             <div class="Profile">
                 <div class="Profile_img">
-                    <img src="https://picsum.photos/100/100" alt="" width="110">
+                    <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" width="110">
                 </div>
             </div>
 
@@ -42,37 +56,37 @@ $user = $result->fetch_assoc();
             </div>
 
             <!-- Home Nav Item -->
-            <div class="navbar-div" id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'Dashboard.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/home.svg" alt="Icon">
                 <p><a class="navbar-items" href="Dashboard.php">Home</a></p>
             </div>
 
             <!-- Expenses Nav Item -->
-            <div class="navbar-div" id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'Dashboard.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
                 <p><a class="navbar-items" href="Expenses.php">Expenses</a></p>
             </div>
 
             <!-- Income Nav Item -->
-            <div class="navbar-div" id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'Expenses.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/income.svg" alt="Icon">
                 <p><a class="navbar-items" href="Income.php">Income</a></p>
             </div>
 
             <!-- Goal Nav Item -->
-            <div class="navbar-div" id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'Goals.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/approvals.svg" alt="Icon">
                 <p><a class="navbar-items" href="Goals.php">Goals</a></p>
             </div>
 
             <!-- Savings Nav Item -->
-            <div class="navbar-div" id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'Savings.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/reports.svg" alt="Icon">
                 <p><a class="navbar-items" href="Savings.php">Savings</a></p>
             </div>
 
             <!-- Settings Nav Item -->
-            <div class="navbar-div" id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'Settings.php' || $current_page == 'Profile.php') ? 'active' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/settings.svg" alt="Icon" width="50px">
                 <p><a class="navbar-items" href="Settings.php">Settings</a></p>
             </div>
@@ -83,7 +97,7 @@ $user = $result->fetch_assoc();
                 </div>
             </div>
         </div>
-        
+
         <section class="main-section">
             <div class="main-container">
                 <div class="content">
@@ -101,6 +115,7 @@ $user = $result->fetch_assoc();
 
                                 <label for="email" class="form-labels">Email</label>
                                 <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+
                                 <label for="new_password" class="form-labels">New Password</label>
                                 <input type="password" id="new_password" name="new_password">
 
@@ -110,26 +125,46 @@ $user = $result->fetch_assoc();
                         </div>
                         <div class="small-divider">
                             <div class="Profile_img">
-                                <img src="https://picsum.photos/100/100" alt="" width="110">
+                                <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" width="110">
                             </div>
-                            <button class="change-pfp-button" type="submit" name="pfp">Change Profile Picture</button>
+                            <!-- Change Profile Picture -->
+                            <input type="file" name="new_pfp" accept="image/*" id="file-input" required>
+                            <label for="file-input" class="change-pfp-button">Change Profile Picture</label>
+
+                            <div class="btn-options">
+                                <a href="Settings.php" class="link-btn"><button type="button" class="cancel">Cancel</button></a>
+                                <button type="submit" name="save" class="save">Save</button>
+                            </div>
                         </div>
                     </form>
-                    <div class="save-div">
-                        <button>Save</button>
-                    </div>
                 </div>
             </div>
         </section>
     </div>
-
-
-
+    <!-- APIs -->
+    <script src="../APIs/profile.js"></script>
 </body>
 
 </html>
 
 <?php
+session_start();
+if (!isset($_SESSION["user"])) {
+    header("Location: ../Login.php");
+}
+
+// Include database connection
+include('../connection/config.php');
+
+// Fetch user data from the database (assuming user_id is stored in session)
+$user_id = $_SESSION['user_id'];
+$query = "SELECT first_name, last_name, email, profile_picture FROM user WHERE user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
 if (isset($_POST['save'])) {
     $first_name = $_POST['first_name'];
     $last_name = $_POST['last_name'];
