@@ -14,9 +14,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['searchKeyword'])) {
 // Prepare the SQL query based on whether a search keyword exists
 if ($searchKeyword) {
     // Use prepared statements to prevent SQL injection
-    $stmt = $conn->prepare("SELECT id, source, total, currency, category, investment FROM incomes WHERE source LIKE ? OR category LIKE ?");
+    $stmt = $conn->prepare("SELECT income_id, source, total, currency, category, investment FROM income WHERE source LIKE ? OR category LIKE ?");
+    
+    // Check if the statement was prepared successfully
+    if ($stmt === false) {
+        die('Prepare failed: ' . htmlspecialchars($conn->error));
+    }
+    
     $likeKeyword = "%$searchKeyword%";
     $stmt->bind_param("ss", $likeKeyword, $likeKeyword);
+    
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -27,9 +34,10 @@ if ($searchKeyword) {
     }
 } else {
     // Default SQL query to get all records
-    $sql = "SELECT id, source, total, currency, category, investment FROM incomes";
+    $sql = "SELECT income_id, source, total, currency, category, investment FROM income";
     $result = $conn->query($sql);
 }
+
 
 ?>
 
@@ -123,7 +131,7 @@ if ($searchKeyword) {
 
         <div class="Logo-Nav" id="Nav_Side">
             <div class="Penny_Logo">
-                <img src="PENNY_WISE_Logo.png" alt="" width="200">
+                <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
             </div>
         </div>
     </div>
@@ -170,7 +178,8 @@ if ($searchKeyword) {
                              echo "<td>" . htmlspecialchars($row['total']) . " " . htmlspecialchars($row['currency']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['investment']) . "</td>";
-                             echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
+                             echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['income_id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
+;
                              echo "</tr>";
                          }
                      } else {
@@ -217,6 +226,42 @@ if ($searchKeyword) {
                 modal.style.display = "none";
             }
         }
+    </script>
+
+<script>
+        // JavaScript for modals (Edit/Delete)
+        var editDeleteModal = document.getElementById("editDeleteModal");
+        var editDeleteClose = editDeleteModal.getElementsByClassName("close")[0];
+
+        document.querySelectorAll('.open-modal').forEach(function(button) {
+            button.addEventListener('click', function() {
+                var id = this.getAttribute('data-id');
+                var source = this.getAttribute('data-source');
+                var total = this.getAttribute('data-total');
+                var currency = this.getAttribute('data-currency');
+                var category = this.getAttribute('data-category');
+                var investment = this.getAttribute('data-investment');
+
+                document.getElementById('incomeId').value = id;
+                document.getElementById('incomeSource').value = source;
+                document.getElementById('incomeTotal').value = total;
+                document.getElementById('incomeCurrency').value = currency;
+                document.getElementById('incomeCategory').value = category;
+                document.getElementById('incomeInvestment').value = investment;
+
+                editDeleteModal.style.display = "block";
+            });
+        });
+
+        editDeleteClose.onclick = function() {
+            editDeleteModal.style.display = "none";
+        };
+
+        window.onclick = function(event) {
+            if (event.target == editDeleteModal) {
+                editDeleteModal.style.display = "none";
+            }
+        };
     </script>
    
 </body>

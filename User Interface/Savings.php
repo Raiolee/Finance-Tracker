@@ -72,20 +72,34 @@ if ($stmt) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../Styles/Interface1.css">
+    <link rel="stylesheet" href="../Styles/mobilestyles.scss">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Dashboard</title>
 </head>
 
 <body class="container">
-    <div class="nav-bar">
-        <div class="Profile">
+
+    <div class="burger"  onclick="toggleMenu()">
+        <div class="burger-outer">
+            <div class="burger-icon">
+                <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
+            </div>
+            <div class="search-icon">
+                <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
+            </div>
+        </div>
+        <hr class="bottom-line">
+    </div>
+
+    <div class="nav-bar" id="burger-nav-bar">
+        <div class="Profile" id='mobile'>
             <div class="Profile_img">
                 <img src="https://picsum.photos/100/100" alt="" width="110">
             </div>
         </div>
 
-        <div class="user-name">
+        <div class="user-name" id='mobile'>
             <p><?php echo htmlspecialchars($username); ?></p>
         </div>
 
@@ -150,7 +164,7 @@ if ($stmt) {
         </div>
 
         <div class="Logo-Nav" id="Nav_Side">
-            <div class="Penny_Logo">
+            <div class="Penny_Logo" id='mobile'>
                 <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
             </div>
         </div>
@@ -177,10 +191,11 @@ if ($stmt) {
                             <thead>
                                 <tr>
                                     <th>Subject</th>
-                                    <th>Balance</th>
-                                    <th>Bank</th>
+                                    <th id="mobile">Balance</th>
+                                    <th id="mobile">Bank</th>
                                     <th>Category</th>
                                     <th>Date</th>
+                                    <th class='mobile-data'>View</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -189,10 +204,11 @@ if ($stmt) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>
                                                 <td>" . htmlspecialchars($row['subject']) . "</td>
-                                                <td>" . htmlspecialchars($row['balance']) . "</td>
-                                                <td>" . htmlspecialchars($row['bank']) . "</td>
+                                                <td class='mobile'>" . htmlspecialchars($row['balance']) . "</td>
+                                                <td class='mobile'>" . htmlspecialchars($row['bank']) . "</td>
                                                 <td>" . htmlspecialchars($row['category']) . "</td>
                                                 <td>" . htmlspecialchars($row['date']) . "</td>
+                                                <td class='mobile-data'><button onclick=\"showPopup('{$row['subject']}', '{$row['balance']}', '{$row['bank']}', '{$row['category']}', '{$row['date']}')\">Description</button></td>
                                             </tr>";
                                     }
                                 } else {
@@ -209,7 +225,7 @@ if ($stmt) {
                     <hr class="bottom-line">
                     <form id="SavingForm" method="post">
                         <div class="Saving-Form-Format" id="Date-Row">
-                            <label for="Date" class="Savings-Label">Date</label>
+                            <label for="SavingsDate" class="Savings-Label">Date</label>
                             <input type="date" id="SavingsDate" name="Date" required>
                         </div>
                         <div class="Saving-Form-Format" id="Bank-Row">
@@ -231,11 +247,11 @@ if ($stmt) {
                             </select>
                         </div>
                         <div class="Saving-Form-Format" id="Subject-Row">
-                            <label for="Subject" class="Savings-Label">Subject</label>
+                            <label for="SavingsSubject" class="Savings-Label">Subject</label>
                             <input type="text" id="SavingsSubject" name="Subject" required>
                         </div>
                         <div class="Saving-Form-Format" id="Description-Row">
-                            <label for="Description" class="Savings-Label">Description</label>
+                            <label for="SavingsDescription" class="Savings-Label">Description</label>
                             <textarea id="SavingsDescription" name="Description" required></textarea>
                         </div>
                         <div class="Saving-Form-Format" id="Savings-Button-Row">
@@ -253,6 +269,15 @@ if ($stmt) {
             </div> <!-- Closing Inner-container -->
         </div> <!-- Closing right-container -->
     </div>
+    <div id="popup" class="popup" style="display:none;">
+                <div class="popup-content">
+                    <h2 id="popup-title"></h2>
+                    <p id="popup-description"></p>
+                    <div class="popup-buttons">
+                        <button id="cancel-btn" onclick="closePopup()">Close</button>
+                    </div>
+                </div>
+            </div>
 
     <script>
         document.getElementById('newSavingButton').addEventListener('click', function() {
@@ -274,6 +299,37 @@ if ($stmt) {
 
         function clearForm() {
             document.getElementById('SavingForm').reset(); // Clear all form fields
+        }
+
+        function toggleMenu()
+        {
+            const menu = document.getElementById('burger-nav-bar');
+            menu.classList.toggle('active');
+
+        if(menu.classList.contains('active'))
+        {
+            menu.style.display = 'none';
+        } else{
+            menu.style.display = 'block';
+        }
+        }
+    </script>
+
+    <script>
+         function showPopup(subject, balance, bank , category, date) {
+            document.getElementById('popup-title').innerText = `Description`;
+            document.getElementById('popup-description').innerText = `Bank: ${bank}\nAmount: ${balance}\nDate: ${date}\nSubject: ${subject}\nCategory: ${category}`;
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('popup')) {
+                closePopup();
+            }
         }
     </script>
 

@@ -38,7 +38,7 @@ if (empty($userId)) {
         } else {
             try {
                 // Prepare and execute the insert statement
-                $sql = "INSERT INTO goals (user_id, subject, start_date, end_date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO goals (user_id, subject, start_date, date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql);
 
                 // Use 'd' for double (for budget limit) and 'i' for integer (for user_id)
@@ -56,7 +56,7 @@ if (empty($userId)) {
         }
     }
 }
-    $sql = "SELECT subject, category, start_date FROM user_db.goals WHERE user_id = ?";
+    $sql = "SELECT subject, category, date FROM user_db.goals WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
@@ -197,6 +197,7 @@ $conn->close();
                                     echo "<tr>
                                         <td>" . htmlspecialchars($row['subject']) . "</td>
                                         <td>" . htmlspecialchars($row['category']) . "</td>
+                                        <td>" . htmlspecialchars($row['date']) . "</td>
                                     </tr>";
                                 }
                             } else {
@@ -259,26 +260,46 @@ $conn->close();
     </div>
 
     <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if URL contains #newGoalForm, show the form if true
+        if (window.location.hash === '#newGoalForm') {
+            const rightContainer = document.querySelector('.inner');
+            const form = document.getElementById('newGoalForm');
+
+            rightContainer.style.display = 'none'; // Hide the right container
+            form.style.display = 'block'; // Show the new goal form
+        }
+
+        // Show form when the "New Goal" button is clicked and update the URL
         document.getElementById('newGoalsBTN').addEventListener('click', function() {
             const rightContainer = document.querySelector('.inner');
             const form = document.getElementById('newGoalForm');
 
             rightContainer.style.display = 'none'; // Hide the right container
             form.style.display = 'block'; // Show the new goal form
+
+            // Update the URL without reloading the page
+            window.history.pushState({}, '', '#newGoalForm');
         });
+    });
 
-        function closeGoalForm() {
-            const rightContainer = document.querySelector('.inner');
-            const form = document.getElementById('newGoalForm');
+    // Close form and clear URL hash
+    function closeGoalForm() {
+        const rightContainer = document.querySelector('.inner');
+        const form = document.getElementById('newGoalForm');
 
-            form.style.display = 'none'; // Hide the new goal form
-            rightContainer.style.display = 'block'; // Show the right container again
-            clearForm(); // Clear the form fields
-        }
+        form.style.display = 'none'; // Hide the new goal form
+        rightContainer.style.display = 'block'; // Show the right container again
+        clearForm(); // Clear the form fields
 
-        function clearForm() {
-            document.getElementById('GoalForm').reset(); // Clear all form fields
-        }
-    </script>
+        // Remove the URL fragment
+        window.history.pushState({}, '', window.location.pathname);
+    }
+
+    // Clear the form
+    function clearForm() {
+        document.getElementById('GoalForm').reset(); // Clear all form fields
+    }
+</script>
 </body>
 </html>
