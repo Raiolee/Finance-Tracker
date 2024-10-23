@@ -166,6 +166,12 @@ $stmt->close();
                                 <i class="icon-credit-card"></i>
                                 <span>+ New Expense</span>
                             </button>
+
+                            <script>
+                                 function handleNewReceipt() {
+                                    window.location.href = 'AddIncome.php';
+                                    }
+                            </script>
                             <button class="quick-access-item" onclick="handleNewReceipt()">
                                 <i class="icon-receipt"></i>
                                 <span>+ Add Income</span>

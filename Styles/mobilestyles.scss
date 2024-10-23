@@ -1,0 +1,96 @@
+.burger
+{
+    display: none;
+}
+.mobile-data
+{
+    display: none;
+}
+@media only screen and (min-width: 300px) and (max-width: 600px)
+{
+    body
+    {
+        display: flex;
+        flex-direction: column;
+
+        .nav-bar
+        {
+            display: none;
+            transition: display 0.3s;
+        }
+
+        nav.bar.active
+        {
+            display: block;
+        }
+
+        .burger
+        {
+            display: block;
+            cursor: pointer;
+
+            
+
+            .burger-outer
+            {
+                display: flex;
+                justify-content: space-between;
+                margin: 2vh 0;
+            }
+        }
+
+        .right-container
+        {
+            margin-top: 0;
+
+        }
+
+        .Inner-container
+        {
+            width: 200px;
+        }
+
+        .mobile-data
+        {
+            display: block;
+        }
+        .content
+        {
+            padding-top: 0;
+        }
+        
+        #mobile
+        {
+            display: none;
+        }
+
+        table-approval th:nth-child(2),
+        .table-approval td:nth-child(2),
+        table-approval th:nth-child(3),
+        .table-approval td:nth-child(3) {
+            display: none;
+        }
+    
+        /* Optionally, adjust the layout for better presentation */
+        .table-approval {
+            width: 100%;
+            border-collapse: collapse;
+        }
+    
+        .table-approval th, .table-approval td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .Savings-Label
+        {
+            text-align: center;
+        }
+
+        .new-expense-form
+        {
+            width: 100%;
+            padding: 0;
+        }
+    }
+}

@@ -34,7 +34,7 @@ if ($searchKeyword) {
     }
 } else {
     // Default SQL query to get all records
-    $sql = "SELECT id, source, total, currency, category, investment FROM income";
+    $sql = "SELECT income_id, source, total, currency, category, investment FROM income";
     $result = $conn->query($sql);
 }
 
@@ -131,7 +131,7 @@ if ($searchKeyword) {
 
         <div class="Logo-Nav" id="Nav_Side">
             <div class="Penny_Logo">
-                <img src="PENNY_WISE_Logo.png" alt="" width="200">
+                <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
             </div>
         </div>
     </div>
