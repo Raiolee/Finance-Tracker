@@ -247,7 +247,13 @@ $conn->close();
                                         <td>" . htmlspecialchars($row['subject']) . "</td>
                                         <td>" . htmlspecialchars($row['category']) . "</td>
                                         <td>" . htmlspecialchars($row['date']) . "</td>
-                                        <td>" . htmlspecialchars(number_format($percentage)) . "%</td>
+                                        <td>
+                                            <div class='progress-container'>
+                                                <div class='progress-bar' style='width: " . htmlspecialchars($percentage) . "%;'>
+                                                    " . htmlspecialchars(number_format($percentage)) . "%
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>";
                                 }
                             } else {
