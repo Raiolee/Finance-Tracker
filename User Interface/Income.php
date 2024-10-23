@@ -227,6 +227,42 @@ if ($searchKeyword) {
             }
         }
     </script>
+
+<script>
+        // JavaScript for modals (Edit/Delete)
+        var editDeleteModal = document.getElementById("editDeleteModal");
+        var editDeleteClose = editDeleteModal.getElementsByClassName("close")[0];
+
+        document.querySelectorAll('.open-modal').forEach(function(button) {
+            button.addEventListener('click', function() {
+                var id = this.getAttribute('data-id');
+                var source = this.getAttribute('data-source');
+                var total = this.getAttribute('data-total');
+                var currency = this.getAttribute('data-currency');
+                var category = this.getAttribute('data-category');
+                var investment = this.getAttribute('data-investment');
+
+                document.getElementById('incomeId').value = id;
+                document.getElementById('incomeSource').value = source;
+                document.getElementById('incomeTotal').value = total;
+                document.getElementById('incomeCurrency').value = currency;
+                document.getElementById('incomeCategory').value = category;
+                document.getElementById('incomeInvestment').value = investment;
+
+                editDeleteModal.style.display = "block";
+            });
+        });
+
+        editDeleteClose.onclick = function() {
+            editDeleteModal.style.display = "none";
+        };
+
+        window.onclick = function(event) {
+            if (event.target == editDeleteModal) {
+                editDeleteModal.style.display = "none";
+            }
+        };
+    </script>
    
 </body>
 </html>
