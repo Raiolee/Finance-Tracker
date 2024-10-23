@@ -131,7 +131,7 @@ if ($searchKeyword) {
 
         <div class="Logo-Nav" id="Nav_Side">
             <div class="Penny_Logo">
-                <img src="PENNY_WISE_Logo.png" alt="" width="200">
+                <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
             </div>
         </div>
     </div>
