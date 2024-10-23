@@ -164,12 +164,13 @@ body {
                 display: flex;
                 justify-content: start;
                 flex-direction: row;
-                margin: 12% 0 12% 5%;
+                margin: 6% 0 6% 5%;
                 .navbar-icon {
                     width: 50px;
                     height: 40px;
                     margin-top: 3%;
                     filter: brightness(0.2);
+                    transition: filter 0.3s ease;
                 }
                 .navbar-items {
                     margin: 0 10%;
@@ -177,7 +178,17 @@ body {
                     text-decoration: none;
                     font-family: "Roboto", sans-serif;
                     font-size: 20px;
-                    color: white;
+                    color: #D8FFFB;
+                    transition: color 0.3s ease;
+                }
+
+                &.active {
+                    .navbar-icon {
+                        filter: brightness(1);
+                    }
+                    .navbar-items {
+                        color: #00DAC6;
+                    }
                 }
             }
             .Penny_Logo {
@@ -201,28 +212,6 @@ body {
 
                     img{
                     border-radius: 50%;   
-                    };
-                }
-                #Nav_Button{
-                    height: 8vh;
-                    display: flex;
-                    margin-left: 35px;
-                
-                    a{
-                    text-decoration: none;
-                    color: rgba(216, 255, 251, 1);
-                    };
-                
-                    p{
-                    padding: 7px 0;
-                    font-size: 20px;
-                    width: 12vw;
-                    font-family: 'Roboto', sans-serif;
-                    };
-                
-                    img{ 
-                    padding: 5px 17px 7px 0;
-                    filter: brightness(0.2);
                     };
                 }
             }
@@ -357,7 +346,7 @@ body {
                     flex-direction: row;
                     width: 95%;
                     .big-divider {
-                        width: 80%;
+                        width: 70%;
                         display: flex;
                         flex-direction: column;
                         padding: 0 5px;
@@ -387,14 +376,23 @@ body {
                     .small-divider {
                         display: flex;
                         flex-direction: column;
-                        width: 20%;
+                        justify-content: space-between;
+                        width: 30%;
                         .change-pfp-button {
                             border: 1px solid #626262;
                             background-color: #484848;
                             color: white;
+                            font: 15px "Cabin Condensed", sans-serif;
                             border-radius: 10px;
                             box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-                            height: 12%;
+                            height: 10%;
+                            display: flex;
+                            justify-content: center;
+                            padding: 10px 10px 0 10px; // Adjust padding as needed
+                            align-items: center;
+                            text-align: center;
+                            margin-bottom: 50%;
+
                             &:hover {
                                 background-color: #383838;
                                 transition: background-color 0.3s ease;
@@ -416,15 +414,42 @@ body {
                             border-radius: 50%;   
                             };
                         }
+                        .submit-button {
+                            display: none; 
+                        }
+                    
+                        .file-name {
+                            margin-left: 10px;
+                        }
+                        #file-input {
+                            display: none; 
+                        }
                     }
                 }
-                .save-div {
+                .btn-options {
+                    margin-top: auto; /* Push the buttons to the bottom */
                     display: flex;
-                    width: 95%;
-                    justify-content: end;
+                    justify-content: space-between; /* Distribute the buttons evenly */
+                    width: 100%;
                     margin-top: 20px;
-                
-                    button {
+                    .link-btn {
+                        margin: 0 2%;
+                    }
+                    .cancel {
+                        background-color: #484848;
+                        color: white;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 10px;
+                        cursor: pointer;
+                        transition: background-color 0.3s;
+                        width: 100px;
+                        box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+                        &:hover {
+                            background-color: red;
+                        }
+                    }
+                    .save {
                         background-color: #00DAC6;
                         color: white;
                         border: none;
@@ -449,7 +474,7 @@ body {
             margin: 2% 0;
             width: 92%;
             .sign-out-button {
-                background-color: red;
+                background-color: #484848;
                 font: 20px "Cabin Condensed", sans-serif;
                 color: #eeeeee;
                 border-radius: 10px;
@@ -457,7 +482,7 @@ body {
                 padding: 5px;
                 width: 120%;
                 &:hover {
-                    background-color: darkred;
+                    background-color: red;
                     cursor: pointer;
                     transition: background-color 0.3s ease;
                 }
