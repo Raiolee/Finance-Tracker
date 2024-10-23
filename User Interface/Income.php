@@ -14,9 +14,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['searchKeyword'])) {
 // Prepare the SQL query based on whether a search keyword exists
 if ($searchKeyword) {
     // Use prepared statements to prevent SQL injection
-    $stmt = $conn->prepare("SELECT id, source, total, currency, category, investment FROM incomes WHERE source LIKE ? OR category LIKE ?");
+    $stmt = $conn->prepare("SELECT income_id, source, total, currency, category, investment FROM income WHERE source LIKE ? OR category LIKE ?");
+    
+    // Check if the statement was prepared successfully
+    if ($stmt === false) {
+        die('Prepare failed: ' . htmlspecialchars($conn->error));
+    }
+    
     $likeKeyword = "%$searchKeyword%";
     $stmt->bind_param("ss", $likeKeyword, $likeKeyword);
+    
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -30,6 +37,7 @@ if ($searchKeyword) {
     $sql = "SELECT id, source, total, currency, category, investment FROM income";
     $result = $conn->query($sql);
 }
+
 
 ?>
 
@@ -170,7 +178,8 @@ if ($searchKeyword) {
                              echo "<td>" . htmlspecialchars($row['total']) . " " . htmlspecialchars($row['currency']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['investment']) . "</td>";
-                             echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
+                             echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['income_id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
+;
                              echo "</tr>";
                          }
                      } else {
