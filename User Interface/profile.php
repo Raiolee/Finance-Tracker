@@ -114,7 +114,7 @@ $current_page = 'Profile.php';
                                 <input type="text" id="last_name" name="last_name" value="<?php echo htmlspecialchars($user['last_name']); ?>" required>
 
                                 <label for="email" class="form-labels">Email</label>
-                                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                                <input readonly type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required>
 
                                 <label for="new_password" class="form-labels">New Password</label>
                                 <input type="password" id="new_password" name="new_password">
@@ -148,7 +148,6 @@ $current_page = 'Profile.php';
 </html>
 
 <?php
-session_start();
 if (!isset($_SESSION["user"])) {
     header("Location: ../Login.php");
 }
@@ -158,7 +157,7 @@ include('../connection/config.php');
 
 // Fetch user data from the database (assuming user_id is stored in session)
 $user_id = $_SESSION['user_id'];
-$query = "SELECT first_name, last_name, email, profile_picture FROM user WHERE user_id = ?";
+$query = "SELECT first_name, last_name, email, user_dp FROM user WHERE user_id = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -173,21 +172,22 @@ if (isset($_POST['save'])) {
     $confirm_password = $_POST['confirm_password'];
 
     // Handle profile picture upload
-    if ($_FILES['profile_picture']['name']) {
-        $profile_picture = 'uploads/' . basename($_FILES['profile_picture']['name']);
-        move_uploaded_file($_FILES['profile_picture']['tmp_name'], $profile_picture);
+    if ($_FILES['new_pfp']['name']) {
+        // Get the binary content of the uploaded image
+        $profile_picture = file_get_contents($_FILES['new_pfp']['tmp_name']);
     } else {
-        $profile_picture = $user['profile_picture'];
+        // Keep the current profile picture if no new one is uploaded
+        $profile_picture = $user['user_dp'];
     }
 
     // Validate and update password if provided
     if (!empty($new_password) && $new_password === $confirm_password) {
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-        $query = "UPDATE user SET first_name = ?, last_name = ?, email = ?, profile_picture = ?, password = ? WHERE user_id = ?";
+        $query = "UPDATE user SET first_name = ?, last_name = ?, email = ?, user_dp = ?, password = ? WHERE user_id = ?";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("sssssi", $first_name, $last_name, $email, $profile_picture, $hashed_password, $user_id);
+        $stmt->bind_param("ssssbi", $first_name, $last_name, $email, $profile_picture, $hashed_password, $user_id);
     } else {
-        $query = "UPDATE user SET first_name = ?, last_name = ?, email = ?, profile_picture = ? WHERE user_id = ?";
+        $query = "UPDATE user SET first_name = ?, last_name = ?, email = ?, user_dp = ? WHERE user_id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("ssssi", $first_name, $last_name, $email, $profile_picture, $user_id);
     }

@@ -125,10 +125,6 @@ if ($user && $user['user_dp']) {
                             </label>
                         </div>
                     </div>
-                    <!-- Back up and Sync Button -->
-                    <div class="buttons">
-                        <h2 class="pfp-labels">Back up and Sync</h2>
-                    </div>
                     <!-- Help and Support Button -->
                     <div class="buttons">
                         <h2 class="pfp-labels">Help and Support</h2>

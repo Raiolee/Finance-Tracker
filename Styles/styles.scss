@@ -159,21 +159,21 @@ body {
         margin-left: 15%;
         .navbar {
             width: 30%;
+            height: 100vh;
             margin-right: 50px;
             .navbar-div {
                 display: flex;
                 justify-content: start;
                 flex-direction: row;
-                margin: 6% 0 6% 5%;
                 .navbar-icon {
-                    width: 50px;
-                    height: 40px;
-                    margin-top: 3%;
+                    height: 2.2rem;
+                    width: 18%;
+                    margin: 4.5% 0;
                     filter: brightness(0.2);
                     transition: filter 0.3s ease;
                 }
                 .navbar-items {
-                    margin: 0 10%;
+                    margin: 0 15%;
                     text-align: end;
                     text-decoration: none;
                     font-family: "Roboto", sans-serif;
@@ -193,10 +193,8 @@ body {
             }
             .Penny_Logo {
                 display: flex; /* Use flexbox */
-                justify-content: center; /* Center items horizontally */
-                margin-left: 20px;
-                height: 150px;
-                width: 150px;
+                justify-content: start; /* Center items horizontally */
+                margin: 0 2%;
             }
             .Profile {
                 .Profile_img {
@@ -429,7 +427,7 @@ body {
                 .btn-options {
                     margin-top: auto; /* Push the buttons to the bottom */
                     display: flex;
-                    justify-content: space-between; /* Distribute the buttons evenly */
+                    justify-content: space-evenly; /* Distribute the buttons evenly */
                     width: 100%;
                     margin-top: 20px;
                     .link-btn {
