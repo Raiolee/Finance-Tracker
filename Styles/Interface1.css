@@ -646,6 +646,20 @@
     gap: 5px; /* Adjust the gap as needed */
     margin: 8px 0; /* Add some vertical spacing */
 }
+
+.progress-container {
+    width: 100%;
+    height: 80%;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.progress-bar{
+    width: 50%;
+    height: 100%;
+    background: #24423f;
+}
+
 /*Goals Design End*/
 
 /*Saving Design*/

@@ -1,10 +1,14 @@
 <?php
 session_start();
-if(!isset($_SESSION["user"])) {
-    header("Location: ../Login.php");
+if (!isset($_SESSION["user"])) {
+    header("Location: ../index.php");
+    exit;
 }
+
 $username = $_SESSION["name"];
+$user_id = $_SESSION["user_id"];
 $current_page = basename($_SERVER['PHP_SELF']);
+require_once '../connection/config.php';
 
 ?>
 <!DOCTYPE html>
