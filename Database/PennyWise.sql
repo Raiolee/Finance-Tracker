@@ -45,7 +45,7 @@ create table `goals` (
     `end_date` date not null,
     `date`date not null,
     `amount` decimal(10,2) not null,
-    `category` varchar(255) not null,
+    `category` enum('Miscellaneous', 'Travels', 'Others') not null,
     `budget_limit` decimal(10,2) not null,
     `description` text not null
 );
