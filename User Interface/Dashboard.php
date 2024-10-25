@@ -225,7 +225,7 @@ $stmt->close();
                     </tbody>
              </table>
         </div>
-        <script src="../User Interface/quickreport.js"></script>
+        <script src="../js/quickreport.js"></script>
         <script>
                 function handleNewReceipt() {
                 window.location.href = 'AddIncome.php';
