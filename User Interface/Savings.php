@@ -79,8 +79,8 @@ if ($stmt) {
 </head>
 
 <body class="container">
-
-    <div class="burger"  onclick="toggleMenu()">
+    <!-- Burger for mobile styles -->
+    <div class="burger" onclick="toggleMenu()">
         <div class="burger-outer">
             <div class="burger-icon">
                 <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
@@ -270,14 +270,14 @@ if ($stmt) {
         </div> <!-- Closing right-container -->
     </div>
     <div id="popup" class="popup" style="display:none;">
-                <div class="popup-content">
-                    <h2 id="popup-title"></h2>
-                    <p id="popup-description"></p>
-                    <div class="popup-buttons">
-                        <button id="cancel-btn" onclick="closePopup()">Close</button>
-                    </div>
-                </div>
+        <div class="popup-content">
+            <h2 id="popup-title"></h2>
+            <p id="popup-description"></p>
+            <div class="popup-buttons">
+                <button id="cancel-btn" onclick="closePopup()">Close</button>
             </div>
+        </div>
+    </div>
 
     <script>
         document.getElementById('newSavingButton').addEventListener('click', function() {
@@ -301,22 +301,20 @@ if ($stmt) {
             document.getElementById('SavingForm').reset(); // Clear all form fields
         }
 
-        function toggleMenu()
-        {
+        function toggleMenu() {
             const menu = document.getElementById('burger-nav-bar');
             menu.classList.toggle('active');
 
-        if(menu.classList.contains('active'))
-        {
-            menu.style.display = 'none';
-        } else{
-            menu.style.display = 'block';
-        }
+            if (menu.classList.contains('active')) {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+            }
         }
     </script>
 
     <script>
-         function showPopup(subject, balance, bank , category, date) {
+        function showPopup(subject, balance, bank, category, date) {
             document.getElementById('popup-title').innerText = `Description`;
             document.getElementById('popup-description').innerText = `Bank: ${bank}\nAmount: ${balance}\nDate: ${date}\nSubject: ${subject}\nCategory: ${category}`;
             document.getElementById('popup').style.display = 'block';
