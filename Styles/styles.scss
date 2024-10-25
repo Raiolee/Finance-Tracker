@@ -349,7 +349,32 @@ body {
                         flex-direction: column;
                         padding: 0 5px;
                         height: 100%;
-                        input {
+                        .file-label-report {
+                            border: 1px solid #626262;
+                            background-color: #484848;
+                            color: white;
+                            font: 15px "Cabin Condensed", sans-serif;
+                            border-radius: 10px;
+                            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+                            height: 10%;
+                            width: 100%;
+                            margin: 4% 0 0 0;
+                            padding: 0 10px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            text-align: center;
+
+                            &:hover {
+                                background-color: #383838;
+                                transition: background-color 0.3s ease;
+                                cursor: pointer;
+                            }
+                        }
+                        #file-input {
+                            display: none; 
+                        }
+                        .var-input {
                             border-radius: 10px;
                             background-color: #383838;
                             border: 1px solid #626262;
@@ -357,6 +382,36 @@ body {
                             color: white;
                             height: 2rem;
                             width: 70%;
+                            padding: 0 10px;
+                        }
+                        .var-input-report {
+                            border-radius: 10px;
+                            background-color: #383838;
+                            border: 1px solid #626262;
+                            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+                            color: white;
+                            height: 2rem;
+                            width: 100%;
+                            padding: 0 10px;
+                        }
+                        .text-input {
+                            border-radius: 10px;
+                            background-color: #383838;
+                            border: 1px solid #626262;
+                            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+                            color: white;
+                            height: 5rem;
+                            width: 70%;
+                            padding: 0 10px;
+                        }
+                        .text-input-report {
+                            border-radius: 10px;
+                            background-color: #383838;
+                            border: 1px solid #626262;
+                            box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+                            color: white;
+                            height: 5rem;
+                            width: 100%;
                             padding: 0 10px;
                         }
                         .row-form {
@@ -376,7 +431,7 @@ body {
                         flex-direction: column;
                         justify-content: space-between;
                         width: 30%;
-                        .change-pfp-button {
+                        .file-label {
                             border: 1px solid #626262;
                             background-color: #484848;
                             color: white;
@@ -416,9 +471,6 @@ body {
                             display: none; 
                         }
                     
-                        .file-name {
-                            margin-left: 10px;
-                        }
                         #file-input {
                             display: none; 
                         }
@@ -462,6 +514,11 @@ body {
                             background-color: #009B95;
                         }
                     }
+                }
+                #report-btns {
+                    width: 100%;
+                    justify-content: end;
+                    margin-left: 21px;
                 }
             }
         }
