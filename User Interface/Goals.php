@@ -45,11 +45,11 @@ if (empty($userId)) {
                 // Use 'd' for double (for budget limit) and 'i' for integer (for user_id)
                 $stmt->bind_param("issssds", $userId, $subject, $startDate, $endDate, $category, $budgetLimit, $description);
 
-                if (!$stmt->execute()) {
-                    $error_message = "Error executing statement: {$stmt->error}";
-                } else {
-                    header("Location: Goals.php?success=1");
+                if ($stmt->execute()) {
+                    header("Location: Goals.php");
                     exit();
+                } else {
+                    $error_message = "Error executing statement: {$stmt->error}";
                 }
             } catch (Exception $e) {
                 $error_message = "An error occurred: " . $e->getMessage();
@@ -235,32 +235,35 @@ $conn->close();
                     </thead>
                     <tbody>
                         <?php
-                            if (isset($result) && $result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    $percentage = 0;
-                                    foreach ($goalsAndSavings as $goal) {
-                                        if ($goal['subject'] === $row['subject']) {
-                                            $percentage = $goal['percentage'];
-                                            break;
-                                        }
+                        if (isset($result) && $result->num_rows > 0) {
+                            $rowCounter = 0;
+                            while ($row = $result->fetch_assoc()) {
+                                $percentage = 0;
+                                foreach ($goalsAndSavings as $goal) {
+                                    if ($goal['subject'] === $row['subject']) {
+                                        $percentage = $goal['percentage'];
+                                        break;
                                     }
-                                    echo "<tr>
-                                        <td>" . htmlspecialchars($row['subject']) . "</td>
-                                        <td>" . htmlspecialchars($row['category']) . "</td>
-                                        <td>" . htmlspecialchars($row['date']) . "</td>
-                                        <td>
-                                            <div class='progress-container'>
-                                                <div class='progress-bar1' style='width: " . htmlspecialchars($percentage) . "%;'></div>
-                                            </div>
-                                            <div class='progress-text'>
-                                                <span>" . htmlspecialchars($percentage) . "%</span>
-                                            </div>
-                                        </td>
-                                    </tr>";
                                 }
-                            } else {
-                                echo "<tr><td colspan='5'>No results found</td></tr>";
+                                $rowClass = ($rowCounter % 2 == 0) ? 'row-color-1' : 'row-color-2';
+                                echo "<tr class='$rowClass'>
+                                    <td><div class='sub'>" . htmlspecialchars($row['subject']) . "</div></td>
+                                    <td>" . htmlspecialchars($row['category']) . "</td>
+                                    <td>" . htmlspecialchars($row['date']) . "</td>
+                                    <td class='progress-row'>
+                                        <div class='progress-container'>
+                                            <div class='progress-bar1' style='width: " . htmlspecialchars($percentage) . "%;'></div>
+                                        </div>
+                                        <div class='progress-text'>
+                                            <span>" . htmlspecialchars($percentage) . "%</span>
+                                        </div>
+                                    </td>
+                                </tr>";
+                                $rowCounter++;
                             }
+                        } else {
+                            echo "<tr><td colspan='5'>No results found</td></tr>";
+                        }
                         ?>
                     </tbody>
                 </table>
@@ -335,8 +338,6 @@ $conn->close();
             rightContainer.style.display = 'none'; // Hide the right container
             form.style.display = 'block'; // Show the new goal form
 
-            // Update the URL without reloading the page
-            window.history.pushState({}, '', '#newGoalForm');
         });
     });
 
