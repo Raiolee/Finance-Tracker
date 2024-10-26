@@ -166,12 +166,6 @@ $stmt->close();
                                 <i class="icon-credit-card"></i>
                                 <span>+ New Expense</span>
                             </button>
-
-                            <script>
-                                 function handleNewReceipt() {
-                                    window.location.href = 'AddIncome.php';
-                                    }
-                            </script>
                             <button class="quick-access-item" onclick="handleNewReceipt()">
                                 <i class="icon-receipt"></i>
                                 <span>+ Add Income</span>
@@ -180,7 +174,7 @@ $stmt->close();
                                 <i class="icon-report"></i>
                                 <span>+ New Goal</span>
                             </button>
-                            <button class="quick-access-item" onclick="window.location.href='Savings.php#newSavingForm'">
+                            <button class="quick-access-item" onclick="handleNewSaving()">
                                 <i class="icon-plane"></i>
                                 <span>+ Add Saving</span>
                             </button>
@@ -231,6 +225,15 @@ $stmt->close();
                     </tbody>
              </table>
         </div>
-        <script src="../User Interface/quickreport.js"></script>
+        <script src="../js/quickreport.js"></script>
+        <script>
+                function handleNewReceipt() {
+                window.location.href = 'AddIncome.php';
+                }
+
+                function handleNewSaving(){
+                    window.location.href='AddSavings.php';
+                }
+        </script>
 </body>
 </html>

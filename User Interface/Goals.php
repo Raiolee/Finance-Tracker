@@ -21,6 +21,7 @@ if (!isset($_SESSION["user"])) {
 // Get the user ID
 $userId = $_SESSION['user_id'] ?? null;
 
+// Error handling for unknown user ID
 if (empty($userId)) {
     $error_message = "User  ID is not set. Please log in again.";
 } else {
@@ -287,7 +288,6 @@ $conn->close();
                         <label for="GoalsCategory" class="Goals-Label">Category*</label>
                         <select id="GoalsCategory" name="GoalsCategory" required>
                             <option value="" disabled selected>Category</option>
-                            <option value="Savings">Savings</option>
                             <option value="Travels">Travels</option>
                             <option value="Miscellaneous">Miscellaneous</option>
                             <option value="Others">Others</option>

@@ -6,13 +6,17 @@
 {
     display: none;
 }
-@media only screen and (min-width: 300px) and (max-width: 600px)
+
+@media only screen and (min-width: 350px) and (max-width: 600px)
 {
     body
     {
         display: flex;
         flex-direction: column;
-
+        .content
+        {
+            padding: 0;
+        }
         .nav-bar
         {
             display: none;
@@ -39,48 +43,79 @@
             }
         }
 
-        .right-container
+        .right-container 
         {
-            margin-top: 0;
+            margin: 0;
+/*Savings Mobile Style Start*/
+            .Inner-container 
+            {
+                width: 80vw;
+                #inner-container
+                {
+                    .Top-container-Approval
+                    {
+                        display: contents;
 
-        }
+                        .Left-Top
+                        {
+                            text-align: center;
+                        }
 
-        .Inner-container
-        {
-            width: 200px;
-        }
+                        .Right-Top
+                        {
+                            margin-bottom: 1vh;
+                        }
+                    }
 
-        .mobile-data
-        {
-            display: block;
-        }
-        .content
-        {
-            padding-top: 0;
-        }
-        
-        #mobile
-        {
-            display: none;
-        }
+                    .Lower-container
+                    {
+                        margin: 0;
 
-        table-approval th:nth-child(2),
-        .table-approval td:nth-child(2),
-        table-approval th:nth-child(3),
-        .table-approval td:nth-child(3) {
-            display: none;
+                        .mobile,
+                        .table-approval th:nth-child(2),
+                        .table-approval td:nth-child(2),
+                        .table-approval th:nth-child(3),
+                        .table-approval td:nth-child(3)
+                        {
+                            display: none;
+                        }
+                        width: 80vw;
+
+                        .mobile-data
+                        {
+                            display: block;
+                            width: 100%;
+                        }
+
+                        .table-approval thead th
+                        {
+                            width: 25%;
+                            text-align: center;
+                        }
+
+                        .mobile-data button
+                        {
+                            margin-right: 10px;
+                            margin-left: 10px;
+                            font-size: 12px; /* Base font size */
+                            border: none;
+                            background-color: #007bff; /* Button background color */
+                            color: white; /* Button text color */
+                            border-radius: 5px; /* Rounded corners */
+                        }
+
+                    }
+                }
+
+                #newSavingForm
+                {
+                    #SavingsDate, #SavingsCategory, #Bank, #Balance,#SavingsSubject, #SavingsDescription {
+                        width: 75vw;
+                    }
+                }
+            }
         }
-    
-        /* Optionally, adjust the layout for better presentation */
-        .table-approval {
-            width: 100%;
-            border-collapse: collapse;
-        }
-    
-        .table-approval th, .table-approval td {
-            padding: 10px;
-            text-align: left;
-        }
+    }
 
         .Savings-Label
         {
@@ -92,5 +127,118 @@
             width: 100%;
             padding: 0;
         }
-    }
 }
+
+@media only screen and (min-width: 300px) and (max-width: 349px)
+{
+    body
+    {
+        display: flex;
+        flex-direction: column;
+
+        .content
+        {
+            padding: 0;
+
+            .right-container 
+            {
+/*Savings Mobile Style Start*/
+                .Inner-container 
+                {
+                    width: 80vw;
+                    #inner-container
+                    {
+                        .Top-container-Approval
+                        {
+                            display: contents;
+
+                            .Left-Top
+                            {
+                                text-align: center;
+                            }
+
+                            .Right-Top
+                            {
+                                margin-bottom: 1vh;
+                            }
+                        }
+
+                        .Lower-container
+                        {
+                            margin: 0;
+                            .mobile2,
+                            .table-approval th:nth-child(2),
+                            .table-approval td:nth-child(2),
+                            .table-approval th:nth-child(3),
+                            .table-approval td:nth-child(3),
+                            .table-approval th:nth-child(5),
+                            .table-approval td:nth-child(5) {
+                                display: none;
+                            }
+
+                            .mobile-data
+                            {
+                                display: block;
+                                text-align: center;
+                            }
+
+                            .mobile-data button
+                            {
+                                margin-left: 10px;
+                                margin-right: 10px;
+                                font-size: 12px; /* Base font size */
+                                border: none;
+                                background-color: #007bff; /* Button background color */
+                                color: white; /* Button text color */
+                                border-radius: 5px; /* Rounded corners */
+                            }
+
+                            width: 80vw;
+
+                            .table-approval thead th
+                            {
+                                width: 33.33%;
+                            }
+
+
+                        }
+                    }
+
+                    #newSavingForm
+                {
+                    #SavingsDate, #SavingsCategory, #Bank, #Balance,#SavingsSubject, #SavingsDescription {
+                        width: 75vw;
+                    }
+                }
+                }
+            }
+        }
+        .nav-bar
+        {
+            display: none;
+            transition: display 0.3s;
+        }
+
+        .burger
+        {
+            display: block;
+
+            .burger-outer
+            {
+                display: flex;
+                justify-content: space-between;
+                margin: 1vh 0;
+            }
+        }
+
+        .right-container
+        {
+            margin-top: 0;
+        }
+/*Savings Mobile Style End*/
+    }
+    
+}
+
+
+

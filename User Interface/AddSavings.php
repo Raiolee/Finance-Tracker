@@ -11,15 +11,9 @@ if (!isset($_SESSION["user_id"])) {
 
 $uid = $_SESSION["user_id"];
 $username = $_SESSION["name"] ?? 'Guest';
-$current_page = basename($_SERVER['PHP_SELF']);
 
 // Include database connection
 include '../connection/config.php';
-
-// Check if the connection was successful
-if ($conn->connect_error) {
-    die(sprintf("Connection failed: %s", $conn->connect_error));
-}
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -41,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Execute the statement
         if ($stmt->execute()) {
-            // Redirect back to the dashboard with success message
+            // Redirect back to the savings page with success message
             header("Location: Savings.php?success=1");
             exit();
         } else {
@@ -50,18 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $error_message = "Error preparing statement: {$conn->error}";
     }
-}
-
-// Fetch existing savings for the user
-$sql = "SELECT subject, balance, bank, category, date FROM user_db.savings WHERE user_id = ?";
-$stmt = $conn->prepare($sql);
-
-if ($stmt) {
-    $stmt->bind_param("i", $uid);
-    $stmt->execute();
-    $result = $stmt->get_result();
-} else {
-    $error_message = "Error preparing statement: {$conn->error}";
 }
 ?>
 
@@ -75,7 +57,7 @@ if ($stmt) {
     <link rel="stylesheet" href="../Styles/mobilestyles.scss">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <title>Dashboard</title>
+    <title>New Saving</title>
 </head>
 
 <body class="container">
@@ -169,103 +151,56 @@ if ($stmt) {
             </div>
         </div>
     </div>
-
     <div class="content">
         <div class="right-container">
             <div class="Inner-container">
                 <div id="inner-container">
-                    <div class="Top-container-Approval">
-                        <div class="Left-Top">
-                            <p>Savings</p>
-                        </div>
-                        <div class="Right-Top">
-                            <button class="New-Saving" id="newSavingButton">+ New Saving</button>
-                        </div>
-                    </div>
-                    <div class="Lower-container">
-                        <hr class="bottom-line">
-                        <table class="table-approval">
-                            <thead>
-                                <tr>
-                                    <th>Subject</th>
-                                    <th class="mobile" class="mobile2">Balance</th>
-                                    <th class="mobile" class="mobile2">Bank</th>
-                                    <th>Category</th>
-                                    <th class="mobile2">Date</th>
-                                    <th class='mobile-data'>View</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if (isset($result) && $result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>
-                                                <td>" . htmlspecialchars($row['subject']) . "</td>
-                                                <td class='mobile'>" . htmlspecialchars($row['balance']) . "</td>
-                                                <td class='mobile'>" . htmlspecialchars($row['bank']) . "</td>
-                                                <td>" . htmlspecialchars($row['category']) . "</td>
-                                                <td>" . htmlspecialchars($row['date']) . "</td>
-                                                <td class='mobile-data'><button onclick=\"showPopup('{$row['subject']}', '{$row['balance']}', '{$row['bank']}', '{$row['category']}', '{$row['date']}')\">Description</button></td>
-                                            </tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='5'>No results found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div id="newSavingForm" class="new-expense-form" style="display:none;">
-                    <h3>New Saving</h3>
-                    <hr class="bottom-line">
-                    <form id="SavingForm" method="post">
-                        <div class="Saving-Form-Format" id="Date-Row">
-                            <label for="SavingsDate" class="Savings-Label">Date</label>
-                            <input type="date" id="SavingsDate" name="Date" required>
-                        </div>
-                        <div class="Saving-Form-Format" id="Bank-Row">
-                            <label for="Bank" class="Savings-Label">Bank</label>
-                            <input type="text" id="Bank" name="Bank" required>
-                        </div>
-                        <div class="Saving-Form-Format" id="Balance-Row">
-                            <label for="Balance" class="Savings-Label">Balance</label>
-                            <input type="number" id="Balance" name="Balance" required>
-                        </div>
-                        <div class="Saving-Form-Format" id="Category-Row">
-                            <label for="SavingsCategory" class="Savings-Label">Category</label>
-                            <select id="SavingsCategory" name="SavingsCategory" required>
-                                <option value="" disabled selected>Category</option>
-                                <option value="Type1">Daily</option>
-                                <option value="Type2">Weekly</option>
-                                <option value="Type3">Monthly</option>
-                                <option value="Type4">Yearly</option>
-                            </select>
-                        </div>
-                        <div class="Saving-Form-Format" id="Subject-Row">
-                            <label for="SavingsSubject" class="Savings-Label">Subject</label>
-                            <input type="text" id="SavingsSubject" name="Subject" required>
-                        </div>
-                        <div class="Saving-Form-Format" id="Description-Row">
-                            <label for="SavingsDescription" class="Savings-Label">Description</label>
-                            <textarea id="SavingsDescription" name="Description" required></textarea>
-                        </div>
-                        <div class="Saving-Form-Format" id="Savings-Button-Row">
-                            <div class="Savings-button-div-row">
-                                <button type="submit" class="button-savings">Save</button>
-                                <button type="button" class="button-savings" onclick="closeExpenseForm()">Cancel</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <?php if (isset($error_message)): ?>
-                    <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
-                <?php endif; ?>
-            </div> <!-- Closing Inner-container -->
-        </div> <!-- Closing right-container -->
+    <div id="newSavingForm" class="new-expense-form">
+    <h3>New Saving</h3>
+    <hr class="bottom-line">
+    <form id="SavingForm" method="post" action="AddSavings.php">
+        <div class="Saving-Form-Format" id="Date-Row">
+            <label for="SavingsDate" class="Savings-Label">Date</label>
+            <input type="date" id="SavingsDate" name="Date" required>
+        </div>
+        <div class="Saving-Form-Format" id="Bank-Row">
+            <label for="Bank" class="Savings-Label">Bank</label>
+            <input type="text" id="Bank" name="Bank" required>
+        </div>
+        <div class="Saving-Form-Format" id="Balance-Row">
+            <label for="Balance" class="Savings-Label">Balance</label>
+            <input type="number" id="Balance" name="Balance" required>
+        </div>
+        <div class="Saving-Form-Format" id="Category-Row">
+            <label for="SavingsCategory" class="Savings-Label">Category</label>
+            <select id="SavingsCategory" name="SavingsCategory" required>
+                <option value="" disabled selected>Category</option>
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Yearly">Yearly</option>
+            </select>
+        </div>
+        <div class="Saving-Form-Format" id="Subject-Row">
+            <label for="SavingsSubject" class="Savings-Label">Subject</label>
+            <input type="text" id="SavingsSubject" name="Subject" required>
+        </div>
+        <div class="Saving-Form-Format" id="Description-Row">
+            <label for="SavingsDescription" class="Savings-Label">Description</label>
+            <textarea id="SavingsDescription" name="Description" required></textarea>
+        </div>
+        <div class="Saving-Form-Format" id="Savings-Button-Row">
+            <div class="Savings-button-div-row">
+                <button type="submit" class="button-savings">Save</button>
+                <button type="button" class="button-savings" onclick="window.location.href='Savings.php'">Cancel</button>
+            </div>
+        </div>
+    </form>
     </div>
+    <?php if (isset($error_message)): ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
+    <?php endif; ?>
+
     <div id="popup" class="popup" style="display:none;">
                 <div class="popup-content">
                     <h2 id="popup-title"></h2>
@@ -275,6 +210,8 @@ if ($stmt) {
                     </div>
                 </div>
             </div>
+
+
 
     <script>
         document.getElementById('newSavingButton').addEventListener('click', function() {
@@ -328,8 +265,7 @@ if ($stmt) {
                 closePopup();
             }
         }
-    </script>
+    </script> 
 
 </body>
-
 </html>
