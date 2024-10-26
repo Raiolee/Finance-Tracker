@@ -27,23 +27,22 @@ if (empty($userId)) {
 } else {
     if (isset($_POST['submit-form'])) {
         $startDate = $_POST['Start-Date'];
-        $endDate = $_POST['End-Date'];
         $subject = $_POST['Subject'];
         $category = $_POST['GoalsCategory'];
         $description = $_POST['Description'];
         $budgetLimit = $_POST['Target-Amount'];
 
         // Validate required fields
-        if (empty($startDate) || empty($endDate) || empty($subject) || empty($category) || empty($description) || empty($budgetLimit)) {
+        if (empty($startDate) || empty($subject) || empty($category) || empty($description) || empty($budgetLimit)) {
             $error_message = "Please fill in all fields.";
         } else {
             try {
                 // Prepare and execute the insert statement
-                $sql = "INSERT INTO goals (user_id, subject, start_date, date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO goals (user_id, subject, start_date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql);
 
                 // Use 'd' for double (for budget limit) and 'i' for integer (for user_id)
-                $stmt->bind_param("issssds", $userId, $subject, $startDate, $endDate, $category, $budgetLimit, $description);
+                $stmt->bind_param("isssds", $userId, $subject, $startDate, $category, $budgetLimit, $description);
 
                 if ($stmt->execute()) {
                     header("Location: Goals.php");
@@ -57,16 +56,19 @@ if (empty($userId)) {
         }
     }
 }
-    $sql = "SELECT subject, category, date FROM user_db.goals WHERE user_id = ?";
-    $stmt = $conn->prepare($sql);
+    function fetchGoals($conn, $userId) {
+        $sql = "SELECT subject, category FROM user_db.goals WHERE user_id = ?";
+        $stmt = $conn->prepare($sql);
 
-    if ($stmt) {
-        $stmt->bind_param("i", $userId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $goalsAndSavings = getGoalsAndSavings($conn, $userId);
-    } else {
-        $error_message = "Error preparing statement: {$conn->error}";
+        if ($stmt) {
+            $stmt->bind_param("i", $userId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $goalsAndSavings = getGoalsAndSavings($conn, $userId);
+            return [$result, $goalsAndSavings];
+        } else {
+            throw new Exception("Error preparing statement: {$conn->error}");
+        }
     }
 
     function getGoalsAndSavings($conn, $userId) {
@@ -108,7 +110,115 @@ if (empty($userId)) {
         return $results;
     }
 
+    try {
+        list($result, $goalsAndSavings) = fetchGoals($conn, $userId);
+        $predictions = predictSavingDate($conn, $userId);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
+
+    function predictSavingDate($conn, $userId) {
+        // Fetch goals
+        $goalsPredict = "SELECT subject, start_date, budget_limit FROM goals WHERE user_id = ?";
+        $stmt = $conn->prepare($goalsPredict);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $goalsResult = $stmt->get_result();
+        $goals = $goalsResult->fetch_all(MYSQLI_ASSOC);
     
+        // Fetch savings
+        $savingsPredict = "SELECT subject, category, balance FROM savings WHERE user_id = ?";
+        $stmt = $conn->prepare($savingsPredict);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $savingsResult = $stmt->get_result();
+        $savings = $savingsResult->fetch_all(MYSQLI_ASSOC);
+    
+        // Prepare an array to hold predictions
+        $predictions = [];
+    
+        foreach ($goals as $goal) {
+            $goalSubject = $goal['subject'];
+            $budgetLimit = $goal['budget_limit'];
+    
+            // Calculate total savings for the goal subject
+            $totalSavings = 0;
+            foreach ($savings as $saving) {
+                if ($saving['subject'] === $goalSubject) {
+                    $totalSavings += $saving['balance'];
+                }
+            }
+    
+            // Calculate the remaining amount needed to reach the goal
+            $remainingAmount = $budgetLimit - $totalSavings;
+    
+            // If the goal is already met
+            if ($remainingAmount <= 0) {
+                $predictions[$goalSubject] = "You have already reached your goal.";
+                continue;
+            }
+    
+            // Calculate savings based on frequency
+            $dailySavings = 0; 
+            $weeklySavings = 0; 
+            $monthlySavings = 0; 
+            $yearlySavings = 0; 
+    
+            foreach ($savings as $saving) {
+                switch ($saving['category']) {
+                    case 'Daily':
+                        $dailySavings += $saving['balance'];
+                        break;
+                    case 'Weekly':
+                        $weeklySavings += $saving['balance'];
+                        break;
+                    case 'Monthly':
+                        $monthlySavings += $saving['balance'];
+                        break;
+                    case 'Yearly':
+                        $yearlySavings += $saving['balance'];
+                        break;
+                }
+            }
+    
+            // Calculate the number of days needed to reach the goal
+            $daysNeeded = PHP_INT_MAX;
+    
+            // Daily savings contribution
+            if ($dailySavings > 0) {
+                $daysNeeded = min($daysNeeded, ceil($remainingAmount / $dailySavings));
+            }
+    
+            // Weekly savings contribution
+            if ($weeklySavings > 0) {
+                $weeksNeeded = ceil($remainingAmount / $weeklySavings);
+                $daysNeeded = min($daysNeeded, $weeksNeeded * 7);
+            }
+    
+            // Monthly savings contribution
+            if ($monthlySavings > 0) {
+                $monthsNeeded = ceil($remainingAmount / $monthlySavings);
+                $daysNeeded = min($daysNeeded, $monthsNeeded * 30); // Approximate month as 30 days
+            }
+    
+            // Yearly savings contribution
+            if ($yearlySavings > 0) {
+                $yearsNeeded = ceil($remainingAmount / $yearlySavings);
+                $daysNeeded = min($daysNeeded, $yearsNeeded * 365); // Approximate year as 365 days
+            }
+    
+            // Calculate the target date
+            if ($daysNeeded === PHP_INT_MAX) {
+                $predictions[$goalSubject] = "N/A"; // No valid savings to reach the goal
+            } else {
+                $targetDate = new DateTime();
+                $targetDate->modify("+$daysNeeded days");
+                $predictions[$goalSubject] = $targetDate->format('Y-m-d');
+            }
+        }
+    
+        return $predictions;
+    }
 
 $conn->close();
 ?>
@@ -249,7 +359,7 @@ $conn->close();
                                 echo "<tr class='$rowClass'>
                                     <td><div class='sub'>" . htmlspecialchars($row['subject']) . "</div></td>
                                     <td>" . htmlspecialchars($row['category']) . "</td>
-                                    <td>" . htmlspecialchars($row['date']) . "</td>
+                                    <td>" . htmlspecialchars($predictions[$row['subject']] ?? 'N/A') . "</td>
                                     <td class='progress-row'>
                                         <div class='progress-container'>
                                             <div class='progress-bar1' style='width: " . htmlspecialchars($percentage) . "%;'></div>
@@ -262,7 +372,7 @@ $conn->close();
                                 $rowCounter++;
                             }
                         } else {
-                            echo "<tr><td colspan='5'>No results found</td></tr>";
+                            echo "<tr><td colspan='4'>No results found</td></tr>";
                         }
                         ?>
                     </tbody>
@@ -278,10 +388,6 @@ $conn->close();
                     <div class="Goal-Form-Format" id="Start-Date-Row">
                         <label for="Start-Date" class="Goals-Label">Start Date*</label>
                         <input type="date" id="Start-Date" name="Start-Date" required>
-                    </div>
-                    <div class="Goal-Form-Format" id="End-Date-Row">
-                        <label for="End-Date" class="Goals-Label">End Date*</label>
-                        <input type="date" id="End-Date" name="End-Date" required>
                     </div>
                     <div class="Goal-Form-Format" id="Subject-Row">
                         <label for="Subject" class="Goals-Label">Subject*</label>
