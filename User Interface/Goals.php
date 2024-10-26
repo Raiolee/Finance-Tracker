@@ -249,9 +249,10 @@ $conn->close();
                                         <td>" . htmlspecialchars($row['date']) . "</td>
                                         <td>
                                             <div class='progress-container'>
-                                                <div class='progress-bar' style='width: " . htmlspecialchars($percentage) . "%;'>
-                                                    " . htmlspecialchars(number_format($percentage)) . "%
-                                                </div>
+                                                <div class='progress-bar1' style='width: " . htmlspecialchars($percentage) . "%;'></div>
+                                            </div>
+                                            <div class='progress-text'>
+                                                <span>" . htmlspecialchars($percentage) . "%</span>
                                             </div>
                                         </td>
                                     </tr>";
