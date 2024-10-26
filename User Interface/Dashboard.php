@@ -9,7 +9,7 @@ $user_id = $_SESSION["user_id"];
 $current_page = basename($_SERVER['PHP_SELF']);
 require_once '../connection/config.php';
 
-$sql = "SELECT subject, date FROM goals WHERE user_id = ? AND date > CURDATE() ORDER BY date ASC LIMIT 5";
+$sql = "SELECT subject, start_date FROM goals WHERE user_id = ? AND start_date ><= CURDATE() ORDER BY start_date ASC LIMIT 5";
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die('MySQL prepare error: ' . $conn->error);
@@ -22,7 +22,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $pending_goals[] = [
             'subject' => $row['subject'],
-            'date' => $row['date'],
+            'start_date' => $row['start_date'],
         ];
     }
 }
@@ -139,7 +139,7 @@ $stmt->close();
                                 <li>
                                  <i class="fas fa-trophy"></i> 
                                 <?php echo htmlspecialchars($goal['subject']); ?> 
-                                (Due by: <?php echo htmlspecialchars(date('F j, Y', strtotime($goal['date']))); ?>)
+                                (Started on: <?php echo htmlspecialchars(date('F j, Y', strtotime($goal['start_date']))); ?>)
                                 </li>
                             <?php endforeach; ?>
                         <?php else: ?>
