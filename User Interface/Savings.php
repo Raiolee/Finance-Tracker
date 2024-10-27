@@ -237,10 +237,10 @@ if ($stmt) {
                             <label for="SavingsCategory" class="Savings-Label">Category</label>
                             <select id="SavingsCategory" name="SavingsCategory" required>
                                 <option value="" disabled selected>Category</option>
-                                <option value="Type1">Daily</option>
-                                <option value="Type2">Weekly</option>
-                                <option value="Type3">Monthly</option>
-                                <option value="Type4">Yearly</option>
+                                <option value="Daily">Daily</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="Monthly">Monthly</option>
+                                <option value="Yearly">Yearly</option>
                             </select>
                         </div>
                         <div class="Saving-Form-Format" id="Subject-Row">
