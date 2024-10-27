@@ -42,7 +42,8 @@ create table `goals` (
     `user_id` int not null,
     `subject` varchar(255) not null,
     `start_date` date not null,
-    `category` enum('Miscellaneous', 'Travels', 'Others') not null,
+    `date`date not null,
+    `category` varchar(255) not null,
     `budget_limit` decimal(10,2) not null,
     `description` text not null
 );
