@@ -2,7 +2,7 @@ document.getElementById('report-form').addEventListener('submit', function(e) {
     e.preventDefault();
     var formData = new FormData(this);
     
-    fetch('report.php', {
+    fetch('../APIs/send_email.php', {
         method: 'POST',
         body: formData
     })
