@@ -226,6 +226,14 @@
     width: 14.2857%; 
 }
 
+.table-approval thead :hover {
+    padding: 10px;
+    background-color: #00bfa5;
+    font-size: 16px;
+    font-family: "Rubik", sans-serif;
+    width: 14.2857%; 
+}
+
 .table-approval td {
     padding: 10px;
     color: white;
@@ -240,6 +248,11 @@
 
 .table-approval tbody tr:nth-child(odd) {
     background-color: #28282A; 
+}
+
+tr:hover {
+    background-color: #f1f1f1; /* Change background color on hover */
+    transform: scale(1.02); /* Slightly scale up the row */
 }
 
 .button-container {
@@ -719,6 +732,7 @@
     padding: 10px 0px; 
 }
 
+
 .bottom-line {
     width: 100%; 
     margin-bottom: 20px; 
@@ -737,6 +751,16 @@ hr
     font-size: small;
     height: 30px;
 }
+.table-approval tbody tr {
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.table-approval tbody tr:hover {
+    background-color: #000000; /* Change this color for the hover effect */
+    border: 2px solid white;
+    font-weight: bolder;
+}
+
 .New-Saving:hover {
     background-color: #00bfa5; /* Slightly darker shade for hover */
     transform: translateY(-2px); /* Slight lift effect on hover */
