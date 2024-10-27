@@ -93,13 +93,13 @@ if ($stmt) {
     </div>
 
     <div class="nav-bar" id="burger-nav-bar">
-        <div class="Profile" id='mobile'>
+        <div class="Profile" id='mobile-burger-hide'>
             <div class="Profile_img">
-                <img src="https://picsum.photos/100/100" alt="" width="110">
+                <img src="../Assets/blank-profile.webp" alt="Profile" width="110">
             </div>
         </div>
 
-        <div class="user-name" id='mobile'>
+        <div class="user-name" id='mobile-burger-hide'>
             <p><?php echo htmlspecialchars($username); ?></p>
         </div>
 

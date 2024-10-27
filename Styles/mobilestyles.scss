@@ -9,6 +9,10 @@
 
 @media only screen and (min-width: 350px) and (max-width: 600px)
 {
+    #mobile-burger-hide
+    {
+        display: none;
+    }
     body
     {
         display: flex;
@@ -21,6 +25,7 @@
         {
             display: none;
             transition: display 0.3s;
+            width: 100%;
         }
 
         nav.bar.active
@@ -114,8 +119,8 @@
                     }
                 }
             }
-        }
-    }
+        } /*.right-container Closing*/
+    }/*Body Closing*/
 
         .Savings-Label
         {
@@ -129,12 +134,23 @@
         }
 }
 
+
+
 @media only screen and (min-width: 300px) and (max-width: 349px)
 {
+    #mobile-burger-hide
+    {
+        display: none;
+    }
     body
     {
         display: flex;
         flex-direction: column;
+
+        .nav-bar
+        {
+            width: 100%;
+        }
 
         .content
         {
