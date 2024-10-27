@@ -127,7 +127,7 @@ if (empty($userId)) {
         $goals = $goalsResult->fetch_all(MYSQLI_ASSOC);
     
         // Fetch savings
-        $savingsPredict = "SELECT subject, category, balance FROM savings WHERE user_id = ?";
+        $savingsPredict = "SELECT subject, category, balance, date FROM savings WHERE user_id = ?";
         $stmt = $conn->prepare($savingsPredict);
         $stmt->bind_param("i", $userId);
         $stmt->execute();
@@ -137,16 +137,29 @@ if (empty($userId)) {
         // Prepare an array to hold predictions
         $predictions = [];
     
+        // Step 1: Determine the latest date for each savings subject
+        $latestSavings = [];
+        foreach ($savings as $saving) {
+            $subject = $saving['subject'];
+            $date = new DateTime($saving['date']);
+            
+            // Store the latest savings entry for each subject
+            if (!isset($latestSavings[$subject]) || $date > new DateTime($latestSavins[$subject]['date'])) {
+                $latestSavings[$subject] = $saving; // Store the entire saving entry
+            }
+        }
+    
+        // Step 2: Calculate the total savings based on the latest entries
         foreach ($goals as $goal) {
             $goalSubject = $goal['subject'];
             $budgetLimit = $goal['budget_limit'];
     
-            // Calculate total savings for the goal subject
-            $totalSavings = 0;
-            foreach ($savings as $saving) {
-                if ($saving['subject'] === $goalSubject) {
-                    $totalSavings += $saving['balance'];
-                }
+            // Check if there is a latest saving for the goal subject
+            if (isset($latestSavings[$goalSubject])) {
+                $latestSaving = $latestSavings[$goalSubject];
+                $totalSavings = $latestSaving['balance'];
+            } else {
+                $totalSavings = 0; // No savings for this goal subject
             }
     
             // Calculate the remaining amount needed to reach the goal
@@ -158,26 +171,29 @@ if (empty($userId)) {
                 continue;
             }
     
-            // Calculate savings based on frequency
+            // Initialize savings based on frequency
             $dailySavings = 0; 
             $weeklySavings = 0; 
             $monthlySavings = 0; 
             $yearlySavings = 0; 
     
+            // Step 3: Accumulate savings based on the latest entries
             foreach ($savings as $saving) {
-                switch ($saving['category']) {
-                    case 'Daily':
-                        $dailySavings += $saving['balance'];
-                        break;
-                    case 'Weekly':
-                        $weeklySavings += $saving['balance'];
-                        break;
-                    case 'Monthly':
-                        $monthlySavings += $saving['balance'];
-                        break;
-                    case 'Yearly':
-                        $yearlySavings += $saving['balance'];
-                        break;
+                if ($saving['subject'] === $goalSubject && $saving['date'] === $latestSaving['date']) {
+                    switch ($saving['category']) {
+                        case 'Daily':
+                            $dailySavings += $saving['balance'];
+                            break;
+                        case 'Weekly':
+                            $weeklySavings += $saving['balance'];
+                            break;
+                        case 'Monthly':
+                            $monthlySavings += $saving['balance'];
+                            break;
+                        case 'Yearly':
+                            $yearlySavings += $saving['balance'];
+                            break;
+                    }
                 }
             }
     
@@ -204,7 +220,7 @@ if (empty($userId)) {
             // Yearly savings contribution
             if ($yearlySavings > 0) {
                 $yearsNeeded = ceil($remainingAmount / $yearlySavings);
-                $daysNeeded = min($daysNeeded, $yearsNeeded * 365); // Approximate year as 365 days
+                $daysNeeded = min($daysNeeded, $yearsNeeded *  365); // Approximate year as 365 days
             }
     
             // Calculate the target date
@@ -212,8 +228,8 @@ if (empty($userId)) {
                 $predictions[$goalSubject] = "N/A"; // No valid savings to reach the goal
             } else {
                 $targetDate = new DateTime();
-                $targetDate->modify("+$daysNeeded days");
-                $predictions[$goalSubject] = $targetDate->format('Y-m-d');
+                $targetDate->add(new DateInterval("P{$daysNeeded}D"));
+                $predictions[$goalSubject] = $targetDate->format("Y-m-d");
             }
         }
     
