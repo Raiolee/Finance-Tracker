@@ -80,12 +80,12 @@ if ($searchKeyword) {
         </div>
 
         <!-- Section for Expenses -->
-        <div class="Expenses-Nav <?php echo ($current_page == 'Expenses.php') ? 'active' : ''; ?>" id="Nav_Button">
+        <div class="Expenses-Nav <?php echo ($current_page == 'expense.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/expenses.svg" alt="Icon" width="50px">
             </div>
             <div>
-                <p><a href="Expenses.php">Expenses</a></p>
+                <p><a href="expense.php">Expenses</a></p>
             </div>
         </div>
 

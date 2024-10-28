@@ -39,14 +39,17 @@ CREATE TABLE `income` (
 
 CREATE TABLE `expenses` (
 	`expense_id` INT AUTO_INCREMENT PRIMARY KEY,
-    `user_id` int not null,
-    `subject` varchar(255) not null,
+    `user_id` INT NOT NULL,
+    `subject` VARCHAR(255) NOT NULL,
     `date` DATE NOT NULL,
-    `currency` varchar(10) NOT NULL,
-    `reimbursable` enum('yes','no') NOT NULL DEFAULT 'no',
-    `merchant` varchar(255) not null,
-    `total` decimal(10, 2) not null,
-    `description` text not null
+    `next_occurrence` DATE,
+    `recurrence_type` ENUM('weekly', 'monthly', 'custom') NOT NULL,
+    `category` VARCHAR(255) NOT NULL,
+    `reimbursable` ENUM('yes','no') NOT NULL DEFAULT 'no',
+    `merchant` VARCHAR(255) NOT NULL,
+    `amount` DECIMAL(10, 2) NOT NULL,
+    `description` TEXT NOT NULL,
+    `receipt` BLOB
 );
 
 create table `goals` (

@@ -102,17 +102,17 @@ if ($stmt) {
 <body>
     <!-- All content is stored in container -->
     <div class="container">
-    <div class="burger"  onclick="toggleMenu()">
-        <div class="burger-outer">
-            <div class="burger-icon">
-                <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
+        <div class="burger" onclick="toggleMenu()">
+            <div class="burger-outer">
+                <div class="burger-icon">
+                    <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
+                </div>
+                <div class="search-icon">
+                    <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
+                </div>
             </div>
-            <div class="search-icon">
-                <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
-            </div>
-        </div>
-        <hr class="bottom-line">
-    </div> <!--Burger End-->
+            <hr class="bottom-line">
+        </div> <!--Burger End-->
 
         <div class="navbar" id="burger-nav-bar">
             <!-- Profile Picture -->
@@ -133,9 +133,9 @@ if ($stmt) {
             </div>
 
             <!-- Expenses Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Expenses.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
-                <p><a class="navbar-items" href="Expenses.php">Expenses</a></p>
+                <p><a class="navbar-items" href="expense.php">Expenses</a></p>
             </div>
 
             <!-- Income Nav Item -->
@@ -171,16 +171,13 @@ if ($stmt) {
         <!-- Main Section -->
         <section class="main-section" id="savings-main-section">
             <div class="main-container">
-                <div class="content" class="Saving s-content" >
+                <div class="content" class="Saving s-content">
                     <div class="inner-content" id="content-container">
-                        <div class="top-bar">
-                            <div class="Left-Top">
-                                <h1 class="header">Savings</h1>
-                            </div>
-                            <div class="Right-Top">
-                                <button class="New-Saving" id="newSavingButton">+ New Saving</button>
-                            </div>
-                        </div><!--Top-Bar End-->
+                        <div class="top-bar space-between">
+                            <h1 class="header">Savings</h1>
+                            <button class="New-Saving" id="newSavingButton">+ New Savings</button>
+                        </div>
+                        <!--Top-Bar End-->
                         <div class="Lower-content">
                             <table class="table-approval">
                                 <thead>
@@ -203,11 +200,10 @@ if ($stmt) {
                                                     <td>" . htmlspecialchars($row['bank']) . "</td>
                                                     <td>" . htmlspecialchars($row['category']) . "</td>
                                                     <td>" . htmlspecialchars($row['date']) . "</td>
-                                                    <td>" . 
-                                                        '<button onclick="showPopup(\'' . addslashes($row['subject']) . '\', \'' . addslashes($row['balance']) . '\', \'' . addslashes($row['bank']) . '\', \'' . addslashes($row['category']) . '\', \'' . addslashes($row['date']) . '\')">Description</button>' . 
-                                                    "</td>
+                                                    <td>" .
+                                                '<button onclick="showPopup(\'' . addslashes($row['subject']) . '\', \'' . addslashes($row['balance']) . '\', \'' . addslashes($row['bank']) . '\', \'' . addslashes($row['category']) . '\', \'' . addslashes($row['date']) . '\')">Description</button>' .
+                                                "</td>
                                                 </tr>";
-
                                         }
                                     } else {
                                         echo "<tr><td colspan='6'>No results found</td></tr>";
@@ -215,25 +211,25 @@ if ($stmt) {
                                     ?>
                                 </tbody>
                             </table><!--Table End-->
-                            
-                        </div><!--Lower Bar End-->
-                    </div><!-- inner Content End-->  
-                    
-                    
-                        <?php if (isset($error_message)): ?>
-                            <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
-                        <?php endif; ?>
 
-                        <div id="popup" class="popup" style="display:none;">
-                            <div class="popup-content">
-                                <h2 id="popup-title"></h2>
-                                <p id="popup-description"></p>
-                                <div class="popup-buttons">
-                                    <button id="cancel-btn" onclick="closePopup()">Close</button>
-                                </div>
+                        </div><!--Lower Bar End-->
+                    </div><!-- inner Content End-->
+
+
+                    <?php if (isset($error_message)): ?>
+                        <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
+                    <?php endif; ?>
+
+                    <div id="popup" class="popup" style="display:none;">
+                        <div class="popup-content">
+                            <h2 id="popup-title"></h2>
+                            <p id="popup-description"></p>
+                            <div class="popup-buttons">
+                                <button id="cancel-btn" onclick="closePopup()">Close</button>
                             </div>
-                        </div> <!-- Popup End -->
-                    
+                        </div>
+                    </div> <!-- Popup End -->
+
 
                     <div id="newSavingForm" class="new-expense-form" style="display:none;">
                         <h3>New Saving</h3>
@@ -281,11 +277,11 @@ if ($stmt) {
                 </div><!--Content End-->
 
 
-                    
+
             </div> <!--Main-Container End-->
         </section> <!--Section End-->
     </div>
-   
+
     <!-- APIs (Put APIs below this comment)-->
     <script>
         document.getElementById('newSavingButton').addEventListener('click', function() {
