@@ -38,8 +38,66 @@ if ($searchKeyword) {
     $result = $conn->query($sql);
 }
 
+// Handle Edit Operation
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['incomeId'])) {
+    $incomeId = $_POST['incomeId'];
+    $incomeSource = $_POST['incomeSource'];
+    $incomeTotal = $_POST['incomeTotal'];
+    $incomeCurrency = $_POST['incomeCurrency'];
+    $incomeCategory = $_POST['incomeCategory'];
+    $incomeInvestment = $_POST['incomeInvestment'];
 
+    // Prepare the SQL statement for updating the record
+    $stmt = $conn->prepare("UPDATE income SET source = ?, total = ?, currency = ?, category = ?, investment = ? WHERE income_id = ?");
+    
+    if ($stmt === false) {
+        die('Prepare failed: ' . htmlspecialchars($conn->error));
+    }
+
+    // Bind parameters
+    $stmt->bind_param("sssssi", $incomeSource, $incomeTotal, $incomeCurrency, $incomeCategory, $incomeInvestment, $incomeId);
+    
+    // Execute the statement and check for errors
+    if ($stmt->execute()) {
+        $message = "Record updated successfully!";
+    } else {
+        $message = "Error updating record: " . $stmt->error;
+    }
+
+    $stmt->close();
+    $conn->close();
+    header("Location: Income.php?message=" . urlencode($message)); // Redirect back with message
+    exit();
+}
+
+// Handle Delete Operation
+if (isset($_GET['id'])) {
+    $incomeId = $_GET['id'];
+
+    // Prepare the SQL statement for deleting the record
+    $stmt = $conn->prepare("DELETE FROM income WHERE income_id = ?");
+    
+    if ($stmt === false) {
+        die('Prepare failed: ' . htmlspecialchars($conn->error));
+    }
+
+    // Bind parameters
+    $stmt->bind_param("i", $incomeId);
+    
+    // Execute the statement and check for errors
+    if ($stmt->execute()) {
+        $message = "Record deleted successfully!";
+    } else {
+        $message = "Error deleting record: " . $stmt->error;
+    }
+
+    $stmt->close();
+    $conn->close();
+    header("Location: Income.php?message=" . urlencode($message)); // Redirect back with message
+    exit();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -207,6 +265,48 @@ if ($searchKeyword) {
             </form>
         </div>
     </div>
+<!-- Edit/Delete Modal -->
+<div id="editDeleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Edit/Delete Income Record</h5>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="editDeleteForm" method="POST"> <!-- Adjust the action as needed -->
+                <input type="hidden" id="incomeId" name="incomeId">
+                <div class="form-group">
+                    <label for="incomeSource">Source of Income</label>
+                    <input type="text" class="form-control" id="incomeSource" name="incomeSource" required>
+                </div>
+                <div class="form-group">
+                    <label for="incomeTotal">Amount</label>
+                    <input type="text" class="form-control" id="incomeTotal" name="incomeTotal" required>
+                </div>
+                <div class="form-group">
+                    <label for="incomeCurrency">Currency</label>
+                    <input type="text" class="form-control" id="incomeCurrency" name="incomeCurrency" required>
+                </div>
+                <div class="form-group">
+                    <label for="incomeCategory">Category</label>
+                    <select class="form-control" id="incomeCategory" name="incomeCategory" required>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Yearly">Yearly</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="incomeInvestment">Type of Investment</label>
+                    <input type="text" class="form-control" id="incomeInvestment" name="incomeInvestment" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
     <script>
         var modal = document.getElementById("sortModal");
@@ -227,42 +327,39 @@ if ($searchKeyword) {
             }
         }
     </script>
-
 <script>
-        // JavaScript for modals (Edit/Delete)
-        var editDeleteModal = document.getElementById("editDeleteModal");
-        var editDeleteClose = editDeleteModal.getElementsByClassName("close")[0];
+var editDeleteModal = document.getElementById("editDeleteModal");
+var editDeleteClose = editDeleteModal.getElementsByClassName("close")[0];
 
-        document.querySelectorAll('.open-modal').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var id = this.getAttribute('data-id');
-                var source = this.getAttribute('data-source');
-                var total = this.getAttribute('data-total');
-                var currency = this.getAttribute('data-currency');
-                var category = this.getAttribute('data-category');
-                var investment = this.getAttribute('data-investment');
+document.querySelectorAll('.btn-outline-light[data-id]').forEach(function(button) {
+    button.addEventListener('click', function() {
+        var id = this.getAttribute('data-id');
+        var source = this.getAttribute('data-source');
+        var total = this.getAttribute('data-total');
+        var currency = this.getAttribute('data-currency');
+        var category = this.getAttribute('data-category');
+        var investment = this.getAttribute('data-investment');
 
-                document.getElementById('incomeId').value = id;
-                document.getElementById('incomeSource').value = source;
-                document.getElementById('incomeTotal').value = total;
-                document.getElementById('incomeCurrency').value = currency;
-                document.getElementById('incomeCategory').value = category;
-                document.getElementById('incomeInvestment').value = investment;
+        document.getElementById('incomeId').value = id;
+        document.getElementById('incomeSource').value = source;
+        document.getElementById('incomeTotal').value = total;
+        document.getElementById('incomeCurrency').value = currency;
+        document.getElementById('incomeCategory').value = category;
+        document.getElementById('incomeInvestment').value = investment;
 
-                editDeleteModal.style.display = "block";
-            });
-        });
+        editDeleteModal.style.display = "block";
+    });
+});
 
-        editDeleteClose.onclick = function() {
-            editDeleteModal.style.display = "none";
-        };
+editDeleteClose.onclick = function() {
+    editDeleteModal.style.display = "none";
+};
 
-        window.onclick = function(event) {
-            if (event.target == editDeleteModal) {
-                editDeleteModal.style.display = "none";
-            }
-        };
-    </script>
-   
+window.onclick = function(event) {
+    if (event.target == editDeleteModal) {
+        editDeleteModal.style.display = "none";
+    }
+};
+   </script>
 </body>
 </html>
