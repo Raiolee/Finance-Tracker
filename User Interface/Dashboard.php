@@ -9,7 +9,7 @@ $user_id = $_SESSION["user_id"];
 $current_page = basename($_SERVER['PHP_SELF']);
 require_once '../connection/config.php';
 
-$sql = "SELECT subject, start_date FROM goals WHERE user_id = ? AND start_date ><= CURDATE() ORDER BY start_date ASC LIMIT 5";
+$sql = "SELECT subject, start_date FROM goals WHERE user_id = ? AND start_date >= CURDATE() ORDER BY start_date ASC LIMIT 5";
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die('MySQL prepare error: ' . $conn->error);
