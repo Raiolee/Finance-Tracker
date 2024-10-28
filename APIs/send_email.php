@@ -19,9 +19,9 @@ try {
     // SMTP settings
     $mail->isSMTP();
     $mail->SMTPAuth = true;
-    $mail->Host = "smtp.gmail.com"; 
-    $mail->Username = "financesampleemail@gmail.com"; 
-    $mail->Password = "sudc qzmf dksg jzou"; 
+    $mail->Host = "smtp.gmail.com";
+    $mail->Username = "financesampleemail@gmail.com";
+    $mail->Password = "sudc qzmf dksg jzou";
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
     $mail->Port = 465;
 
@@ -45,5 +45,4 @@ try {
 // Redirect after submission
 header("Location: ../User Interface/report_submitted.php");
 exit;
-
 ?>

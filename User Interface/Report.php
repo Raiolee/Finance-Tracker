@@ -139,6 +139,7 @@ if ($user['user_dp']) {
             </div>
         </section>
     </div>
+    <script src="report.js"> </script>
 </body>
 
 </html>

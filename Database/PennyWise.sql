@@ -1,3 +1,4 @@
+-- Run overall for creation of new database 
 DROP DATABASE IF EXISTS user_db;
 CREATE DATABASE user_db;
 USE user_db;
@@ -9,7 +10,18 @@ CREATE TABLE `user`
     `last_name` VARCHAR(50),
     `email` VARCHAR(50),
     `password` VARCHAR(255),
-    `user_dp` BLOB
+    `user_dp` BLOB,
+    `otp_code` int default null,
+    `is_verified` tinyint(1) default 0
+);
+
+CREATE TABLE `otp` (
+    `otp_id` INT PRIMARY KEY AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `otp` VARCHAR(6) NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `expires_at` TIMESTAMP NULL,
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE
 );
 
 CREATE TABLE `income` (
