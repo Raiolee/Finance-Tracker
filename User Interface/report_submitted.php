@@ -107,7 +107,7 @@ $current_page = 'profile.php';
                         <h1 class="header">Report Submitted</h1>
                     </div>
                     <!-- Put main code here -->
-                    <h2 class="cabin-condensed-h2">Thank you for your support! <br> We'll look into your report and fix the bug as soon as possible. </h2>
+                    <h2 class="cabin-condensed-h2">Thank you for your support! <br> We'll look into your report and fix the bug as soon as possible.</h2>
                 </div>
             </div>
         </section>

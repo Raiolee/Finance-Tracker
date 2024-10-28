@@ -1,7 +1,87 @@
 <?php
 session_start();
-if (isset($_SESSION["user"])) {
-    header("Location: User Interface/Dashboard.php");
+require_once "connection/config.php";
+require 'vendor/autoload.php'; // Load PHPMailer
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$alertMessage = '';
+
+if (isset($_POST["submit"])) {
+    $fname = trim($_POST["fname"]);
+    $lname = trim($_POST["lname"]);
+    $email = trim($_POST["email"]);
+    $password = $_POST["password"];
+    $confirmPassword = $_POST["Confirmpassword"];
+
+    $errors = [];
+
+    if (empty($fname) || empty($lname) || empty($email) || empty($password) || empty($confirmPassword)) {
+        $errors[] = "All fields are required";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Email is not valid";
+    } elseif (strlen($password) < 8) {
+        $errors[] = "Password must be at least 8 characters";
+    } elseif ($password !== $confirmPassword) {
+        $errors[] = "Passwords do not match";
+    }
+
+    if (empty($errors)) {
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM user WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->bind_result($rowCount);
+        $stmt->fetch();
+        $stmt->close();
+
+        if ($rowCount > 0) {
+            $errors[] = "Email already exists!";
+        } else {
+            // Generate OTP and hash password
+            $otp = rand(100000, 999999);
+            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+            $defaultProfilePicturePath = 'Assets/blank-profile.webp';
+            $profilePicture = file_get_contents($defaultProfilePicturePath);
+
+            // Insert user with OTP
+            $stmt = $conn->prepare("INSERT INTO user (first_name, last_name, email, password, user_dp, otp_code) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssssi", $fname, $lname, $email, $passwordHash, $profilePicture, $otp);
+            $stmt->send_long_data(4, $profilePicture);
+            $stmt->execute();
+            $stmt->close();
+
+            // Send OTP email
+            $mail = new PHPMailer(true);
+            try {
+                $mail->isSMTP();
+                $mail->SMTPAuth = true;
+                $mail->Host = "smtp.gmail.com";
+                $mail->Username = "financesampleemail@gmail.com";
+                $mail->Password = "sudc qzmf dksg jzou";
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                $mail->Port = 465;
+
+                $mail->setFrom('financesampleemail@gmail.com', 'PennyWise');
+                $mail->addAddress($email);
+                $mail->isHTML(true);
+                $mail->Subject = 'Your OTP Code for PennyWise';
+                $mail->Body = "<p>Your OTP code is <strong>$otp</strong></p><p>Enter this code to verify your account.</p>";
+
+                $mail->send();
+                header("Location: APIs/verify.php?email=" . urlencode($email));
+                exit();
+            } catch (Exception $e) {
+                $alertMessage .= "<div class='alert alert-danger'>Message could not be sent. Mailer Error: {$mail->ErrorInfo}</div>";
+            }
+        }
+    }
+
+    if ($errors) {
+        foreach ($errors as $error) {
+            $alertMessage .= "<div class='alert alert-danger'>$error</div>";
+        }
+    }
 }
 ?>
 
