@@ -395,7 +395,7 @@ $conn->close();
                                     }
                                 }
                                 $rowClass = ($rowCounter % 2 == 0) ? 'row-color-1' : 'row-color-2';
-                                echo "<tr class='$rowClass'>
+                                echo "<tr class='$rowClass' >
                                     <td><div class='sub'>" . htmlspecialchars($row['subject']) . "</div></td>
                                     <td>" . htmlspecialchars($row['category']) . "</td>
                                     <td>" . htmlspecialchars($predictions[$row['subject']] ?? 'N/A') . "</td>
@@ -461,48 +461,52 @@ $conn->close();
                     <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
                 <?php endif; ?>
             </div>
+
+            <div id="historyTable" class="goalHistory" style="display:none;">
+
+            </div>
         </div>
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Check if URL contains #newGoalForm, show the form if true
-        if (window.location.hash === '#newGoalForm') {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if URL contains #newGoalForm, show the form if true
+            if (window.location.hash === '#newGoalForm') {
+                const rightContainer = document.querySelector('.inner');
+                const form = document.getElementById('newGoalForm');
+
+                rightContainer.style.display = 'none'; // Hide the right container
+                form.style.display = 'block'; // Show the new goal form
+            }
+
+            // Show form when the "New Goal" button is clicked and update the URL
+            document.getElementById('newGoalsBTN').addEventListener('click', function() {
+                const rightContainer = document.querySelector('.inner');
+                const form = document.getElementById('newGoalForm');
+
+                rightContainer.style.display = 'none'; // Hide the right container
+                form.style.display = 'block'; // Show the new goal form
+
+            });
+        });
+
+        // Close form and clear URL hash
+        function closeGoalForm() {
             const rightContainer = document.querySelector('.inner');
             const form = document.getElementById('newGoalForm');
 
-            rightContainer.style.display = 'none'; // Hide the right container
-            form.style.display = 'block'; // Show the new goal form
+            form.style.display = 'none'; // Hide the new goal form
+            rightContainer.style.display = 'block'; // Show the right container again
+            clearForm(); // Clear the form fields
+
+            // Remove the URL fragment
+            window.history.pushState({}, '', window.location.pathname);
         }
 
-        // Show form when the "New Goal" button is clicked and update the URL
-        document.getElementById('newGoalsBTN').addEventListener('click', function() {
-            const rightContainer = document.querySelector('.inner');
-            const form = document.getElementById('newGoalForm');
-
-            rightContainer.style.display = 'none'; // Hide the right container
-            form.style.display = 'block'; // Show the new goal form
-
-        });
-    });
-
-    // Close form and clear URL hash
-    function closeGoalForm() {
-        const rightContainer = document.querySelector('.inner');
-        const form = document.getElementById('newGoalForm');
-
-        form.style.display = 'none'; // Hide the new goal form
-        rightContainer.style.display = 'block'; // Show the right container again
-        clearForm(); // Clear the form fields
-
-        // Remove the URL fragment
-        window.history.pushState({}, '', window.location.pathname);
-    }
-
-    // Clear the form
-    function clearForm() {
-        document.getElementById('GoalForm').reset(); // Clear all form fields
-    }
-</script>
+        // Clear the form
+        function clearForm() {
+            document.getElementById('GoalForm').reset(); // Clear all form fields
+        }
+    </script>
 </body>
 </html>
