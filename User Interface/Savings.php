@@ -181,17 +181,15 @@ if ($stmt) {
                                         <thead>
                                             <tr>
                                                 <th>Bank</th>
-                                                <th>Account Number</th>
                                                 <th>Balance</th>
                                                 <th>Manage Savings</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php
-                                            if (isset($result) && $result->num_rows > 0) {
-                                                while ($row = $result->fetch_assoc()) {
+                                            if (isset($result2) && $result2->num_rows > 0) {
+                                                while ($row2 = $result2->fetch_assoc()) {
                                                     echo "<tr>
-                                                            <td></td>
                                                             <td></td>
                                                             <td></td>
                                                             <td><button  onclick='BankForm()'>Allocate</button></td>
