@@ -16,6 +16,24 @@ $current_page = basename($_SERVER['PHP_SELF']);
 // Include database connection
 include '../connection/config.php';
 
+// Fetch only the user_dp (profile picture) from the database
+$user_id = $_SESSION['user_id'];
+$query = "SELECT user_dp FROM user WHERE user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+
+// Prepare the profile picture for display
+if ($user && $user['user_dp']) {
+    // Convert BLOB to base64-encoded image
+    $profile_pic = 'data:image/jpeg;base64,' . base64_encode($user['user_dp']);
+} else {
+    // If no profile picture is found, use a placeholder image
+    $profile_pic = 'https://picsum.photos/100/100';
+}
 // Check if the connection was successful
 if ($conn->connect_error) {
     die(sprintf("Connection failed: %s", $conn->connect_error));
@@ -73,16 +91,30 @@ if ($stmt) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="../Styles/styles.scss">
-    <link rel="stylesheet" href="../Styles/mobilestyles.scss">
     <link href='https://fonts.googleapis.com/css?family=Cabin Condensed' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/mobilestyles.scss">
+    <style>
+    </style>
 </head>
 
 <body>
     <!-- All content is stored in container -->
     <div class="container">
-        <div class="navbar">
+    <div class="burger"  onclick="toggleMenu()">
+        <div class="burger-outer">
+            <div class="burger-icon">
+                <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
+            </div>
+            <div class="search-icon">
+                <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
+            </div>
+        </div>
+        <hr class="bottom-line">
+    </div> <!--Burger End-->
+
+        <div class="navbar" id="burger-nav-bar">
             <!-- Profile Picture -->
             <div class="Profile">
                 <div class="Profile_img">
@@ -139,7 +171,7 @@ if ($stmt) {
         <!-- Main Section -->
         <section class="main-section" id="savings-main-section">
             <div class="main-container">
-                <div class="content" class="Savings-content" >
+                <div class="content" class="Saving s-content" >
                     <div class="inner-content" id="content-container">
                         <div class="top-bar">
                             <div class="Left-Top">
@@ -149,17 +181,16 @@ if ($stmt) {
                                 <button class="New-Saving" id="newSavingButton">+ New Saving</button>
                             </div>
                         </div><!--Top-Bar End-->
-
                         <div class="Lower-content">
                             <table class="table-approval">
                                 <thead>
                                     <tr>
                                         <th>Subject</th>
-                                        <th class="mobile" class="mobile2">Balance</th>
-                                        <th class="mobile" class="mobile2">Bank</th>
+                                        <th>Balance</th>
+                                        <th>Bank</th>
                                         <th>Category</th>
-                                        <th class="mobile2">Date</th>
-                                        <th class='mobile-data'>View</th>
+                                        <th>Date</th>
+                                        <th>View</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -168,12 +199,15 @@ if ($stmt) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>
                                                     <td>" . htmlspecialchars($row['subject']) . "</td>
-                                                    <td class='mobile'>" . htmlspecialchars($row['balance']) . "</td>
-                                                    <td class='mobile'>" . htmlspecialchars($row['bank']) . "</td>
+                                                    <td>" . htmlspecialchars($row['balance']) . "</td>
+                                                    <td>" . htmlspecialchars($row['bank']) . "</td>
                                                     <td>" . htmlspecialchars($row['category']) . "</td>
                                                     <td>" . htmlspecialchars($row['date']) . "</td>
-                                                    <td class='mobile-data'><button onclick=\"showPopup('{$row['subject']}', '{$row['balance']}', '{$row['bank']}', '{$row['category']}', '{$row['date']}')\">Description</button></td>
+                                                    <td>" . 
+                                                        '<button onclick="showPopup(\'' . addslashes($row['subject']) . '\', \'' . addslashes($row['balance']) . '\', \'' . addslashes($row['bank']) . '\', \'' . addslashes($row['category']) . '\', \'' . addslashes($row['date']) . '\')">Description</button>' . 
+                                                    "</td>
                                                 </tr>";
+
                                         }
                                     } else {
                                         echo "<tr><td colspan='6'>No results found</td></tr>";
@@ -183,7 +217,9 @@ if ($stmt) {
                             </table><!--Table End-->
                             
                         </div><!--Lower Bar End-->
-
+                    </div><!-- inner Content End-->  
+                    
+                    
                         <?php if (isset($error_message)): ?>
                             <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
                         <?php endif; ?>
@@ -197,7 +233,7 @@ if ($stmt) {
                                 </div>
                             </div>
                         </div> <!-- Popup End -->
-                    </div><!-- inner Content End-->
+                    
 
                     <div id="newSavingForm" class="new-expense-form" style="display:none;">
                         <h3>New Saving</h3>

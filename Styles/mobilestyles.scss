@@ -2,257 +2,179 @@
 {
     display: none;
 }
-.mobile-data
+.table-approval th:nth-child(6),
+.table-approval td:nth-child(6)
 {
     display: none;
 }
 
 @media only screen and (min-width: 350px) and (max-width: 600px)
 {
-    #mobile-burger-hide
+    .table-approval th:nth-child(6),
+    .table-approval td:nth-child(6)
+    {
+        display: block;
+    }
+        #burger-nav-bar
     {
         display: none;
     }
-    body
+    #mobile-burger-hide
     {
-        display: flex;
-        flex-direction: column;
-        .content
-        {
-            padding: 0;
-        }
-        .nav-bar
-        {
-            display: none;
-            transition: display 0.3s;
-            width: 100%;
-        }
-
-        nav.bar.active
-        {
-            display: block;
-        }
-
-        .burger
-        {
-            display: block;
-            cursor: pointer;
-
-            
-
+        display: block;
+    }
+    .burger
+    {
+        display: block;
+        cursor: pointer;
+        width: 85vw;
             .burger-outer
             {
                 display: flex;
                 justify-content: space-between;
-                margin: 2vh 0;
+                margin: 2vw 0;
             }
+    }
+
+    body
+    {
+        .container
+        {
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            margin-left: 5%;
+            margin-right: 5%;
         }
 
-        .right-container 
+        .main-section
         {
-            margin: 0;
-/*Savings Mobile Style Start*/
-            .Inner-container 
+            margin-top: 0;
+            width: 85vw;
+            overflow-x: auto;
+        } 
+
+    }
+    #savings-main-section
+    {
+        .main-container
+        {
+
+            .content
             {
-                width: 80vw;
-                #inner-container
+                .Lower-content
                 {
-                    .Top-container-Approval
+                    .table-approval thead th
                     {
-                        display: contents;
-
-                        .Left-Top
-                        {
-                            text-align: center;
-                        }
-
-                        .Right-Top
-                        {
-                            margin-bottom: 1vh;
-                        }
+                        width: 25% !important;
+                        text-align: center !important;
                     }
-
-                    .Lower-container
+                    .table-approval td
                     {
-                        margin: 0;
-
-                        .mobile,
-                        .table-approval th:nth-child(2),
-                        .table-approval td:nth-child(2),
-                        .table-approval th:nth-child(3),
-                        .table-approval td:nth-child(3)
-                        {
-                            display: none;
-                        }
-                        width: 80vw;
-
-                        .mobile-data
-                        {
-                            display: block;
-                            width: 100%;
-                        }
-
-                        .table-approval thead th
-                        {
-                            width: 25%;
-                            text-align: center;
-                        }
-
-                        .mobile-data button
-                        {
-                            margin-right: 10px;
-                            margin-left: 10px;
-                            font-size: 12px; /* Base font size */
-                            border: none;
-                            background-color: #007bff; /* Button background color */
-                            color: white; /* Button text color */
-                            border-radius: 5px; /* Rounded corners */
-                        }
-
+                        width: 25% !important;
+                        text-align: center !important;
                     }
-                }
-
-                #newSavingForm
-                {
-                    #SavingsDate, #SavingsCategory, #Bank, #Balance,#SavingsSubject, #SavingsDescription {
-                        width: 75vw;
+                    .table-approval th:nth-child(2),
+                    .table-approval td:nth-child(2),
+                    .table-approval th:nth-child(3),
+                    .table-approval td:nth-child(3)
+                    {
+                        display: none;
                     }
                 }
             }
-        } /*.right-container Closing*/
-    }/*Body Closing*/
-
-        .Savings-Label
-        {
-            text-align: center;
         }
+    }
 
-        .new-expense-form
-        {
-            width: 100%;
-            padding: 0;
-        }
 }
-
-
 
 @media only screen and (min-width: 300px) and (max-width: 349px)
 {
-    #mobile-burger-hide
+    .table-approval th:nth-child(6),
+    .table-approval td:nth-child(6)
+    {
+        display: block;
+    }
+        #burger-nav-bar
     {
         display: none;
     }
-    body
+    #mobile-burger-hide
     {
-        display: flex;
-        flex-direction: column;
-
-        .nav-bar
-        {
-            width: 100%;
-        }
-
-        .content
-        {
-            padding: 0;
-
-            .right-container 
-            {
-/*Savings Mobile Style Start*/
-                .Inner-container 
-                {
-                    width: 80vw;
-                    #inner-container
-                    {
-                        .Top-container-Approval
-                        {
-                            display: contents;
-
-                            .Left-Top
-                            {
-                                text-align: center;
-                            }
-
-                            .Right-Top
-                            {
-                                margin-bottom: 1vh;
-                            }
-                        }
-
-                        .Lower-container
-                        {
-                            margin: 0;
-                            .mobile2,
-                            .table-approval th:nth-child(2),
-                            .table-approval td:nth-child(2),
-                            .table-approval th:nth-child(3),
-                            .table-approval td:nth-child(3),
-                            .table-approval th:nth-child(5),
-                            .table-approval td:nth-child(5) {
-                                display: none;
-                            }
-
-                            .mobile-data
-                            {
-                                display: block;
-                                text-align: center;
-                            }
-
-                            .mobile-data button
-                            {
-                                margin-left: 10px;
-                                margin-right: 10px;
-                                font-size: 12px; /* Base font size */
-                                border: none;
-                                background-color: #007bff; /* Button background color */
-                                color: white; /* Button text color */
-                                border-radius: 5px; /* Rounded corners */
-                            }
-
-                            width: 80vw;
-
-                            .table-approval thead th
-                            {
-                                width: 33.33%;
-                            }
-
-
-                        }
-                    }
-
-                    #newSavingForm
-                {
-                    #SavingsDate, #SavingsCategory, #Bank, #Balance,#SavingsSubject, #SavingsDescription {
-                        width: 75vw;
-                    }
-                }
-                }
-            }
-        }
-        .nav-bar
-        {
-            display: none;
-            transition: display 0.3s;
-        }
-
-        .burger
-        {
-            display: block;
-
+        display: block;
+    }
+    .burger
+    {
+        display: block;
+        cursor: pointer;
+        width: 85vw;
             .burger-outer
             {
                 display: flex;
                 justify-content: space-between;
-                margin: 1vh 0;
+                margin: 2vw 0;
             }
+            .table-approval thead td
+            {
+                width: 33.33%;
+            }
+            
+    }
+
+    body
+    {
+        .container
+        {
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            margin-left: 5%;
+            margin-right: 5%;
+            
         }
 
-        .right-container
+        .main-section
         {
             margin-top: 0;
-        }
-/*Savings Mobile Style End*/
+            width: 85vw;
+            overflow-x: auto;
+        } 
+
     }
+
+    #savings-main-section
+    {
+        .main-container
+        {
+
+            .content
+            {
+                .Lower-content
+                {
+                    .table-approval th
+                    {
+                        width: 33.33% !important;
+                        text-align: center !important;
+                    }
+                    .table-approval td
+                    {
+                        width: 33.33% !important;
+                        text-align: center !important;
+                    }
+                        .table-approval th:nth-child(2),
+                        .table-approval td:nth-child(2),
+                        .table-approval th:nth-child(3),
+                        .table-approval td:nth-child(3),
+                        .table-approval th:nth-child(4),
+                        .table-approval td:nth-child(4)
+                        {
+                            display: none;
+                        }
+                }
+            }
+        }
+    }
+    
     
 }
 

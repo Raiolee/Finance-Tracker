@@ -258,6 +258,7 @@ body {
                 padding: 8px 0 8px 0;
                 height: 90%;
                 width: 95%;
+                overflow-x: auto;
                 .cabin-condensed-h2 {
                     font: 20px "Cabin Condensed", sans-serif;
                     color: white;
@@ -553,12 +554,9 @@ body {
     /*Savings SCSS*/
     #savings-main-section
     {
-        .mobile-data
-        {
-            display: none;
-        }
         .main-container
         {
+
             .content
             {
                  align-items: normal !important;

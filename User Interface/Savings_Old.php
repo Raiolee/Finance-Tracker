@@ -182,6 +182,7 @@ if ($stmt) {
                             <button class="New-Saving" id="newSavingButton">+ New Saving</button>
                         </div>
                     </div>
+                    
                     <div class="Lower-container">
                         <hr class="bottom-line">
                         <table class="table-approval">
