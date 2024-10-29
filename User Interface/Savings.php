@@ -2,15 +2,15 @@
 // Enable error reporting for development
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-session_start();
 
-if (!isset($_SESSION["user_id"])) {
-    header("Location: ../index.php");
+session_start();
+if (!isset($_SESSION["user"])) {
+    header("Location: ../Login.php");
     exit();
 }
 
 $uid = $_SESSION["user_id"];
-$username = $_SESSION["name"] ?? 'Guest';
+$username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);
 
 // Include database connection
@@ -102,17 +102,17 @@ if ($stmt) {
 <body>
     <!-- All content is stored in container -->
     <div class="container">
-        <div class="burger" onclick="toggleMenu()">
-            <div class="burger-outer">
-                <div class="burger-icon">
-                    <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
-                </div>
-                <div class="search-icon">
-                    <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
-                </div>
+    <div class="burger"  onclick="toggleMenu()">
+        <div class="burger-outer">
+            <div class="burger-icon">
+                <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
             </div>
-            <hr class="bottom-line">
-        </div> <!--Burger End-->
+            <div class="search-icon">
+                <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
+            </div>
+        </div>
+        <hr class="bottom-line">
+    </div> <!--Burger End-->
 
         <div class="navbar" id="burger-nav-bar">
             <!-- Profile Picture -->
@@ -133,9 +133,9 @@ if ($stmt) {
             </div>
 
             <!-- Expenses Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'Expenses.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
-                <p><a class="navbar-items" href="expense.php">Expenses</a></p>
+                <p><a class="navbar-items" href="Expenses.php">Expenses</a></p>
             </div>
 
             <!-- Income Nav Item -->
@@ -171,65 +171,113 @@ if ($stmt) {
         <!-- Main Section -->
         <section class="main-section" id="savings-main-section">
             <div class="main-container">
-                <div class="content" class="Saving s-content">
-                    <div class="inner-content" id="content-container">
-                        <div class="top-bar space-between">
-                            <h1 class="header">Savings</h1>
-                            <button class="New-Saving" id="newSavingButton">+ New Savings</button>
-                        </div>
-                        <!--Top-Bar End-->
-                        <div class="Lower-content">
-                            <table class="table-approval">
-                                <thead>
-                                    <tr>
-                                        <th>Subject</th>
-                                        <th>Balance</th>
-                                        <th>Bank</th>
-                                        <th>Category</th>
-                                        <th>Date</th>
-                                        <th>View</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    if (isset($result) && $result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo "<tr>
-                                                    <td>" . htmlspecialchars($row['subject']) . "</td>
-                                                    <td>" . htmlspecialchars($row['balance']) . "</td>
-                                                    <td>" . htmlspecialchars($row['bank']) . "</td>
-                                                    <td>" . htmlspecialchars($row['category']) . "</td>
-                                                    <td>" . htmlspecialchars($row['date']) . "</td>
-                                                    <td>" .
-                                                '<button onclick="showPopup(\'' . addslashes($row['subject']) . '\', \'' . addslashes($row['balance']) . '\', \'' . addslashes($row['bank']) . '\', \'' . addslashes($row['category']) . '\', \'' . addslashes($row['date']) . '\')">Description</button>' .
-                                                "</td>
-                                                </tr>";
-                                        }
-                                    } else {
-                                        echo "<tr><td colspan='6'>No results found</td></tr>";
-                                    }
-                                    ?>
-                                </tbody>
-                            </table><!--Table End-->
-
-                        </div><!--Lower Bar End-->
-                    </div><!-- inner Content End-->
-
-
-                    <?php if (isset($error_message)): ?>
-                        <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
-                    <?php endif; ?>
-
-                    <div id="popup" class="popup" style="display:none;">
-                        <div class="popup-content">
-                            <h2 id="popup-title"></h2>
-                            <p id="popup-description"></p>
-                            <div class="popup-buttons">
-                                <button id="cancel-btn" onclick="closePopup()">Close</button>
+                <div class="content" class="Savings-content">
+                    <div class="Bank-holder">
+                        <div class="Bank-inner">
+                            <p>Bank</p>
+                            <div class="Bank">
+                                <table class="table-Bank">
+                                    
+                                        <thead>
+                                            <tr>
+                                                <th>Bank</th>
+                                                <th>Balance</th>
+                                                <th>Manage Savings</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            if (isset($result2) && $result2->num_rows > 0) {
+                                                while ($row2 = $result2->fetch_assoc()) {
+                                                    echo "<tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td><button  onclick='BankForm()'>Allocate</button></td>
+                                                        </tr>";
+    
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='6'>No results found</td></tr>";
+                                            }
+                                            ?>
+                                        </tbody>
+                                </table><!--Table End-->  
                             </div>
                         </div>
-                    </div> <!-- Popup End -->
+                        
+                        <div class="inner-content" id="content-container">
+                            <div class="top-bar">
+                                <div class="Left-Top">
+                                    <h1 class="header">Savings</h1>
+                                </div>
+                                <div class="Right-Top">
+                                    <button class="New-Saving" id="newSavingButton">+ New Saving</button>
+                                </div>
+                            </div><!--Top-Bar End-->
+                            <div class="Lower-content">
+                                <table class="table-approval">
+                                    <thead>
+                                        <tr>
+                                            <th>Subject</th>
+                                            <th>Balance</th>
+                                            <th>Bank</th>
+                                            <th>Category</th>
+                                            <th>Date</th>
+                                            <th>View</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        if (isset($result) && $result->num_rows > 0) {
+                                            while ($row = $result->fetch_assoc()) {
+                                                echo "<tr>
+                                                        <td>" . htmlspecialchars($row['subject']) . "</td>
+                                                        <td>" . htmlspecialchars($row['balance']) . "</td>
+                                                        <td>" . htmlspecialchars($row['bank']) . "</td>
+                                                        <td>" . htmlspecialchars($row['category']) . "</td>
+                                                        <td>" . htmlspecialchars($row['date']) . "</td>
+                                                        <td>" . 
+                                                            '<button onclick="showPopup(\'' . addslashes($row['subject']) . '\', \'' . addslashes($row['balance']) . '\', \'' . addslashes($row['bank']) . '\', \'' . addslashes($row['category']) . '\', \'' . addslashes($row['date']) . '\')">Description</button>' . 
+                                                        "</td>
+                                                    </tr>";
 
+                                            }
+                                        } else {
+                                            echo "<tr><td colspan='6'>No results found</td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table><!--Table End-->
+                                
+                            </div><!--Lower Bar End-->
+                        </div><!-- inner Content End-->  
+                    </div>
+                    
+                        <?php if (isset($error_message)): ?>
+                            <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
+                        <?php endif; ?>
+
+                        <div id="popup" class="popup" style="display:none;">
+                            <div class="popup-content">
+                                <h2 id="popup-title"></h2>
+                                <p id="popup-description"></p>
+                                <div class="popup-buttons">
+                                    <button id="cancel-btn" onclick="closePopup()">Close</button>
+                                </div>
+                            </div>
+                        </div> <!-- Popup End -->
+
+                        <div id="popup-Bank" style="display: none;">
+                            <div class="popup-content">
+                                    <h2 id="popup-title-Bank"></h2>
+                                    <p id="popup-description-Bank"></p>
+                                    <div class="popup-buttons">
+                                        <button id="cancel-btn" onclick="closePopupBank()">Close</button>
+                                    </div>
+                            </div>
+                        </div>
+
+                    
 
                     <div id="newSavingForm" class="new-expense-form" style="display:none;">
                         <h3>New Saving</h3>
@@ -277,13 +325,15 @@ if ($stmt) {
                 </div><!--Content End-->
 
 
-
+                    
             </div> <!--Main-Container End-->
         </section> <!--Section End-->
     </div>
-
+   
     <!-- APIs (Put APIs below this comment)-->
     <script>
+
+
         document.getElementById('newSavingButton').addEventListener('click', function() {
             const rightContainer = document.getElementById('content-container');
             const form = document.getElementById('newSavingForm');
@@ -324,8 +374,58 @@ if ($stmt) {
             document.getElementById('popup').style.display = 'block';
         }
 
+        function BankForm() {
+            document.getElementById('popup-title-Bank').innerText = `Manage Savings`;
+            // Create the form HTML
+            const formHTML = `
+                <form id="bank-form">
+                    <label for="bank">Select Bank:</label>
+                    <select id="bank" name="bank">
+                        <option value="bank1">Bank 1</option>
+                        <option value="bank2">Bank 2</option>
+                        <option value="bank3">Bank 3</option>
+                    </select>
+                    <br>
+                    <label for="goal">Savings Goal:</label>
+                    <input type="text" id="goal" name="goal" required>
+                    <br>
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" name="amount" required>
+                    <br>
+                    <button type="submit">Submit</button>
+                </form>
+            `;
+
+            // Set the innerHTML of the popup description
+            document.getElementById('popup-description-Bank').innerHTML = formHTML;
+
+            // Show the popup
+            document.getElementById('popup-Bank').style.display = 'block';
+
+            // Optionally, reset the form if it's already displayed
+            document.getElementById('bank-form')?.reset();
+
+            // // Attach an event listener to handle form submission
+            // document.getElementById('bank-form').addEventListener('submit', function(event) {
+            //     event.preventDefault(); // Prevent default form submission
+            //     const bank = document.getElementById('bank').value;
+            //     const goal = document.getElementById('goal').value;
+            //     const amount = document.getElementById('amount').value;
+
+            //     // Process the data as needed
+            //     console.log(`Bank: ${bank}, Goal: ${goal}, Amount: ${amount}`);
+
+            //     // Optionally hide the popup after submission
+            //     document.getElementById('popup-Bank').style.display = 'none';
+            // });
+        }
+
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
+        }
+
+        function closePopupBank() {
+            document.getElementById('popup-Bank').style.display = 'none';
         }
 
         window.onclick = function(event) {

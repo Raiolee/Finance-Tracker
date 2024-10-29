@@ -888,18 +888,76 @@ body {
         margin-top: 40px;
       }
 
-      .button-savings:hover {
-        background-color: #00bfa5; /* Slightly darker shade for hover */
-        transform: translateY(-2px); /* Slight lift effect on hover */
-      }
-      .New-Saving:hover {
-        background-color: #00bfa5; /* Slightly darker shade for hover */
-        transform: translateY(-2px); /* Slight lift effect on hover */
-      }
-      .table-approval tbody tr:hover {
-        border: 2px solid white;
-        font-weight: bolder;
-      }
+                .button-savings:hover {
+                    background-color: #00bfa5; /* Slightly darker shade for hover */
+                    transform: translateY(-2px); /* Slight lift effect on hover */
+                }
+                .New-Saving:hover {
+                    background-color: #00bfa5; /* Slightly darker shade for hover */
+                    transform: translateY(-2px); /* Slight lift effect on hover */
+                }
+                .table-approval tbody tr:hover {
+                    border: 2px solid white;
+                    font-weight: bolder;
+                }    
+                .Bank-inner
+                {
+                    width: 95%;
+                    height: 80%;
+                    justify-self: center;
+                    color: white;
+                    border-radius: 10px;
+
+                    p
+                    {
+                        font-size: 30px;
+                        font-weight: 600;
+                        padding-bottom: 0;
+                        margin: 0px;
+                    }
+                }
+                .Bank
+                {
+                    width: 90%;
+                    height: 70%;
+                    justify-self: center;
+                    border-radius: 10px;
+                    margin-bottom: 2.5%;
+                    margin-top: 2.5%;
+                    background-color: #000000;
+
+                    .table-Bank
+                    {
+                        width: 100%;
+                        border-collapse: separate;
+                        border-spacing: 0 5px;
+
+                        th 
+                        {
+                            padding: 10px;
+                            color: white;
+                            font-size: 16px;
+                            font-family: "Rubik", sans-serif;
+                            width: 25%;
+                            text-align: center;
+                        }
+
+                        td
+                        {
+                            text-align: center;
+                        }
+                    }
+                }
+
+                .Bank-Separate
+                {
+                    opacity: .15;
+                }
+               
+                
+            }
+
+            
+        }
     }
-  }
-}
+
