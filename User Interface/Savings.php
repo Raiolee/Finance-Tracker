@@ -237,8 +237,7 @@ if ($stmt2) {
                             </div>
                         </div>
                     </div> <!-- Popup End -->
-
-                    <div id="popup-Bank" style="display: none;">
+                    <div id="popup-Bank" class="popup" style="display: none;">
                         <div class="popup-content">
                             <h2 id="popup-title-Bank"></h2>
                             <p id="popup-description-Bank"></p>
@@ -247,6 +246,8 @@ if ($stmt2) {
                             </div>
                         </div>
                     </div>
+
+
 
 
 
@@ -300,7 +301,9 @@ if ($stmt2) {
 
             </div> <!--Main-Container End-->
         </section> <!--Section End-->
+
     </div>
+
 
     <!-- APIs (Put APIs below this comment)-->
     <script>
