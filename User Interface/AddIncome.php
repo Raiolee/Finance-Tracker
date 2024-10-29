@@ -160,6 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="text" class="form-control" id="source" name="source" required>
                         </div>
                     </div>
+                
                     <div class="mb-3 row">
                         <label for="total" class="form-label col-sm-3">Total*</label>
                         <div class="col-sm-9 d-flex align-items-center">
@@ -172,6 +173,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </select>
                         </div>
                     </div>
+                    <label for="bank_name" class="form-label col-sm-3">Bank Name*</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="bank_name" name="bank_name" required>
+                </div>
+            </div>
                     <div class="mb-3 row">
                         <label for="category" class="form-label col-sm-3">Category*</label>
                         <div class="col-sm-9">

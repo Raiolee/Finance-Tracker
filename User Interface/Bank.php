@@ -21,38 +21,57 @@ if ($conn->connect_error) {
     die(sprintf("Connection failed: %s", $conn->connect_error));
 }
 
+
+
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data
-    $date = $_POST['Date'];
-    $bank = $_POST['Bank'];
-    $balance = $_POST['Balance'];
-    $category = $_POST['SavingsCategory'];
-    $subject = $_POST['Subject'];
-    $description = $_POST['Description'];
+    // Collect form data with checks
+    $date = $_POST['Date'] ?? null;
+    $bank = $_POST['Bank'] ?? null;
+    $balance = $_POST['Balance'] ?? null;
+    $category = $_POST['SavingsCategory'] ?? null;
+    $subject = $_POST['Subject'] ?? null;
+    $description = $_POST['Description'] ?? null;
 
-    // Prepare and bind the SQL statement
-    $sql = "INSERT INTO user_db.savings (user_id, date, bank, balance, category, subject, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
+    // Validate that all fields are filled
+    if ($date && $bank && $balance && $category && $subject && $description) {
+        // Prepare and bind the SQL statement
+        $sql = "INSERT INTO user_db.savings (user_id, date, bank, balance, category, subject, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
 
-    if ($stmt) {
-        // Bind parameters
-        $stmt->bind_param("issdsss", $uid, $date, $bank, $balance, $category, $subject, $description);
+        if ($stmt) {
+            // Bind parameters
+            $stmt->bind_param("issdsss", $uid, $date, $bank, $balance, $category, $subject, $description);
 
-        // Execute the statement
-        if ($stmt->execute()) {
-            // Redirect back to the dashboard with success message
-            header("Location: Savings.php?success=1");
-            exit();
+            // Execute the statement
+            if ($stmt->execute()) {
+                // Redirect back to the dashboard with success message
+                header("Location: Savings.php?success=1");
+                exit();
+            } else {
+                $error_message = "Error executing statement: {$stmt->error}";
+            }
         } else {
-            $error_message = "Error executing statement: {$stmt->error}";
+            $error_message = "Error preparing statement: {$conn->error}";
         }
     } else {
-        $error_message = "Error preparing statement: {$conn->error}";
+        $error_message = "All fields are required.";
     }
 }
 
 // Fetch existing savings for the user
+$sql2 = "SELECT investment, total FROM user_db.income WHERE user_id = ?";
+$stmt2 = $conn->prepare($sql2);
+
+if ($stmt2) {
+    $stmt2->bind_param("i", $uid);
+    $stmt2->execute();
+    $result2 = $stmt2->get_result();
+} else {
+    $error_message = "Error preparing statement: {$conn->error}";
+}
+
+// Fetch existing savings
 $sql = "SELECT subject, balance, bank, category, date FROM user_db.savings WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
 
@@ -173,50 +192,98 @@ if ($stmt) {
     <div class="content">
         <div class="right-container">
             <div class="Inner-container">
-                <div id="inner-container">
-                    <div class="Top-container-Approval">
-                        <div class="Left-Top">
-                            <p>Savings</p>
+                <div id="Bank-container">
+                    <div id="inner-container">
+                        <div class="Top-container-Approval">
+                            <div class="Left-Top">
+                                <p>Bank</p>
+                            </div>
+
                         </div>
-                        <div class="Right-Top">
-                            <button class="New-Saving" id="newSavingButton">+ New Saving</button>
+                        
+                        <div class="Lower-container">
+                            <hr class="bottom-line">
+                            <table class="table-approval">
+    <thead>
+        <tr>
+            <th class="mobile">Bank</th>
+            <th class="mobile">Balance</th>
+            <th class="mobile">Manage</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php
+if (isset($result2) && $result2->num_rows > 0) {
+    while ($row2 = $result2->fetch_assoc()) {
+        // Use the correct variables from the current row
+        echo "<tr>
+                <td>" . htmlspecialchars($row2['investment']) . "</td>
+                <td>" . htmlspecialchars($row2['total']) . "</td>
+                <td class='mobile-data'>
+                    <button onclick=\"showPopup1('This is your message!')\">Description</button>
+                </td>
+            </tr>";
+    }
+} else {
+    echo "<tr><td colspan='3'>No results found</td></tr>"; // Ensure column span matches the number of columns
+}
+?>
+
+    </tbody>
+</table>
+
+                            
                         </div>
                     </div>
-                    
-                    <div class="Lower-container">
-                        <hr class="bottom-line">
-                        <table class="table-approval">
-                            <thead>
-                                <tr>
-                                    <th>Subject</th>
-                                    <th class="mobile" class="mobile2">Balance</th>
-                                    <th class="mobile" class="mobile2">Bank</th>
-                                    <th>Category</th>
-                                    <th class="mobile2">Date</th>
-                                    <th class='mobile-data'>View</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if (isset($result) && $result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<tr>
-                                                <td>" . htmlspecialchars($row['subject']) . "</td>
-                                                <td class='mobile'>" . htmlspecialchars($row['balance']) . "</td>
-                                                <td class='mobile'>" . htmlspecialchars($row['bank']) . "</td>
-                                                <td>" . htmlspecialchars($row['category']) . "</td>
-                                                <td>" . htmlspecialchars($row['date']) . "</td>
-                                                <td class='mobile-data'><button onclick=\"showPopup('{$row['subject']}', '{$row['balance']}', '{$row['bank']}', '{$row['category']}', '{$row['date']}')\">Description</button></td>
-                                            </tr>";
+
+                    <div id="inner-container">
+                        <div class="Top-container-Approval">
+                            <div class="Left-Top">
+                                <p>Savings</p>
+                            </div>
+                            <div class="Right-Top">
+                                <button class="New-Saving" id="newSavingButton">+ New Saving</button>
+                            </div>
+                        </div>
+                        
+                        <div class="Lower-container">
+                            <hr class="bottom-line">
+                            <table class="table-approval">
+                                <thead>
+                                    <tr>
+                                        <th class="mobile" class="mobile2">Bank</th>
+                                        <th>Subject</th>
+                                        <th class="mobile" class="mobile2">Balance</th>
+                                        <th>Category</th>
+                                        <th class="mobile2">Date</th>
+                                        <th class='mobile-data'>View</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if (isset($result) && $result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            echo "<tr>
+                                                    <td class='mobile'>" . htmlspecialchars($row['bank']) . "</td>
+                                                    <td>" . htmlspecialchars($row['subject']) . "</td>
+                                                    <td class='mobile'>" . htmlspecialchars($row['balance']) . "</td>
+                                                    <td>" . htmlspecialchars($row['category']) . "</td>
+                                                    <td>" . htmlspecialchars($row['date']) . "</td>
+                                                    <td class='mobile-data'><button onclick=\"showPopup('{$row['subject']}', '{$row['balance']}', '{$row['bank']}', '{$row['category']}', '{$row['date']}')\">Description</button></td>
+                                                </tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='5'>No results found</td></tr>";
                                     }
-                                } else {
-                                    echo "<tr><td colspan='5'>No results found</td></tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
+                                    ?>
+                                </tbody>
+                            </table>
+                            
+                        </div>
                     </div>
                 </div>
+                
+
 
                 <div id="newSavingForm" class="new-expense-form" style="display:none;">
                     <h3>New Saving</h3>
@@ -278,9 +345,15 @@ if ($stmt) {
                 </div>
             </div>
 
+            <div id="popup" class="popup" style="display:none;">
+                <div class="popup-content">
+                   
+                </div>
+            </div>
+
     <script>
         document.getElementById('newSavingButton').addEventListener('click', function() {
-            const rightContainer = document.getElementById('inner-container');
+            const rightContainer = document.getElementById('Bank-container');
             const form = document.getElementById('newSavingForm');
 
             rightContainer.style.display = 'none'; // Hide the right container
@@ -288,7 +361,7 @@ if ($stmt) {
         });
 
         function closeExpenseForm() {
-            const rightContainer = document.getElementById('inner-container');
+            const rightContainer = document.getElementById('Bank-container');
             const form = document.getElementById('newSavingForm');
 
             form.style.display = 'none'; // Hide the new expense form
@@ -318,6 +391,12 @@ if ($stmt) {
          function showPopup(subject, balance, bank , category, date) {
             document.getElementById('popup-title').innerText = `Description`;
             document.getElementById('popup-description').innerText = `Bank: ${bank}\nAmount: ${balance}\nDate: ${date}\nSubject: ${subject}\nCategory: ${category}`;
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function showPopup1() {
+            document.getElementById('popup-title').innerText = `Manage Funds`;
+            
             document.getElementById('popup').style.display = 'block';
         }
 
