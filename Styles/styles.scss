@@ -526,6 +526,51 @@ body {
                     justify-content: end;
                     margin-left: 21px;
                 }
+
+                .Bank
+                {
+                    color: white;
+                    width: 90%;
+                    height: 70%;
+                    align-self: center;
+                    border-radius: 10px;
+                    margin-bottom: 2.5%;
+                    margin-top: 2.5%;
+                    background-color: #000000;
+
+                    .table-Bank
+                    {
+                        width: 100%;
+                        border-collapse: separate;
+                        border-spacing: 0 5px;
+
+                        th 
+                        {
+                            padding: 10px;
+                            color: white;
+                            font-size: 16px;
+                            font-family: "Rubik", sans-serif;
+                            width: 25%;
+                            text-align: center;
+                        }
+
+                        td
+                        {
+                            text-align: center;
+                        }
+                    }
+                }
+
+                .Bank-Separate
+                {
+                    opacity: .15;
+                }
+
+                #popup-description-Bank
+                {
+                    display: flex;
+                    flex-direction: column;
+                }
             }
         }
         .sign-out {
@@ -778,27 +823,12 @@ body {
                     border: 2px solid white;
                     font-weight: bolder;
                 }    
-                .Bank-inner
-                {
-                    width: 95%;
-                    height: 80%;
-                    justify-self: center;
-                    color: white;
-                    border-radius: 10px;
-
-                    p
-                    {
-                        font-size: 30px;
-                        font-weight: 600;
-                        padding-bottom: 0;
-                        margin: 0px;
-                    }
-                }
                 .Bank
                 {
+                    color: white;
                     width: 90%;
                     height: 70%;
-                    justify-self: center;
+                    align-self: center;
                     border-radius: 10px;
                     margin-bottom: 2.5%;
                     margin-top: 2.5%;
@@ -831,11 +861,18 @@ body {
                 {
                     opacity: .15;
                 }
+
+                #popup-description-Bank
+                {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+
                
                 
             }
 
-            
         }
     }
 }
