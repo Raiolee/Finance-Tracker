@@ -3,17 +3,17 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include '../connection/config.php';
 
-// Initialize an empty variable for the search keyword
+
 $searchKeyword = '';
 
-// Check if the form has been submitted and set the search keyword
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['searchKeyword'])) {
     $searchKeyword = htmlspecialchars($_POST['searchKeyword']);
 }
 
-// Prepare the SQL query based on whether a search keyword exists
+
 if ($searchKeyword) {
-    // Use prepared statements to prevent SQL injection
+  
     $stmt = $conn->prepare("SELECT income_id, source, total, currency, category, investment FROM income WHERE source LIKE ? OR category LIKE ?");
     
     // Check if the statement was prepared successfully
@@ -138,12 +138,12 @@ if (isset($_GET['id'])) {
         </div>
 
         <!-- Section for Expenses -->
-        <div class="Expenses-Nav <?php echo ($current_page == 'expense.php') ? 'active' : ''; ?>" id="Nav_Button">
+        <div class="Expenses-Nav <?php echo ($current_page == 'Expenses.php') ? 'active' : ''; ?>" id="Nav_Button">
             <div>
                 <img src="../Assets/Icons/expenses.svg" alt="Icon" width="50px">
             </div>
             <div>
-                <p><a href="expense.php">Expenses</a></p>
+                <p><a href="Expenses.php">Expenses</a></p>
             </div>
         </div>
 
