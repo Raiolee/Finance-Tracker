@@ -273,7 +273,7 @@ if (isset($_GET['id'])) {
             <span class="close">&times;</span>
         </div>
         <div class="modal-body">
-            <form id="editDeleteForm" method="POST"> <!-- Adjust the action as needed -->
+            <form id="editDeleteForm" method="POST" action=""> <!-- Adjust the action as needed -->
                 <input type="hidden" id="incomeId" name="incomeId">
                 <div class="form-group">
                     <label for="incomeSource">Source of Income</label>
