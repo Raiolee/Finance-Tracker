@@ -152,8 +152,8 @@ if ($user['user_dp']) {
             </div>
         </section>
     </div>
-    <script src="../js/expense.js"></script>
     <!-- APIs (Put APIs below this comment)-->
+    <script src="../js/expense.js"></script>
 </body>
 
 </html>
