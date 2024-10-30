@@ -60,12 +60,14 @@
           <!-- Dropdown list -->
           <ul class="dropdown-menu">
             <li><a class="dropdown-item @@team" href="team.php">Team</a></li>
-            <li><a class="dropdown-item" href="login.php">Log-in</a></li>
             <li><a class="dropdown-item" href="register.php">Sign Up</a></li>
           </ul>
         </li>
         <li class="nav-item @@contact">
           <a class="nav-link" href="contact.php">Contact</a>
+        </li>
+		<li class="nav-item @@login">
+          <a class="nav-link" href="Login.php">Login</a>
         </li>
       </ul>
     </div>
