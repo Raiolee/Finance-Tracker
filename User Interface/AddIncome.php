@@ -2,7 +2,11 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+session_start();
+$uid = $_SESSION["user_id"];
 include '../connection/config.php';
+
 
 $message = ''; // Variable to store success/error messages
 
@@ -10,37 +14,63 @@ $message = ''; // Variable to store success/error messages
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
     $date = $_POST['date'];
-    $investment = $_POST['investment'];
     $source = $_POST['source'];
     $total = $_POST['total'];
-    $currency = $_POST['currency'];
     $category = $_POST['category'];
+    $bank = $_POST['bank_name'];
     $description = $_POST['description'];
 
-    // Prepare the SQL statement
-    $stmt = $conn->prepare("INSERT INTO income (date, investment, source, total, currency, category, description) 
-    VALUES (?, ?, ?, ?, ?, ?, ?)");
+    // Start transaction
+    $conn->begin_transaction();
 
-    if ($stmt === false) {
-        $message = 'Prepare failed: ' . $conn->error;
-    } else {
-        // Bind the parameters
-        $stmt->bind_param("sssssss", $date, $investment, $source, $total, $currency, $category, $description);
+    try {
+        // Prepare the SQL statement for inserting income
+        $stmt = $conn->prepare("INSERT INTO income (user_id, date, source, total, category, description, bank) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-        // Execute the statement and check for errors
-
-        header("Location:Income.php");
-
-        if ($stmt->execute()) {
-            $message = 'Record saved successfully!';
-        } else {
-            $message = 'Error: ' . $stmt->error;
+        if ($stmt === false) {
+            throw new Exception("Prepare failed: {$conn->error}");
         }
 
-        $stmt->close();
+        // Bind the parameters
+        $stmt->bind_param("issssss", $uid, $date, $source, $total, $category, $description, $bank);
+
+        if (!$stmt->execute()) {
+            throw new Exception("Execute failed: {$stmt->error}");
+        }
+
+        // Update the bank balance
+        $updateStmt = $conn->prepare("UPDATE bank SET balance = balance + ? WHERE user_id = ? AND bank = ?");
+        if ($updateStmt === false) {
+            throw new Exception("Prepare failed: {$conn->error}");
+        }
+
+        $updateStmt->bind_param("dis", $total, $uid, $bank);
+
+        if (!$updateStmt->execute()) {
+            throw new Exception("Execute failed: {$updateStmt->error}");
+        }
+
+        // Commit transaction
+        $conn->commit();
+
+        $message = 'Record saved successfully!';
+        header("Location:Income.php");
+    } catch (Exception $e) {
+        // Rollback transaction
+        $conn->rollback();
+        $message = 'Error: ' . $e->getMessage();
     }
+
+    // Close statements
+    if (isset($stmt)) $stmt->close();
+    if (isset($updateStmt)) $updateStmt->close();
+
+    // Close connection
     $conn->close();
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +84,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel ="stylesheet" href="../Styles/AddIncome.css">
     
-   
 </head>
 <body class="container">
     <div class="nav-bar">
@@ -149,35 +178,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label for="investment" class="form-label col-sm-3">Investment*</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="investment" name="investment" required>
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
                         <label for="source" class="form-label col-sm-3">Source of Income*</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="source" name="source" required>
                         </div>
-                    </div>
-                
+                    </div>            
                     <div class="mb-3 row">
                         <label for="total" class="form-label col-sm-3">Total*</label>
                         <div class="col-sm-9 d-flex align-items-center">
                             <input type="number" class="form-control me-2" id="total" name="total" required style="flex: 1;">
-                            <select class="form-select" name="currency" style="max-width: 100px;">
-                                <option selected>Currency</option>
-                                <option value="USD">USD</option>
-                                <option value="EUR">EUR</option>
-                                <option value="GBP">GBP</option>
-                            </select>
                         </div>
                     </div>
-                    <label for="bank_name" class="form-label col-sm-3">Bank Name*</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="bank_name" name="bank_name" required>
-                </div>
-            </div>
+                    <div class="mb-3 row">
+                        <label for="bank_name" class="form-label col-sm-3">Bank Name*</label>
+                        <div class="col-sm-9">
+                            <select class="form-select" id="bank_name" name="bank_name" required>
+                                <option value="" disabled selected>Select a bank</option> <!-- Optional placeholder -->
+                                <?php
+                                // Fetch bank names from the database
+                                $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";
+                                $bankStmt = $conn->prepare($bankQuery);
+                                $bankStmt->bind_param("i", $uid);
+                                $bankStmt->execute();
+                                $bankResult = $bankStmt->get_result();
+
+                                while ($row = $bankResult->fetch_assoc()) {
+                                    // Use 'bank' instead of 'bank_name' to match the column name in the database
+                                    echo '<option value="' . htmlspecialchars($row['bank']) . '">' . htmlspecialchars($row['bank']) . '</option>';
+                                }
+
+                                $bankStmt->close();
+                                ?>
+                            </select>
+                        </div>
+                    </div>   
                     <div class="mb-3 row">
                         <label for="category" class="form-label col-sm-3">Category*</label>
                         <div class="col-sm-9">
@@ -197,9 +231,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="button-containter">
                         <button type="submit" class="btn btn-primary btn-save">Save</button>
                     </div>
-                </form>
-              
-            
+                </div>
+            </form>
             </div>
         </div>
     </div>

@@ -41,37 +41,75 @@ if ($conn->connect_error) {
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data
-    $date = $_POST['Date'];
-    $bank = $_POST['Bank'];
-    $balance = $_POST['Balance'];
-    $category = $_POST['SavingsCategory'];
-    $subject = $_POST['Subject'];
-    $description = $_POST['Description'];
+    // Check the action parameter to differentiate between requests
+    if (isset($_POST['action'])) {
+        $action = $_POST['action'];
 
-    // Prepare and bind the SQL statement
-    $sql = "INSERT INTO user_db.savings (user_id, date, bank, balance, category, subject, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
+        if ($action === 'insert_bank') {
+            // Collect form data for bank insertion
+            $date = $_POST['date']; // Ensure the form input name is consistent
+            $bank = $_POST['bank'];
 
-    if ($stmt) {
-        // Bind parameters
-        $stmt->bind_param("issdsss", $uid, $date, $bank, $balance, $category, $subject, $description);
+            // Prepare and bind the SQL statement
+            $sql = "INSERT INTO user_db.bank (user_id, date, bank) VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($sql);
 
-        // Execute the statement
-        if ($stmt->execute()) {
-            // Redirect back to the dashboard with success message
-            header("Location: Savings.php?success=1");
-            exit();
-        } else {
-            $error_message = "Error executing statement: {$stmt->error}";
+            if ($stmt) {
+                // Bind parameters
+                $stmt->bind_param("iss", $uid, $date, $bank);
+
+                // Execute the statement
+                if ($stmt->execute()) {
+                    // Redirect back to the dashboard with success message
+                    header("Location: Savings.php?success=1");
+                    exit();
+                } else {
+                    $error_message = "Error executing statement: {$stmt->error}";
+                }
+            } else {
+                $error_message = "Error preparing statement: {$conn->error}";
+            }
+        } elseif ($action === 'another_action') {
+            // Collect form data
+            $goal = $_POST['goal']; // This should be the subject
+            $amount = $_POST['amount'];
+            $category = $_POST['category'];
+            $date = $_POST['date']; // Ensure this is collected from the form
+            $bank = $_POST['bank']; // Collect bank value as well
+        
+            // Prepare the SQL statement for the other action
+            $stmt = $conn->prepare("INSERT INTO user_db.savings (user_id, date, bank, subject, savings_amount, category) VALUES (?, ?, ?, ?, ?, ?)");
+        
+            // Ensure $user_id is defined; this should be set earlier in your code
+            if (isset($uid)) {
+                $stmt->bind_param("isssis", $uid, $date, $bank, $goal, $amount, $category);
+        
+                // Execute the statement
+                if ($stmt->execute()) {
+                    // Redirect or provide success message
+                    header("Location: Savings.php?success=1");
+                    exit();
+                } else {
+                    echo "Error inserting data: " . $stmt->error;
+                }
+        
+                // Close the statement
+                $stmt->close();
+            } else {
+                echo "User ID is not set.";
+            }
+        }
+        
+        else {
+            echo "Unknown action.";
         }
     } else {
-        $error_message = "Error preparing statement: {$conn->error}";
+        echo "No action specified.";
     }
 }
-
+// Form Handling End
 // Fetch existing savings for the user
-$sql = "SELECT subject, balance, bank, category, date FROM user_db.savings WHERE user_id = ?";
+$sql = "SELECT user_bank_id, bank, balance FROM user_db.bank WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
 
 if ($stmt) {
@@ -93,6 +131,23 @@ if ($stmt2) {
 } else {
     $error_message = "Error preparing statement: {$conn->error}";
 }
+
+// Fetch existing goals for the user
+$sql3 = "SELECT subject, category FROM user_db.goals WHERE user_id = ?";
+$stmt3 = $conn->prepare($sql3);
+
+if ($stmt3) {
+    $stmt3->bind_param("i", $uid);
+    $stmt3->execute();
+    $result3 = $stmt3->get_result();
+} else {
+    $error_message = "Error preparing statement: {$conn->error}";
+}
+
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -146,8 +201,7 @@ if ($stmt2) {
             </div>
 
             <!-- Expenses Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>"
-                id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
                 <p><a class="navbar-items" href="expense.php">Expenses</a></p>
             </div>
@@ -189,137 +243,117 @@ if ($stmt2) {
                 <div class="content">
                     <div class="top-bar">
                         <h1 class="header">Bank</h1>
-                        <button class="New-Saving">New Bank</button>
+                        <button class="New-Saving" id="BankButton">New Bank</button>
                     </div>
 
                     <div class="Bank">
-                        <table class="table-Bank">
+                        <div id="Bank-Content">
+                            <table class="table-Bank">
 
-                            <thead>
-                                <tr>
-                                    <th>Bank</th>
-                                    <th>Balance</th>
-                                    <th>Manage Savings</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if (isset($result2) && $result2->num_rows > 0) {
-                                    while ($row2 = $result2->fetch_assoc()) {
-                                        // Use the correct variables from the current row
-                                        echo "<tr>
-                                                                    <td>" . htmlspecialchars($row2['investment']) . "</td>
-                                                                    <td>" . htmlspecialchars($row2['total']) . "</td>
-                                                                    <td class='mobile-data'>
-                                                                        <button onclick=\"BankForm()\">Allocate</button>
-                                                                    </td>
-                                                                    </tr>";
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Bank</th>
+                                        <th>Balance</th>
+                                        <th>Manage Savings</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if (isset($result) && $result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            // Use the correct variables from the current row
+                                            echo "<tr>
+                                                     <td>" . htmlspecialchars($row['user_bank_id']) . "</td>
+                                                     <td>" . htmlspecialchars($row['bank']) . "</td>
+                                                     <td>" . htmlspecialchars($row['balance']) . "</td>
+                                                     <td>
+                                                         <button onclick=\"BankForm('" . htmlspecialchars($row['bank']) . "')\">Allocate</button>
+                                                     </td>
+                                                 </tr>";
+                                        }
+
+                                    } else {
+                                        echo "<tr><td colspan='4'>No results found</td></tr>"; // Ensure column span matches the number of columns
                                     }
-                                } else {
-                                    echo "<tr><td colspan='3'>No results found</td></tr>"; // Ensure column span matches the number of columns
-                                }
-                                ?>
-                            </tbody>
-                        </table><!--Table End-->
-
-                    </div>
-
-                    <?php if (isset($error_message)): ?>
-                        <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
-                    <?php endif; ?>
-
-                    <div id="popup" class="popup" style="display:none;">
-                        <div class="popup-content">
-                            <h2 id="popup-title"></h2>
-                            <p id="popup-description"></p>
-                            <div class="popup-buttons">
-                                <button id="cancel-btn" onclick="closePopup()">Close</button>
-                            </div>
+                                    ?>
+                                </tbody>
+                            </table><!--Table End-->
                         </div>
-                    </div> <!-- Popup End -->
-                    <div id="popup-Bank" class="popup" style="display: none;">
-                        <div class="popup-content">
-                            <h2 id="popup-title-Bank"></h2>
-                            <p id="popup-description-Bank"></p>
-                            <div class="popup-buttons">
-                                <button id="cancel-btn" onclick="closePopupBank()">Close</button>
-                            </div>
-                        </div>
-                    </div>
+                        <div id="BankSavingForm" class="new-expense-form" style="display:none;">
+                            <h3>New Saving</h3>
+                            <hr class="bottom-line">
+                            <form id="SavingForm" method="post" action="">
+                                <input type="hidden" name="action" value="insert_bank">
 
-
-
-
-
-                    <div id="newSavingForm" class="new-expense-form" style="display:none;">
-                        <h3>New Saving</h3>
-                        <hr class="bottom-line">
-                        <form id="SavingForm" method="post">
-                            <div class="Saving-Form-Format" id="Date-Row">
-                                <label for="SavingsDate" class="Savings-Label">Date</label>
-                                <input type="date" id="SavingsDate" name="Date" required>
-                            </div>
-                            <div class="Saving-Form-Format" id="Bank-Row">
-                                <label for="Bank" class="Savings-Label">Bank</label>
-                                <input type="text" id="Bank" name="Bank" required>
-                            </div>
-                            <div class="Saving-Form-Format" id="Balance-Row">
-                                <label for="Balance" class="Savings-Label">Balance</label>
-                                <input type="number" id="Balance" name="Balance" required>
-                            </div>
-                            <div class="Saving-Form-Format" id="Category-Row">
-                                <label for="SavingsCategory" class="Savings-Label">Category</label>
-                                <select id="SavingsCategory" name="SavingsCategory" required>
-                                    <option value="" disabled selected>Category</option>
-                                    <option value="Daily">Daily</option>
-                                    <option value="Weekly">Weekly</option>
-                                    <option value="Monthly">Monthly</option>
-                                    <option value="Yearly">Yearly</option>
-                                </select>
-                            </div>
-                            <div class="Saving-Form-Format" id="Subject-Row">
-                                <label for="SavingsSubject" class="Savings-Label">Subject</label>
-                                <input type="text" id="SavingsSubject" name="Subject" required>
-                            </div>
-                            <div class="Saving-Form-Format" id="Description-Row">
-                                <label for="SavingsDescription" class="Savings-Label">Description</label>
-                                <textarea id="SavingsDescription" name="Description" required></textarea>
-                            </div>
-                            <div class="Saving-Form-Format" id="Savings-Button-Row">
-                                <div class="Savings-button-div-row">
-                                    <button type="submit" class="button-savings">Save</button>
-                                    <button type="button" class="button-savings"
-                                        onclick="closeExpenseForm()">Cancel</button>
+                                <div class="Saving-Form-Format" id="Date-Row">
+                                    <label for="SavingsDate" class="Savings-Label">Date</label>
+                                    <input type="date" id="SavingsDate" name="date" required>
+                                    <!-- Ensure the name matches in PHP -->
                                 </div>
-                            </div>
-                        </form>
+                                <div class="Saving-Form-Format" id="Bank-Row">
+                                    <label for="Bank" class="Savings-Label">Bank</label>
+                                    <input type="text" id="Bank" name="bank" required>
+                                    <!-- Ensure the name matches in PHP -->
+                                </div>
+                                <div class="Saving-Form-Format" id="Savings-Button-Row">
+                                    <div class="Savings-button-div-row">
+                                        <button type="submit" class="button-savings">Save</button>
+                                        <button type="button" class="button-savings"
+                                            onclick="closeExpenseForm()">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
                     </div> <!--Form End-->
 
-                </div><!--Content End-->
+                </div>
+
+                <?php if (isset($error_message)): ?>
+                    <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
+                <?php endif; ?>
+
+                <div id="popup" class="popup" style="display:none;">
+                    <div class="popup-content">
+                        <h2 id="popup-title"></h2>
+                        <p id="popup-description"></p>
+                        <div class="popup-buttons">
+                            <button id="cancel-btn" onclick="closePopup()">Close</button>
+                        </div>
+                    </div>
+                </div> <!-- Popup End -->
+                <div id="popup-Bank" class="popup" style="display: none;">
+                    <div class="popup-content">
+                        <h2 id="popup-title-Bank"></h2>
+                        <p id="popup-description-Bank"></p>
+                        <div class="popup-buttons">
+                            <button id="cancel-btn" onclick="closePopupBank()">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!--Content End-->
 
 
 
-            </div> <!--Main-Container End-->
-        </section> <!--Section End-->
+    </div> <!--Main-Container End-->
+    </section> <!--Section End-->
 
     </div>
 
 
-    <!-- APIs (Put APIs below this comment)-->
     <script>
 
 
-        document.getElementById('newSavingButton').addEventListener('click', function () {
-            const rightContainer = document.getElementById('content-container');
-            const form = document.getElementById('newSavingForm');
+        document.getElementById('BankButton').addEventListener('click', function () {
+            const rightContainer = document.getElementById('Bank-Content');
+            const form = document.getElementById('BankSavingForm');
 
             rightContainer.style.display = 'none'; // Hide the right container
             form.style.display = 'block'; // Show the new saving form
         });
 
         function closeExpenseForm() {
-            const rightContainer = document.getElementById('content-container'); // Corrected ID
-            const form = document.getElementById('newSavingForm');
+            const rightContainer = document.getElementById('Bank-Content'); // Corrected ID
+            const form = document.getElementById('BankSavingForm');
 
             form.style.display = 'none'; // Hide the new expense form
             rightContainer.style.display = 'block'; // Show the right container again
@@ -349,51 +383,94 @@ if ($stmt2) {
             document.getElementById('popup').style.display = 'block';
         }
 
-        function BankForm() {
-            document.getElementById('popup-title-Bank').innerText = `Manage Savings`;
-            // Create the form HTML
-            const formHTML = `
-                <form id="bank-form">
-                    <label for="bank">Select Bank:</label>
-                    <select id="bank" name="bank">
-                        <option value="bank1">Bank 1</option>
-                        <option value="bank2">Bank 2</option>
-                        <option value="bank3">Bank 3</option>
-                    </select>
-                    <br>
-                    <label for="goal">Savings Goal:</label>
-                    <input type="text" id="goal" name="goal" required>
-                    <br>
-                    <label for="amount">Amount:</label>
-                    <input type="number" id="amount" name="amount" required>
-                    <br>
-                    <button type="submit">Submit</button>
-                </form>
-            `;
+        function BankForm(bank) {
+    document.getElementById('popup-title-Bank').innerText = `Manage Savings`;
 
-            // Set the innerHTML of the popup description
-            document.getElementById('popup-description-Bank').innerHTML = formHTML;
+    // Create the form HTML
+    const formHTML = `
+        <p>Bank: ${bank}</p>
+        <form id="bank-form" method="post" action="">
+            <input type="hidden" name="action" value="another_action">
+            
+            <label for="goal">Subject:</label>
+            <select class="var-input large" name="goal" id="goal">
+                ${getCategoryOptions()}
+            </select>
+            <br>
+            
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required>
+            <br>
 
-            // Show the popup
-            document.getElementById('popup-Bank').style.display = 'block';
+            <label for="date" class="Savings-Label">Date:</label>
+            <input type="date" id="date" name="date" required>
+            <br> 
+            
+            <label for="category">Category:</label>
+            <select class="var-input large" name="category" id="category">
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
+            <br>
 
-            // Optionally, reset the form if it's already displayed
-            document.getElementById('bank-form')?.reset();
+            <button type="submit">Submit</button>
+        </form>
+    `;
 
-            // // Attach an event listener to handle form submission
-            // document.getElementById('bank-form').addEventListener('submit', function(event) {
-            //     event.preventDefault(); // Prevent default form submission
-            //     const bank = document.getElementById('bank').value;
-            //     const goal = document.getElementById('goal').value;
-            //     const amount = document.getElementById('amount').value;
+    // Set the innerHTML of the popup description
+    document.getElementById('popup-description-Bank').innerHTML = formHTML;
 
-            //     // Process the data as needed
-            //     console.log(`Bank: ${bank}, Goal: ${goal}, Amount: ${amount}`);
+    // Show the popup
+    document.getElementById('popup-Bank').style.display = 'block';
 
-            //     // Optionally hide the popup after submission
-            //     document.getElementById('popup-Bank').style.display = 'none';
-            // });
-        }
+    // Optionally, reset the form if it's already displayed
+    document.getElementById('bank-form').reset();
+
+    // Attach an event listener to handle form submission
+    document.getElementById('bank-form').addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission
+        
+        // Retrieve values from the form
+        const bankValue = bank; // The bank passed to the function
+        const goal = document.getElementById('goal').value; // This is the subject now
+        const amount = document.getElementById('amount').value;
+        const date = document.getElementById('date').value; // Make sure the ID is 'date'
+        const category = document.getElementById('category').value;
+
+        // Process the data as needed
+        console.log(`Bank: ${bankValue}, Subject: ${goal}, Amount: ${amount}, Date: ${date}, Category: ${category}`);
+
+        // Send the data to the server using fetch
+        fetch(window.location.href, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                action: 'another_action',
+                bank: bankValue,
+                goal: goal,
+                amount: amount,
+                date: date,
+                category: category,
+            }),
+        })
+        .then(response => {
+            if (response.ok) {
+                // Handle successful response
+                document.getElementById('popup-Bank').style.display = 'none'; // Hide the popup
+                window.location.href = 'Savings.php?success=1'; // Redirect on success
+            } else {
+                console.error('Error:', response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('Request failed:', error);
+        });
+    });
+}
+
+
 
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
@@ -408,6 +485,43 @@ if ($stmt2) {
                 closePopup();
             }
         }
+
+        function getCategoryOptions() {
+            // Fetch categories dynamically from PHP
+            const categories = [
+                <?php
+                if (isset($result3) && $result3->num_rows > 0) {
+                    while ($row3 = $result3->fetch_assoc()) {
+                        echo "'" . addslashes($row3['category']) . "',"; // Corrected to fetch category
+                    }
+                    echo rtrim(',', ' '); // Remove the trailing comma
+                } else {
+                    echo "'No categories found'"; // Provide a default value
+                }
+                ?>
+            ];
+
+            return categories.map(category => `<option value="${category}">${category}</option>`).join('');
+        }
+
+        function getGoalOptions() {
+            // Fetch subjects dynamically from PHP
+            const subjects = [
+                <?php
+                if (isset($result3) && $result3->num_rows > 0) {
+                    while ($row3 = $result3->fetch_assoc()) {
+                        echo "'" . addslashes($row3['subject']) . "',"; // Corrected to fetch subject
+                    }
+                    echo rtrim(',', ' '); // Remove the trailing comma
+                } else {
+                    echo "'No subjects found'"; // Provide a default value
+                }
+                ?>
+            ];
+
+            return subjects.map(subject => `<option value="${subject}">${subject}</option>`).join('');
+        }
+
     </script>
 </body>
 

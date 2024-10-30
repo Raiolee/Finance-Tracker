@@ -433,7 +433,7 @@
     overflow: hidden; /* Ensure content doesn't overflow */
 }
 
-.goal-form input {
+.search-form input {
     background-color: transparent;
     width: 100%;
     height: 42.5px;
@@ -447,7 +447,7 @@
     color: white;
 }
 
-.goal-form .fa {
+.search-form .fa {
     box-sizing: border-box;
     padding: 10px;
     width: 42.5px;
@@ -462,21 +462,21 @@
     justify-content: center; /* Center icon horizontally */
 }
 
-.goal-form:hover {
+.search-form:hover {
     width: 200px;
     cursor: pointer;
 }
 
-.goal-form:hover input {
+.search-form:hover input {
     display: block;
 }
 
-.goal-form:hover .fa {
+.search-form:hover .fa {
     background: black;
     color: transparent;
 }
 
-.goal-form button {
+.search-form button {
     background-color: transparent;
     color: transparent;
     width: 42.5px;
@@ -843,4 +843,6 @@ hr
     background-color: #00bfa5; /* Slightly darker shade for hover */
     transform: translateY(-2px); /* Slight lift effect on hover */
 }
+
+
 /*Saving Design End*/

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION["user"])) {
-    header("Location: ../index.php");
+    header("Location: ../login.php");
     exit;
 }
 $username = $_SESSION["name"];
@@ -196,7 +196,7 @@ $stmt->close();
                         <tbody>
                         <?php
                          // SQL query to fetch recent expenses for the logged-in user
-                         $sql = "SELECT subject, merchant, total, date FROM expenses WHERE user_id = ? ORDER BY date DESC LIMIT 5";
+                         $sql = "SELECT subject, merchant, amount, date FROM expenses WHERE user_id = ? ORDER BY date DESC LIMIT 5";
 
                          // Prepare and bind the SQL statement
                             $stmt = $conn->prepare($sql);
