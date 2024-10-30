@@ -15,7 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['searchKeyword'])) {
 if ($searchKeyword) {
   
     $stmt = $conn->prepare("SELECT income_id, source, total, currency, category, investment FROM income WHERE source LIKE ? OR category LIKE ?");
-    
+    $likeKeyword = "%$searchKeyword%";
+    $stmt->bind_param("ss", $likeKeyword, $likeKeyword);
+    $stmt->execute();
+    $result = $stmt->get_result();
     // Check if the statement was prepared successfully
     if ($stmt === false) {
         die('Prepare failed: ' . htmlspecialchars($conn->error));

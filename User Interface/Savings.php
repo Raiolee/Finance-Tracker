@@ -189,39 +189,83 @@ if ($stmt2) {
                 <div class="content">
                     <div class="top-bar">
                         <h1 class="header">Bank</h1>
-                        <button class="New-Saving">New Bank</button>
+                        <button class="New-Saving" id="BankButton">New Bank</button>
                     </div>
 
                     <div class="Bank">
-                        <table class="table-Bank">
+                        <div id="Bank-Content">
+                            <table class="table-Bank">
 
-                            <thead>
-                                <tr>
-                                    <th>Bank</th>
-                                    <th>Balance</th>
-                                    <th>Manage Savings</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                if (isset($result2) && $result2->num_rows > 0) {
-                                    while ($row2 = $result2->fetch_assoc()) {
-                                        // Use the correct variables from the current row
-                                        echo "<tr>
-                                                                    <td>" . htmlspecialchars($row2['investment']) . "</td>
-                                                                    <td>" . htmlspecialchars($row2['total']) . "</td>
-                                                                    <td class='mobile-data'>
-                                                                        <button onclick=\"BankForm()\">Allocate</button>
-                                                                    </td>
-                                                                    </tr>";
+                                <thead>
+                                    <tr>
+                                        <th>Bank</th>
+                                        <th>Balance</th>
+                                        <th>Manage Savings</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if (isset($result2) && $result2->num_rows > 0) {
+                                        while ($row2 = $result2->fetch_assoc()) {
+                                            // Use the correct variables from the current row
+                                            echo "<tr>
+                                                                        <td>" . htmlspecialchars($row2['investment']) . "</td>
+                                                                        <td>" . htmlspecialchars($row2['total']) . "</td>
+                                                                        <td class='mobile-data'>
+                                                                            <button onclick=\"BankForm('{$row2['investment']}')\">Allocate</button>
+                                                                        </td>
+                                                                        </tr>";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='3'>No results found</td></tr>"; // Ensure column span matches the number of columns
                                     }
-                                } else {
-                                    echo "<tr><td colspan='3'>No results found</td></tr>"; // Ensure column span matches the number of columns
-                                }
-                                ?>
-                            </tbody>
-                        </table><!--Table End-->
-
+                                    ?>
+                                </tbody>
+                            </table><!--Table End-->
+                        </div>
+                        <div id="BankSavingForm" class="new-expense-form" style="display:none;">
+                            <h3>New Saving</h3>
+                            <hr class="bottom-line">
+                            <form id="SavingForm" method="post">
+                                <div class="Saving-Form-Format" id="Date-Row">
+                                    <label for="SavingsDate" class="Savings-Label">Date</label>
+                                    <input type="date" id="SavingsDate" name="Date" required>
+                                </div>
+                                <div class="Saving-Form-Format" id="Bank-Row">
+                                    <label for="Bank" class="Savings-Label">Bank</label>
+                                    <input type="text" id="Bank" name="Bank" required>
+                                </div>
+                                <div class="Saving-Form-Format" id="Balance-Row">
+                                    <label for="Balance" class="Savings-Label">Balance</label>
+                                    <input type="number" id="Balance" name="Balance" required>
+                                </div>
+                                <div class="Saving-Form-Format" id="Category-Row">
+                                    <label for="SavingsCategory" class="Savings-Label">Category</label>
+                                    <select id="SavingsCategory" name="SavingsCategory" required>
+                                        <option value="" disabled selected>Category</option>
+                                        <option value="Daily">Daily</option>
+                                        <option value="Weekly">Weekly</option>
+                                        <option value="Monthly">Monthly</option>
+                                        <option value="Yearly">Yearly</option>
+                                    </select>
+                                </div>
+                                <div class="Saving-Form-Format" id="Subject-Row">
+                                    <label for="SavingsSubject" class="Savings-Label">Subject</label>
+                                    <input type="text" id="SavingsSubject" name="Subject" required>
+                                </div>
+                                <div class="Saving-Form-Format" id="Description-Row">
+                                    <label for="SavingsDescription" class="Savings-Label">Description</label>
+                                    <textarea id="SavingsDescription" name="Description" required></textarea>
+                                </div>
+                                <div class="Saving-Form-Format" id="Savings-Button-Row">
+                                    <div class="Savings-button-div-row">
+                                        <button type="submit" class="button-savings">Save</button>
+                                        <button type="button" class="button-savings"
+                                            onclick="closeExpenseForm()">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div> <!--Form End-->
                     </div>
 
                     <?php if (isset($error_message)): ?>
@@ -251,49 +295,7 @@ if ($stmt2) {
 
 
 
-                    <div id="newSavingForm" class="new-expense-form" style="display:none;">
-                        <h3>New Saving</h3>
-                        <hr class="bottom-line">
-                        <form id="SavingForm" method="post">
-                            <div class="Saving-Form-Format" id="Date-Row">
-                                <label for="SavingsDate" class="Savings-Label">Date</label>
-                                <input type="date" id="SavingsDate" name="Date" required>
-                            </div>
-                            <div class="Saving-Form-Format" id="Bank-Row">
-                                <label for="Bank" class="Savings-Label">Bank</label>
-                                <input type="text" id="Bank" name="Bank" required>
-                            </div>
-                            <div class="Saving-Form-Format" id="Balance-Row">
-                                <label for="Balance" class="Savings-Label">Balance</label>
-                                <input type="number" id="Balance" name="Balance" required>
-                            </div>
-                            <div class="Saving-Form-Format" id="Category-Row">
-                                <label for="SavingsCategory" class="Savings-Label">Category</label>
-                                <select id="SavingsCategory" name="SavingsCategory" required>
-                                    <option value="" disabled selected>Category</option>
-                                    <option value="Daily">Daily</option>
-                                    <option value="Weekly">Weekly</option>
-                                    <option value="Monthly">Monthly</option>
-                                    <option value="Yearly">Yearly</option>
-                                </select>
-                            </div>
-                            <div class="Saving-Form-Format" id="Subject-Row">
-                                <label for="SavingsSubject" class="Savings-Label">Subject</label>
-                                <input type="text" id="SavingsSubject" name="Subject" required>
-                            </div>
-                            <div class="Saving-Form-Format" id="Description-Row">
-                                <label for="SavingsDescription" class="Savings-Label">Description</label>
-                                <textarea id="SavingsDescription" name="Description" required></textarea>
-                            </div>
-                            <div class="Saving-Form-Format" id="Savings-Button-Row">
-                                <div class="Savings-button-div-row">
-                                    <button type="submit" class="button-savings">Save</button>
-                                    <button type="button" class="button-savings"
-                                        onclick="closeExpenseForm()">Cancel</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div> <!--Form End-->
+
 
                 </div><!--Content End-->
 
@@ -305,21 +307,20 @@ if ($stmt2) {
     </div>
 
 
-    <!-- APIs (Put APIs below this comment)-->
     <script>
 
 
-        document.getElementById('newSavingButton').addEventListener('click', function () {
-            const rightContainer = document.getElementById('content-container');
-            const form = document.getElementById('newSavingForm');
+        document.getElementById('BankButton').addEventListener('click', function () {
+            const rightContainer = document.getElementById('Bank-Content');
+            const form = document.getElementById('BankSavingForm');
 
             rightContainer.style.display = 'none'; // Hide the right container
             form.style.display = 'block'; // Show the new saving form
         });
 
         function closeExpenseForm() {
-            const rightContainer = document.getElementById('content-container'); // Corrected ID
-            const form = document.getElementById('newSavingForm');
+            const rightContainer = document.getElementById('Bank-Content'); // Corrected ID
+            const form = document.getElementById('BankSavingForm');
 
             form.style.display = 'none'; // Hide the new expense form
             rightContainer.style.display = 'block'; // Show the right container again
@@ -349,24 +350,22 @@ if ($stmt2) {
             document.getElementById('popup').style.display = 'block';
         }
 
-        function BankForm() {
+        function BankForm(bank) {
             document.getElementById('popup-title-Bank').innerText = `Manage Savings`;
             // Create the form HTML
             const formHTML = `
                 <form id="bank-form">
-                    <label for="bank">Select Bank:</label>
-                    <select id="bank" name="bank">
-                        <option value="bank1">Bank 1</option>
-                        <option value="bank2">Bank 2</option>
-                        <option value="bank3">Bank 3</option>
-                    </select>
+                    <label for="bank">Bank: ${bank}</label>
                     <br>
+                    
                     <label for="goal">Savings Goal:</label>
                     <input type="text" id="goal" name="goal" required>
                     <br>
+                    
                     <label for="amount">Amount:</label>
                     <input type="number" id="amount" name="amount" required>
                     <br>
+                    
                     <button type="submit">Submit</button>
                 </form>
             `;
