@@ -263,6 +263,24 @@ body {
         height: 90%;
         width: 95%;
         overflow-x: auto;
+        &::-webkit-scrollbar {
+          width: 8px; /* Width of the scrollbar */
+        }
+
+        &::-webkit-scrollbar-track {
+          background: #383838; /* Background of the scrollbar track */
+          border-radius: 10px; /* Rounded corners for the track */
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background: #626262; /* Color of the scrollbar thumb */
+          border-radius: 10px; /* Rounded corners for the thumb */
+          border: 2px solid #383838; /* Space around the thumb */
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+          background: #484848; /* Color of the scrollbar thumb on hover */
+        }
         .table-approval {
           width: 100%;
           border-collapse: separate;
@@ -480,6 +498,9 @@ body {
             box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
             color: white;
             height: 2rem;
+            &:hover {
+              cursor: pointer;
+            }
             &.medium {
               width: 40%;
               margin-right: 0px;
@@ -497,7 +518,14 @@ body {
             &.large {
               width: 80%;
             }
+            &.x-large {
+              width: 100%;
+            }
+            &.pointer {
+              cursor: pointer;
+            }
             &.medium {
+              width: 50%;
               margin: 0 20px 0 0;
             }
           }
@@ -520,6 +548,9 @@ body {
             height: 5rem;
             width: 70%;
             padding: 0 10px;
+            &.x-large {
+              width: 100%;
+            }
           }
           .text-input-report {
             border-radius: 10px;
@@ -539,15 +570,21 @@ body {
             &.no-margin {
               margin-right: 0;
             }
+            &.large {
+              width: 100%;
+            }
           }
           .column-form {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             margin: 20px 0 10px 0;
-            width: 30rem;
+            width: 70%;
             &.start {
               justify-content: start;
+            }
+            &.x-large {
+              width: 100%;
             }
           }
           .file-label {
@@ -592,6 +629,7 @@ body {
           color: #eeeeee;
           &.row {
             margin-right: 10px;
+            width: 15%;
           }
           &.center {
             text-align: center;

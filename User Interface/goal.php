@@ -103,23 +103,23 @@ if ($user['user_dp']) {
                 <div class="content">
                     <!-- Top bar section -->
                     <div class="top-bar space-between" id="expense">
-                        <h1 class="header">Expenses</h1>
-                        <a href="add_expense.php"><button class="New-Saving" id="NewExpenseButton">+ Add an Expense</button></a>
+                        <h1 class="header">Goals</h1>
+                        <a href="add_goal.php"><button class="New-Saving" id="NewExpenseButton">+ Add a Goal</button></a>
                     </div>
                     <!-- Put main code here -->
 
                     <table class="table-approval">
                         <thead>
                             <tr> <!-- The headers here are the only values I want to be seen in the goals section -->
-                                <th>DETAILS</th>
-                                <th>MERCHANT</th>
+                                <th>SUBJECT</th>
+                                <th>CATEGORY</th>
                                 <th>BANK</th>
-                                <th>AMOUNT</th>
-                                <th>REIMBURSABLE</th>
+                                <th>DATE</th>
+                                <th>PROGRESS</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Put PHP code here -->
+                            <!-- Put PHP code here (Back-End boys)-->
 
                         </tbody>
                     </table>
