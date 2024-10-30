@@ -3,41 +3,28 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include '../connection/config.php';
 
+$userId = $_SESSION['user_id'] ?? null;
 
-$searchKeyword = '';
-
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST['searchKeyword'])) {
-    $searchKeyword = htmlspecialchars($_POST['searchKeyword']);
+function searchGoalsBySubject($conn, $userId, $query) {
+    $sql = "SELECT subject, category FROM income WHERE user_id = ? AND subject LIKE ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $likeQuery = "%{$query}%";
+        $stmt->bind_param("is", $userId, $likeQuery);
+        $stmt->execute();
+        return $stmt->get_result();
+    } else {
+        throw new Exception("Error preparing statement: {$conn->error}");
+    }
 }
 
-
-if ($searchKeyword) {
-    $stmt = $conn->prepare("SELECT income_id, source, total, currency, category, investment FROM income WHERE source LIKE ? OR category LIKE ?");
-    $likeKeyword = "%$searchKeyword%";
-    $stmt->bind_param("ss", $likeKeyword, $likeKeyword);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    // Check if the statement was prepared successfully
-    if ($stmt === false) {
-        die('Prepare failed: ' . htmlspecialchars($conn->error));
+if (isset($_GET['query'])) {
+    $searchQuery = $_GET['query'];
+    try {
+        $result = searchGoalsBySubject($conn, $userId, $searchQuery);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
     }
-    
-    $likeKeyword = "%$searchKeyword%";
-    $stmt->bind_param("ss", $likeKeyword, $likeKeyword);
-    
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Check for errors
-    if ($stmt->error) {
-        echo "Error: " . $stmt->error;
-        exit();
-    }
-} else {
-    // Default SQL query to get all records
-    $sql = "SELECT income_id, source, total, currency, category, investment FROM income";
-    $result = $conn->query($sql);
 }
 
 // Handle Edit Operation
@@ -98,6 +85,7 @@ if (isset($_GET['id'])) {
     header("Location: Income.php?message=" . urlencode($message)); // Redirect back with message
     exit();
 }
+
 ?>
 
 
@@ -208,9 +196,12 @@ if (isset($_GET['id'])) {
                         <a href="AddIncome.php">
                             <button class="btn btn-outline-light me-2">+ New Income</button>
                         </a>
-                        <button class="btn btn-outline-light me-2" id="sortBtn">
-                                <i class="fas fa-search"></i>
+                        <form class="search-form" action="" method="GET">
+                            <input type="search" name="query" placeholder="Search here ...">
+                            <button type="submit">
+                                <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
                             </button>
+                        </form> 
                         
                         </button>
                     </div>
@@ -221,7 +212,8 @@ if (isset($_GET['id'])) {
                             <th class="table-header">Source of Income</th>
                             <th class="table-header">Amount</th>
                             <th class="table-header">Category</th>
-                            <th class="table-header">Type of Investment</th>
+                            <th class="table-header">Bank</th>
+                            <th class="table-header">Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -239,13 +231,13 @@ if (isset($_GET['id'])) {
                              echo "<td>" . htmlspecialchars($row['source']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['total']) . " " . htmlspecialchars($row['currency']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                             echo "<td>" . htmlspecialchars($row['investment']) . "</td>";
+                             echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
+                             echo "<td>" . htmlspecialchars($row['date']) . "</td>";
                              echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['income_id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
-;
                              echo "</tr>";
                          }
                      } else {
-                         echo "<tr><td colspan='4'>No income records found</td></tr>";
+                         echo "<tr><td colspan='5'>No income records found</td></tr>";
                      }
                  }
                  

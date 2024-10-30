@@ -14,23 +14,25 @@ $message = ''; // Variable to store success/error messages
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get form data
     $date = $_POST['date'];
-    $investment = $_POST['investment'];
     $source = $_POST['source'];
     $total = $_POST['total'];
-    $currency = $_POST['currency'];
     $category = $_POST['category'];
+    $bank = $_POST['bank_name'];
     $description = $_POST['description'];
 
     // Prepare the SQL statement
-    $stmt = $conn->prepare("INSERT INTO income (user_id, date, investment, source, total, currency, category, description) 
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO income (user_id, date, source, total, category, description, bank) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+    //$stmt = $conn->prepare("INSERT INTO banks (user_id, total, category) 
+    //VALUES (?, ?, ?)");
 
     if ($stmt === false) {
-        $message = 'Prepare failed: ' . $conn->error;
+        $message = "Prepare failed: {$conn->error}";
     } else {
         // Bind the parameters
-        $stmt->bind_param("isssssss", $uid, $date, $investment, $source, $total, $currency, $category, $description);
-
+        $stmt->bind_param("issssss", $uid, $date, $source, $total, $category, $description, $bank);
+        //$stmt->bind_param("iss", $uid, $total, $category);
         // Execute the statement and check for errors
 
         header("Location:Income.php");
@@ -58,7 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel ="stylesheet" href="../Styles/AddIncome.css">
     
-   
 </head>
 <body class="container">
     <div class="nav-bar">
@@ -162,18 +163,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <label for="total" class="form-label col-sm-3">Total*</label>
                         <div class="col-sm-9 d-flex align-items-center">
                             <input type="number" class="form-control me-2" id="total" name="total" required style="flex: 1;">
-                            <select class="form-select" name="currency" style="max-width: 100px;">
-                                <option selected>Currency</option>
-                                <option value="USD">USD</option>
-                                <option value="EUR">EUR</option>
-                                <option value="GBP">GBP</option>
-                            </select>
                         </div>
                     </div>
                     <div class="mb-3 row">
                         <label for="bank_name" class="form-label col-sm-3">Bank Name*</label>
                         <div class="col-sm-9">
-                        <input type="text" class="form-control" id="bank_name" name="bank_name" required>
+                            <select class="form-select" id="category" name="bank_name" required>
+                            <option value="Weekly">Weekly</option>
+                            <option value="Yearly">Yearly</option>
+                            </select>
                         </div>
                     </div>    
                     <div class="mb-3 row">
