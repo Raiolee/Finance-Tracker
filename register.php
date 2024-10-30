@@ -224,7 +224,7 @@ if (isset($_POST["submit"])) {
                     </div>
 
                     <input type="submit" id="register" value="Register" name="submit">
-                    <p class="already-have">Already have an account? <a class="forgot" href="index.php">Login</a></p>
+                    <p class="already-have">Already have an account? <a class="forgot" href="login.php">Login</a></p>
                 </form>
             </div>
         </div>
