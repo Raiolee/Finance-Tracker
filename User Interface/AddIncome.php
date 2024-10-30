@@ -2,7 +2,11 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+session_start();
+$uid = $_SESSION["user_id"];
 include '../connection/config.php';
+
 
 $message = ''; // Variable to store success/error messages
 
@@ -18,14 +22,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = $_POST['description'];
 
     // Prepare the SQL statement
-    $stmt = $conn->prepare("INSERT INTO income (date, investment, source, total, currency, category, description) 
-    VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO income (user_id, date, investment, source, total, currency, category, description) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
     if ($stmt === false) {
         $message = 'Prepare failed: ' . $conn->error;
     } else {
         // Bind the parameters
-        $stmt->bind_param("sssssss", $date, $investment, $source, $total, $currency, $category, $description);
+        $stmt->bind_param("isssssss", $uid, $date, $investment, $source, $total, $currency, $category, $description);
 
         // Execute the statement and check for errors
 
