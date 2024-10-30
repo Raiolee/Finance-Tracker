@@ -146,10 +146,10 @@ if ($stmt2) {
             </div>
 
             <!-- Expenses Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Expenses.php') ? 'active-tab' : ''; ?>"
+            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>"
                 id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
-                <p><a class="navbar-items" href="Expenses.php">Expenses</a></p>
+                <p><a class="navbar-items" href="expense.php">Expenses</a></p>
             </div>
 
             <!-- Income Nav Item -->

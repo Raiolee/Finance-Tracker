@@ -135,21 +135,20 @@ if ($user['user_dp']) {
                                 <input type="number" class="var-input" id="amount" name="amount" step="100.00">
                                 <label for="name" class="form-labels">Description</label>
                                 <textarea class="text-input" name="description" id="description"></textarea>
-                                <label for="name" class="form-labels">Reimbursable</label>
-                                <input type="text" class="var-input" id="name" name="name">
 
-                                <!-- Receipt -->
+                                <!-- Reimbursable -->
                                 <div class="column-form start">
-                                    <label for="reimbursable" class="form-labels">Receipt</label>
-                                    <input type="radio" name="reimbursable" id="reimbursable-yes" value="yes">
-                                    <label for="reimbursable-yes">Yes</label>
+                                    <label for="reimbursable" class="form-labels">Reimbursable</label>
+                                    <input class="radio" type="radio" name="reimbursable" id="reimbursable-yes" value="yes">
+                                    <label class="form-labels center no-margin" for="reimbursable-yes">Yes</label>
 
-                                    <input type="radio" name="reimbursable" id="reimbursable-no" value="no">
-                                    <label for="reimbursable-no">No</label>
-
-                                    <label for="attachment" class="file-label" id="file-label" style="display: none;">Attach Image</label>
-                                    <input class="file-input" type="file" name="attachment" accept="image/*" id="file-input" style="display: none;">
+                                    <input class="radio" type="radio" name="reimbursable" id="reimbursable-no" value="no" checked>
+                                    <label class="form-labels center no-margin" for="reimbursable-no">No</label>
                                 </div>
+                                
+                                <!-- file input/ photo input -->
+                                <label for="attachment" class="file-label" id="file-label">Attach Receipt</label>
+                                <input class="file-input" type="file" name="attachment" accept="image/*" id="file-input">
 
                                 <div class="btn-options center" id="report-btns">
                                     <a href="expense.php" class="link-btn"><button type="button" class="cancel">Cancel</button></a>
@@ -181,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $amount = $_POST['amount'];
     $description = $_POST['description'];
     $reimbursable = ($_POST['reimbursable'] == 'yes') ? 'yes' : 'no';
-    
+
     // Handle file upload
     $receipt = null;
     if (!empty($_FILES['receipt']['tmp_name'])) {

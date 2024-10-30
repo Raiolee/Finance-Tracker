@@ -110,7 +110,7 @@ if ($user['user_dp']) {
 
                     <table class="table-approval">
                         <thead>
-                            <tr>
+                            <tr> <!-- The headers here are the only values I want to be seen in the goals section -->
                                 <th>DETAILS</th>
                                 <th>MERCHANT</th>
                                 <th>BANK</th>
@@ -119,41 +119,17 @@ if ($user['user_dp']) {
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                            require_once "../connection/config.php";
+                            <!-- Put PHP code here -->
 
-                            // Query to fetch the required details from the expenses table
-                            $query = "SELECT subject AS details, merchant, 'Bank Name' AS bank, total AS amount, reimbursable FROM expenses";
-                            $result = $conn->query($query);
-
-                            if ($result->num_rows > 0) {
-                                // Output data of each row
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . htmlspecialchars($row['details']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['merchant']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['amount']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['reimbursable']) . "</td>";
-                                    echo "</tr>";
-                                }
-                            } else {
-                                echo "<tr><td colspan='5'>No expenses found.</td></tr>";
-                            }
-
-                            $conn->close();
-                            ?>
                         </tbody>
                     </table>
-
-
 
                 </div>
             </div>
         </section>
     </div>
     <!-- APIs (Put APIs below this comment)-->
-    <script src="../js/expense.js"></script>
+
 </body>
 
 </html>
