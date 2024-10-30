@@ -44,18 +44,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Collect form data
     $date = $_POST['Date'];
     $bank = $_POST['Bank'];
-    $balance = $_POST['Balance'];
-    $category = $_POST['SavingsCategory'];
-    $subject = $_POST['Subject'];
-    $description = $_POST['Description'];
 
     // Prepare and bind the SQL statement
-    $sql = "INSERT INTO user_db.savings (user_id, date, bank, balance, category, subject, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO user_db.bank (user_id, date, bank) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
         // Bind parameters
-        $stmt->bind_param("issdsss", $uid, $date, $bank, $balance, $category, $subject, $description);
+        $stmt->bind_param("iss", $uid, $date, $bank);
 
         // Execute the statement
         if ($stmt->execute()) {
@@ -71,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 // Fetch existing savings for the user
-$sql = "SELECT subject, balance, bank, category, date FROM user_db.savings WHERE user_id = ?";
+$sql = "SELECT user_bank_id, bank, balance FROM user_db.bank WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
 
 if ($stmt) {
@@ -93,6 +89,20 @@ if ($stmt2) {
 } else {
     $error_message = "Error preparing statement: {$conn->error}";
 }
+
+// Fetch existing goals for the user
+$sql3 = "SELECT subject, category FROM user_db.goals WHERE user_id = ?";
+$stmt3 = $conn->prepare($sql3);
+
+if ($stmt3) {
+    $stmt3->bind_param("i", $uid);
+    $stmt3->execute();
+    $result3 = $stmt3->get_result();
+} else {
+    $error_message = "Error preparing statement: {$conn->error}";
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -146,8 +156,7 @@ if ($stmt2) {
             </div>
 
             <!-- Expenses Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>"
-                id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
                 <p><a class="navbar-items" href="expense.php">Expenses</a></p>
             </div>
@@ -198,6 +207,7 @@ if ($stmt2) {
 
                                 <thead>
                                     <tr>
+                                        <th>No.</th>
                                         <th>Bank</th>
                                         <th>Balance</th>
                                         <th>Manage Savings</th>
@@ -205,19 +215,21 @@ if ($stmt2) {
                                 </thead>
                                 <tbody>
                                     <?php
-                                    if (isset($result2) && $result2->num_rows > 0) {
-                                        while ($row2 = $result2->fetch_assoc()) {
+                                    if (isset($result) && $result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
                                             // Use the correct variables from the current row
                                             echo "<tr>
-                                                                        <td>" . htmlspecialchars($row2['investment']) . "</td>
-                                                                        <td>" . htmlspecialchars($row2['total']) . "</td>
-                                                                        <td class='mobile-data'>
-                                                                            <button onclick=\"BankForm('{$row2['investment']}')\">Allocate</button>
-                                                                        </td>
-                                                                        </tr>";
+                                                     <td>" . htmlspecialchars($row['user_bank_id']) . "</td>
+                                                     <td>" . htmlspecialchars($row['bank']) . "</td>
+                                                     <td>" . htmlspecialchars($row['balance']) . "</td>
+                                                     <td>
+                                                         <button onclick=\"BankForm('" . htmlspecialchars($row['bank']) . "')\">Allocate</button>
+                                                     </td>
+                                                 </tr>";
                                         }
+
                                     } else {
-                                        echo "<tr><td colspan='3'>No results found</td></tr>"; // Ensure column span matches the number of columns
+                                        echo "<tr><td colspan='4'>No results found</td></tr>"; // Ensure column span matches the number of columns
                                     }
                                     ?>
                                 </tbody>
@@ -234,28 +246,6 @@ if ($stmt2) {
                                 <div class="Saving-Form-Format" id="Bank-Row">
                                     <label for="Bank" class="Savings-Label">Bank</label>
                                     <input type="text" id="Bank" name="Bank" required>
-                                </div>
-                                <div class="Saving-Form-Format" id="Balance-Row">
-                                    <label for="Balance" class="Savings-Label">Balance</label>
-                                    <input type="number" id="Balance" name="Balance" required>
-                                </div>
-                                <div class="Saving-Form-Format" id="Category-Row">
-                                    <label for="SavingsCategory" class="Savings-Label">Category</label>
-                                    <select id="SavingsCategory" name="SavingsCategory" required>
-                                        <option value="" disabled selected>Category</option>
-                                        <option value="Daily">Daily</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Monthly">Monthly</option>
-                                        <option value="Yearly">Yearly</option>
-                                    </select>
-                                </div>
-                                <div class="Saving-Form-Format" id="Subject-Row">
-                                    <label for="SavingsSubject" class="Savings-Label">Subject</label>
-                                    <input type="text" id="SavingsSubject" name="Subject" required>
-                                </div>
-                                <div class="Saving-Form-Format" id="Description-Row">
-                                    <label for="SavingsDescription" class="Savings-Label">Description</label>
-                                    <textarea id="SavingsDescription" name="Description" required></textarea>
                                 </div>
                                 <div class="Saving-Form-Format" id="Savings-Button-Row">
                                     <div class="Savings-button-div-row">
@@ -290,13 +280,6 @@ if ($stmt2) {
                             </div>
                         </div>
                     </div>
-
-
-
-
-
-
-
                 </div><!--Content End-->
 
 
@@ -352,23 +335,36 @@ if ($stmt2) {
 
         function BankForm(bank) {
             document.getElementById('popup-title-Bank').innerText = `Manage Savings`;
+
             // Create the form HTML
             const formHTML = `
-                <form id="bank-form">
-                    <label for="bank">Bank: ${bank}</label>
-                    <br>
-                    
-                    <label for="goal">Savings Goal:</label>
-                    <input type="text" id="goal" name="goal" required>
-                    <br>
-                    
-                    <label for="amount">Amount:</label>
-                    <input type="number" id="amount" name="amount" required>
-                    <br>
-                    
-                    <button type="submit">Submit</button>
-                </form>
-            `;
+        <form id="bank-form">
+            <label for="bank">Bank: ${bank}</label>
+            <br>
+            
+            <label for="goal">Goal:</label>
+            <select class="var-input large" name="recurrence_type" id="recurrence_type">
+                ${getGoalOptions()}
+            </select>
+            <br>
+            
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required>
+            <br>
+
+            <label for="SavingsDate" class="Savings-Label">Date:</label>
+            <input type="date" id="SavingsDate" name="Date" required>
+            <br> 
+            
+            <label for="category">Category:</label>
+            <select class="var-input large" name="category" id="category">
+                ${getCategoryOptions()} <!-- Call to a function that returns the category options -->
+            </select>
+            <br>
+
+            <button type="submit">Submit</button>
+        </form>
+    `;
 
             // Set the innerHTML of the popup description
             document.getElementById('popup-description-Bank').innerHTML = formHTML;
@@ -379,19 +375,21 @@ if ($stmt2) {
             // Optionally, reset the form if it's already displayed
             document.getElementById('bank-form')?.reset();
 
-            // // Attach an event listener to handle form submission
-            // document.getElementById('bank-form').addEventListener('submit', function(event) {
-            //     event.preventDefault(); // Prevent default form submission
-            //     const bank = document.getElementById('bank').value;
-            //     const goal = document.getElementById('goal').value;
-            //     const amount = document.getElementById('amount').value;
+            // Attach an event listener to handle form submission
+            document.getElementById('bank-form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
+                const bank = document.getElementById('bank').value;
+                const goal = document.getElementById('recurrence_type').value; // Corrected to match the select name
+                const amount = document.getElementById('amount').value;
+                const date = document.getElementById('SavingsDate').value;
+                const category = document.getElementById('category').value;
 
-            //     // Process the data as needed
-            //     console.log(`Bank: ${bank}, Goal: ${goal}, Amount: ${amount}`);
+                // Process the data as needed
+                console.log(`Bank: ${bank}, Goal: ${goal}, Amount: ${amount}, Date: ${date}, Category: ${category}`);
 
-            //     // Optionally hide the popup after submission
-            //     document.getElementById('popup-Bank').style.display = 'none';
-            // });
+                // Optionally hide the popup after submission
+                document.getElementById('popup-Bank').style.display = 'none';
+            });
         }
 
         function closePopup() {
@@ -407,6 +405,43 @@ if ($stmt2) {
                 closePopup();
             }
         }
+
+        function getCategoryOptions() {
+            // Fetch categories dynamically from PHP
+            const categories = [
+                <?php
+                if (isset($result3) && $result3->num_rows > 0) {
+                    while ($row3 = $result3->fetch_assoc()) {
+                        echo "'" . addslashes($row3['category']) . "',"; // Corrected to fetch category
+                    }
+                    echo rtrim(',', ' '); // Remove the trailing comma
+                } else {
+                    echo "'No categories found'"; // Provide a default value
+                }
+                ?>
+            ];
+
+            return categories.map(category => `<option value="${category}">${category}</option>`).join('');
+        }
+
+        function getGoalOptions() {
+            // Fetch subjects dynamically from PHP
+            const subjects = [
+                <?php
+                if (isset($result3) && $result3->num_rows > 0) {
+                    while ($row3 = $result3->fetch_assoc()) {
+                        echo "'" . addslashes($row3['subject']) . "',"; // Corrected to fetch subject
+                    }
+                    echo rtrim(',', ' '); // Remove the trailing comma
+                } else {
+                    echo "'No subjects found'"; // Provide a default value
+                }
+                ?>
+            ];
+
+            return subjects.map(subject => `<option value="${subject}">${subject}</option>`).join('');
+        }
+
     </script>
 </body>
 
