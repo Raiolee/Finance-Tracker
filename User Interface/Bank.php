@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Fetch existing savings for the user
+// Fetch existing savings for the income
 $sql2 = "SELECT investment, total FROM user_db.income WHERE user_id = ?";
 $stmt2 = $conn->prepare($sql2);
 
