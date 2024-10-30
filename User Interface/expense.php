@@ -123,18 +123,18 @@ if ($user['user_dp']) {
                             require_once "../connection/config.php";
 
                             // Query to fetch the required details from the expenses table
-                            $query = "SELECT subject AS details, merchant, 'Bank Name' AS bank, total AS amount, reimbursable FROM expenses";
+                            $query = "SELECT subject AS details, merchant, 'Bank Name' AS bank, amount, reimbursable FROM expenses";
                             $result = $conn->query($query);
 
                             if ($result->num_rows > 0) {
                                 // Output data of each row
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
-                                    echo "<td>" . htmlspecialchars($row['details']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['merchant']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['amount']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['reimbursable']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['details']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['merchant']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['amount']) . "</td>";
+                                        echo "<td>" . htmlspecialchars($row['reimbursable']) . "</td>";
                                     echo "</tr>";
                                 }
                             } else {

@@ -25,6 +25,8 @@ if ($user['user_dp']) {
     // If no profile picture is found, use a placeholder image
     $profile_pic = 'https://picsum.photos/100/100';
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -109,7 +111,7 @@ if ($user['user_dp']) {
                             <div class="row-form no-margin">
                                 <div class="column-form">
                                     <label for="name" class="form-labels row">Subject</label>
-                                    <input type="text" class="var-input medium" id="name" name="name">
+                                    <input type="text" class="var-input medium" id="name" name="subject">
                                     <label for="category" class="form-labels row medium">Category</label>
                                     <select class="date-input medium" id="category" name="category">
                                         <option value="food">Food</option>
@@ -121,7 +123,7 @@ if ($user['user_dp']) {
                                 </div>
                                 <div class="column-form">
                                     <label for="name" class="form-labels row">Date</label>
-                                    <input type="date" class="date-input" id="name" name="name">
+                                    <input type="date" class="date-input" id="name" name="date">
                                     <label for="recurrence_type" class="form-labels row">Frequency</label>
                                     <select class="var-input large" name="recurrence_type" id="recurrence_type">
                                         <option value="weekly">Weekly</option>
@@ -130,7 +132,7 @@ if ($user['user_dp']) {
                                     </select>
                                 </div>
                                 <label for="name" class="form-labels">Merchant</label>
-                                <input type="text" class="var-input" id="name" name="name">
+                                <input type="text" class="var-input" id="name" name="merchant">
                                 <label for="name" class="form-labels">Amount</label>
                                 <input type="number" class="var-input" id="amount" name="amount" step="100.00">
                                 <label for="name" class="form-labels">Description</label>

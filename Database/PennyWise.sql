@@ -43,6 +43,7 @@ CREATE TABLE `expenses` (
     `subject` VARCHAR(255) NOT NULL,
     `date` DATE NOT NULL,
     `next_occurrence` DATE,
+    `frequency`  VARCHAR(255) NOT NULL,
     `recurrence_type` ENUM('weekly', 'monthly', 'custom') NOT NULL,
     `category` VARCHAR(255) NOT NULL,
     `reimbursable` ENUM('yes','no') NOT NULL DEFAULT 'no',
