@@ -24,7 +24,7 @@ $stmt->close();
 if ($user && $user['user_dp']) {
     $profile_pic = 'data:image/jpeg;base64,' . base64_encode($user['user_dp']);
 } else {
-    $profile_pic = 'https://picsum.photos/100/100';
+    $profile_pic = '../Assets/blank-profile.webp';
 }
 ?>
 
