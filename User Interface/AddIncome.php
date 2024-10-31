@@ -181,36 +181,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </select>
                             </div>
                         </div>
-                         <div class="mb-3 row">
+                        <div class="mb-3 row">
                                 <label for="bank_name" class="form-label col-sm-3">Bank Name*</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" id="bank_name" name="bank_name" required>
+                                    <select class="form-select" id="bank_name" name="bank_name" required>
+                                        <option value="" disabled selected>Select a bank</option> <!-- Optional placeholder -->
+                                        <?php
+                                        // Fetch bank names from the database
+                                        $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";
+                                        $bankStmt = $conn->prepare($bankQuery);
+                                        $bankStmt->bind_param("i", $uid);
+                                        $bankStmt->execute();
+                                        $bankResult = $bankStmt->get_result();
+
+                                        while ($row = $bankResult->fetch_assoc()) {
+                                            echo '<option value="' . htmlspecialchars($row['bank']) . '">' . htmlspecialchars($row['bank']) . '</option>';
+                                        }
+
+                                        $bankStmt->close();
+                                        ?>
+                                    </select>
                                 </div>
-                                <option value="" disabled selected>Select a bank</option> <!-- Optional placeholder -->
-                                <?php
-                                // Fetch bank names from the database
-                                $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";
-                                $bankStmt = $conn->prepare($bankQuery);
-                                $bankStmt->bind_param("i", $uid);
-                                $bankStmt->execute();
-                                $bankResult = $bankStmt->get_result();
-
-                                while ($row = $bankResult->fetch_assoc()) {
-                                    // Use 'bank' instead of 'bank_name' to match the column name in the database
-                                    echo '<option value="' . htmlspecialchars($row['bank']) . '">' . htmlspecialchars($row['bank']) . '</option>';
-                                }
-
-                                $bankStmt->close();
-                                ?>
-                            </select>
-                            </div>  
-                            <div class="mb-3 row">
-                            <label for="description" class="form-label col-sm-3">Description</label>
-                            <div class="col-sm-9">
-                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                             </div>
-                        </div>
-                    </div>   
+
+                            
                     <div class="mb-3 row">
                         <label for="category" class="form-label col-sm-3">Category*</label>
                         <div class="col-sm-9">
@@ -221,6 +215,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </select>
                         </div>
                     </div>
+                    
                     <div class="mb-3 row">
                         <label for="description" class="form-label col-sm-3">Description</label>
                         <div class="col-sm-9">
