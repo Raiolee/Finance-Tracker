@@ -122,7 +122,7 @@ function getGoalsAndSavings($conn, $userId) {
 
 function predictSavingDate($conn, $userId) {
     // Fetch goals
-    $goalsPredict = "SELECT user_id, subject, start_date, budget_limit FROM goals WHERE user_id = ?";
+    $goalsPredict = "SELECT user_id, subject, budget_limit FROM goals WHERE user_id = ?";
     $stmtGoals = $conn->prepare($goalsPredict);
     $stmtGoals->bind_param("i", $userId);
     $stmtGoals->execute();
@@ -131,7 +131,7 @@ function predictSavingDate($conn, $userId) {
     $stmtGoals->close(); // Close the statement after fetching goals
     
     // Fetch savings
-    $savingsPredict = "SELECT subject, category, savings_amount AS balance, date FROM savings WHERE user_id = ?";
+    $savingsPredict = "SELECT subject, category, savings_amount, date FROM savings WHERE user_id = ?";
     $stmtSavings = $conn->prepare($savingsPredict);
     $stmtSavings->bind_param("i", $userId);
     $stmtSavings->execute();
@@ -141,86 +141,72 @@ function predictSavingDate($conn, $userId) {
     
     // Prepare an array to hold predictions
     $predictions = [];
-    
-    // Step 1: Determine the latest date for each savings subject
-    $latestSavings = [];
-    foreach ($savings as $saving) {
-        $subject = $saving['subject'];
-        $date = new DateTime($saving['date']);
-    
-        // Store the latest savings entry for each subject
-        if (!isset($latestSavings[$subject]) || $date > new DateTime($latestSavings[$subject]['date'])) {
-            $latestSavings[$subject] = $saving; // Store the entire saving entry
-        }
-    }
-    
-    // Step 2: Calculate the total savings based on the latest entries
+
+    // Calculate total savings for each goal
     foreach ($goals as $goal) {
         $goalSubject = $goal['subject'];
         $budgetLimit = $goal['budget_limit'];
-    
-        // Check if there is a latest saving for the goal subject
-        $latestTotalSavings = isset($latestSavings[$goalSubject]['savings_amount']) ? $latestSavings[$goalSubject]['savings_amount'] : 0;
-    
-        // Initialize total savings
         $totalSavings = 0;
 
-        // Calculate the remaining amount needed to reach the goal
+        // Calculate current savings for the specific goal
+        foreach ($savings as $saving) {
+            if ($saving['subject'] === $goalSubject) {
+                $totalSavings += $saving['savings_amount'];
+            }
+        }
+
+        // Calculate remaining amount needed to reach the goal
         $remainingAmount = $budgetLimit - $totalSavings;
-    
+
         // If the goal is already met
         if ($remainingAmount <= 0) {
-            $predictions[$goalSubject] = "You have already reached your goal.";
+            $predictions[$goalSubject] = null; // No specific date needed
             continue;
         }
-    
-        // Initialize savings based on frequency
-        $totalSavings = 0; // Initialize a variable to hold the total savings
 
-        foreach ($savings as $saving) {
-            // Check if the saving's subject matches the goal subject
-            if ($saving['subject'] === $goalSubject) {
-                // Accumulate the savings
-                $totalSavings += $saving['savings_amount'] ?? 0;
-            }
-        }
-    
-        // Calculate the number of days needed to reach the goal
-        $daysNeeded = PHP_INT_MAX;
-    
-        // Calculate days needed based on savings contributions
-        if ($totalSavings > 0 && isset($latestSavings[$goalSubject]['date'])) {
-            $latestDate = new DateTime($latestSavings[$goalSubject]['date']);
-            $daysSinceStart = $latestDate->diff(new DateTime($goal['start_date']))->days;
-            if ($daysSinceStart > 0) {
-                $dailySavingsRate = $totalSavings / $daysSinceStart;
-                if ($dailySavingsRate > 0) {
-                    $daysNeeded = ceil($remainingAmount / $dailySavingsRate);
-                }
-            }
-        }
+        // Estimate the monthly savings rate (average savings per month)
+        $monthlySavings = 0;
+        $savingsCount = count($savings);
         
-        // Calculate the target date
-        if ($daysNeeded === PHP_INT_MAX) {
-            $predictions[$goalSubject] = "N/A"; // No valid savings to reach the goal
-        } else {
-            $targetDate = new DateTime();
-            $targetDate->add(new DateInterval("P{$daysNeeded}D"));
-            $predictions[$goalSubject] = $targetDate->format("Y-m-d");
-            
-            // Update the prediction date in the goals table for the specific goal
-            $updateQuery = "UPDATE goals SET `date` = ? WHERE user_id = ? AND subject = ?";
-            $stmtUpdate = $conn->prepare($updateQuery);
-            if ($stmtUpdate) {
-                $stmtUpdate->bind_param("sis", $predictions[$goalSubject], $userId, $goalSubject);
-                $stmtUpdate->execute();
-                $stmtUpdate->close();
-            } else {
-                throw new Exception("Error preparing update statement: {$conn->error}");
+        if ($savingsCount > 0) {
+            // Calculate average monthly savings
+            $totalMonths = 0;
+            $currentDate = new DateTime();
+            foreach ($savings as $saving) {
+                $savingDate = new DateTime($saving['date']);
+                $monthsDiff = $currentDate->diff($savingDate)->m + ($currentDate->diff($savingDate)->y * 12);
+                $monthlySavings += $saving['savings_amount'] / max($monthsDiff, 1); // Avoid division by zero
+                $totalMonths++;
             }
+            $monthlySavings /= max($totalMonths, 1); // Avoid division by zero
+        }
+
+        // Predict the date to reach the goal
+        if ($monthlySavings > 0) {
+            $monthsToGoal = ceil($remainingAmount / $monthlySavings);
+            $predictedDate = (new DateTime())->add(new DateInterval("P{$monthsToGoal}M"));
+
+            $predictions[$goalSubject] = $predictedDate->format('Y-m-d');
+
+            // Update the predicted date in the goals table
+            $updateGoal = "UPDATE goals SET predicted_date = ? WHERE user_id = ? AND subject = ?";
+            $stmtUpdate = $conn->prepare($updateGoal);
+            $stmtUpdate->bind_param("sis", $predictedDate->format('Y-m-d'), $userId, $goalSubject);
+            $stmtUpdate->execute();
+            $stmtUpdate->close();
+        } else {
+            // If no savings data is available, set to "N/A"
+            $predictions[$goalSubject] = "N/A"; 
         }
     }
-    
+
+    // Set predictions to "N/A" for goals with no savings data
+    foreach ($goals as $goal) {
+        if (!isset($predictions[$goal['subject']])) {
+            $predictions[$goal['subject']] = "N/A";
+        }
+    }
+
     return $predictions;
 }
 
