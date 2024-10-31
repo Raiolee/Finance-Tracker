@@ -1,220 +1,126 @@
-.container {
-    background-color: #1b1b1b;
-    display: flex;
-    height: 100vh;
-    width: auto;
-    min-height: 100vh;
-   /* Allows the container to expand if needed */
-}
-.nav-bar {
-    width: 20%;
-    margin-right: 50px;
-}
-.Profile_img {
-    display: flex;
-   /* Use flexbox */
-    align-items: center;
-   /* Center items vertically */
-    justify-content: center;
-   /* Center items horizontally */
-    height: 120px;
-    width: 120px;
+* Container spacing */
+/* Container styling for centered form */
+.form-container {
+    max-width: 600px;
     margin: auto;
-   /* Center the container itself */
-    margin-top: 2.5vh;
-    margin-bottom: 2vh;
-}
-.Profile_img img {
-    border-radius: 50%;
-}
-.user-name {
-    height: 5vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: rgba(164, 164, 164, 1);
-    margin-bottom: 10px;
-}
-.user-name p {
-    font-size: 25px;
-    font-family: 'Roboto', sans-serif;
-}
-#Nav_Button {
-    height: 8vh;
-    display: flex;
-    margin-left: 35px;
-}
-#Nav_Button a {
-    text-decoration: none;
-    color: rgba(216, 255, 251, 1);
-}
-#Nav_Button p {
-    padding: 7px 0;
-    font-size: 20px;
-    width: 12vw;
-    font-family: 'Roboto', sans-serif;
-}
-#Nav_Button img {
-    padding: 5px 17px 7px 0;
-    filter: brightness(0.2);
-}
-#Nav_Button.active p a {
-    color: rgba(0, 218, 198, 1);
-   /* Change this to the desired active color */
-    font-weight: bold;
-   /* Optional: make it bold */
-    filter: brightness(1);
-}
-#Nav_Button.active img {
-    filter: brightness(1);
-   /* Dimmed default state */
-}
-#Nav_Button:hover p a {
-    color: #00dac6;
-   /* Change color on hover */
-}
-#Nav_Button.active p a {
-    color: rgba(0, 218, 198, 1);
-   /* Highlight active navigation link */
-}
-.Penny_Logo {
-    display: flex;
-   /* Use flexbox */
-    align-items: center;
-   /* Center items vertically */
-    justify-content: center;
-   /* Center items horizontally */
-    margin-left: auto;
-    margin-right: auto;
-    height: 150px;
-    width: 150px;
-}
-.content {
-    height: 100vh;
-   /* Ensure content fills the full viewport height */
-    padding-top: 20px;
-   /* Optional: Adjust padding from the top */
-    width: 100%;
-    display: flex;
-    justify-content: center;
-   /* Centers the content */
-}
-.right-container {
-    background-color: black;
-    width: 100%;
-   /* Scales relative to viewport */
-    max-width: 1250px;
-   /* Prevents it from growing beyond this size */
-    height: auto;
-   /* Adjusts height based on content */
-    margin: 40px auto;
-   /* Centers the container */
-    border-radius: 15px;
     padding: 20px;
-    box-sizing: border-box;
-   /* Ensures padding is included in width */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    gap: 20px;
-   /* Spacing between sections */
-    overflow: auto;
-   /* Ensures content is contained */
-    overflow-y: scroll;
-   /* Enable vertical scrolling */
-    position: relative;
-}
-.right-container::-webkit-scrollbar {
-    width: 5px;
-   /* Width of the scrollbar */
-    height: 8px;
-   /* Height of horizontal scrollbar */
-}
-/* Customize the thumb (draggable part of the scrollbar) */
-.right-container::-webkit-scrollbar-thumb {
-    background-color: #888;
-   /* Thumb color */
-    border-radius: 10px;
-   /* Round the corners of the thumb */
-    border: 3px solid #888;
-   /* Adds a border around the thumb */
-}
-/* Customize the track (the area the thumb slides in) */
-.right-container::-webkit-scrollbar-track {
-    background: #000;
-   /* Track color */
-    border-radius: 10px;
-   /* Round the corners of the track */
-}
-/* Customize the track when hovering over the thumb */
-.right-container::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-   /* Darker thumb color when hovering */
+    
 }
 
-
-
-
-
-
-  .form-label {
-            font-size: 15px;
-            font-weight: 400;
-            color: #908F8F;
-        }
-        .form-control, .form-select {
-            background-color: #2c2c2c;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-        }
-
-        .form-control:focus, .form-select:focus {
-            box-shadow: none;
-            border-color: #00DAC6;
-        }
-        .custom-date {
-     width: 180px; 
-    }
-
-        .submit {
-        background-color: #00DAC6;
-        color: #000000;
-        border: none;
-        padding: 5px 10px;
-        font-size: 16px; /* Increased font size */
-        border-radius: 1px;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-save {
-        background-color: #00DAC6; /* Make sure to include this for the default state */
-        color: white;
-        border: none;
-        padding: 5px 25px;
-        font-size: 12px; /* Increased font size */
-        border-radius: 10px;
-        transition: background-color 0.3s ease;
-       
-        margin-left: auto; /* Moves the button to the right */
-        display: block; /* Ensure the button is block-level if needed */
-
-
-    }
-    .button-container {
+/* Label and input container alignment */
+.mb-3.row {
     display: flex;
-    justify-content: flex-end; /* Aligns items to the right */
-    padding: 10px; /* Optional padding for spacing */
+    align-items: center;
+    margin-bottom: 1.5rem;
 }
 
+/* Label styling with fixed width */
+.form-label {
+    width: 120px; /* Adjust width as needed */
+    font: 15px "Cabin Condensed", sans-serif;
+    color: #eeeeee;
+    margin-right: 10px; /* Space between label and input */
+}
 
-    .btn-save:hover {
-        background-color: #00b8a5;
+/* Input styling */
+.form-control, .form-select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    border: 1px solid #0b0b0b;
+    background-color: #383838;
+    color: #eeeeee;
+}
+
+/* Custom alignment for total input and select dropdown */
+.d-flex.align-items-center {
+    display: flex;
+    gap: 10px; /* Space between number input and select */
+}
+
+/* Button container styling */
+.button-containter {
+    text-align: right;
+    margin-top: 1.5rem;
+}
+
+.btn-save {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    transition: background-color 0.3s;
+}
+
+.btn-save:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .mb-3.row {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
+    .form-label {
+        width: auto;
+        margin-bottom: 0.5rem;
+    }
 
-        .input-group {
-            max-width: 300px; /* Adjust input width */
-        }
-
-        textarea {
-    resize: none; /* Prevent resizing */
+    .button-containter {
+        text-align: center;
+    }
 }
+
+
+.custom-date {
+width: 206px; 
+}
+
+.submit {
+background-color: #00DAC6;
+color: #000000;
+border: none;
+padding: 5px 10px;
+font-size: 16px; /* Increased font size */
+border-radius: 1px;
+transition: background-color 0.3s ease;
+}
+
+.btn-save {
+background-color: #00DAC6; /* Make sure to include this for the default state */
+color: white;
+border: none;
+padding: 5px 25px;
+font-size: 12px; /* Increased font size */
+border-radius: 10px;
+transition: background-color 0.3s ease;
+
+margin-left: auto; /* Moves the button to the right */
+display: block; /* Ensure the button is block-level if needed */
+
+
+}
+.button-container {
+display: flex;
+justify-content: flex-end; /* Aligns items to the right */
+padding: 10px; /* Optional padding for spacing */
+}
+
+
+.btn-save:hover {
+background-color: #00b8a5;
+}
+
+
+.input-group {
+    max-width: 300px; /* Adjust input width */
+}
+
+textarea {
+resize: none; /* Prevent resizing */
+}
+
