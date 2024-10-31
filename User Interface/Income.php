@@ -128,9 +128,8 @@ if (isset($_GET['id'])) {
                                 <th class="table-header">Source of Income</th>
                                 <th class="table-header">Amount</th>
                                 <th class="table-header">Category</th>
-                                <th class="table-header">Type of Investment</th>
                                 <th class="table-header">Date</th>
-                                
+                                <th class="table-header">Bank</th>
                             </tr>
                         <?php
                  $sql = "SELECT * FROM income";
@@ -145,8 +144,8 @@ if (isset($_GET['id'])) {
                              echo "<td>" . htmlspecialchars($row['source']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['total']) . " " . htmlspecialchars($row['currency']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                             echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                             echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                              echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['income_id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
                              echo "</tr>";
                          }

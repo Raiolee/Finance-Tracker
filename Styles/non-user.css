@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible&display=swap');
+
+/* Apply the custom font style */
+.font {
+    font-family: 'Atkinson Hyperlegible', sans-serif;
+}
+
+/* Customize button style */
+.btn-custom {
+    background-color: #00dac6; /* Custom teal shade */
+    color: white;
+    font-weight: bold;
+    border: none;
+}
+
+.btn-custom:hover {
+    background-color: #00bfa8; /* Slightly darker teal for hover */
+    color: white;
+}
+
+.form-control {
+    margin-bottom: 15px;
+    background-color: #1B1B1B; /* Match the container background */
+}
+
+/* Placeholder color styling */
+.form-control::placeholder {
+    color: #b0b0b0;
+    opacity: 1;
+}
+
+/* Styles for the body */
+body {
+    height: 100vh;
+    margin: 0;
+}
+
+/* Styles for the container */
+.container {
+    max-width: 400px;
+    background-color: #1B1B1B; /* Match the container background */
+}
