@@ -22,12 +22,12 @@ if (isset($_POST["Login"])) {
 
         // Check if user exists and password matches
         if ($user && password_verify($password, $user["password"])) {
-          $_SESSION["user"] = "yes"; // Mark user as logged in
-          $_SESSION["user_id"] = $user["user_id"]; // Store the user ID
-          $_SESSION["name"] = $user["first_name"] . ' ' . $user["last_name"]; // Store full name          
-          header("Location: User Interface/Dashboard.php"); // Redirect to Dashboard
-          exit();
-      } else {
+            $_SESSION["user"] = "yes"; // Mark user as logged in
+            $_SESSION["user_id"] = $user["user_id"]; // Store the user ID
+            $_SESSION["name"] = $user["first_name"] . ' ' . $user["last_name"]; // Store full name          
+            header("Location: User Interface/Dashboard.php"); // Redirect to Dashboard
+            exit();
+        } else {
             $error_message = "Invalid email or password.";
         }
     } else {
@@ -38,46 +38,31 @@ if (isset($_POST["Login"])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="PENNY WISE" content="A Finance Tracker">
-  <title>Penny Wise</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="Styles/styles.scss">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="Styles/non-user.css">
 </head>
-<body class="container">
-  <div class="login">
-    <div class="left-section">
-      <img src="Assets/PENNY_WISE_Logo.png" alt="Penny Wise Logo" width="600" height="600" class="logo">
+
+<body class="bg-dark text-light d-flex align-items-center justify-content-center font">
+    <div class="container p-4 rounded shadow text-center">
+        <h2 class="mb-3">LOGIN</h2>
+        <?php if (isset($error_message)): ?>
+            <div class='alert alert-danger'><?php echo $error_message; ?></div>
+        <?php endif; ?>
+        <form class="column" action="" method="POST">
+            <input class="form-control var-input text-light" type="email" placeholder="Email" name="email" id="email" required></input>
+            <input class="form-control var-input text-light" type="password" placeholder="Password" name="password" id="password" required></input>
+            <button type="submit" value="Login" name="Login" class="btn btn-custom w-100 mb-3">Log in</button>
+            <p>Don't have an account? <a href="register.php">Register</a></p>
+            <a class="font" href="forgot-password.php">Forgot Password</a>
+        </form>
     </div>
-
-    <div class="right-section">
-      <div class="login-container">
-        <form action="login.php" method="post">
-          <p class="log-title">LOGIN</p>
-
-          <?php if (isset($error_message)): ?>
-              <div class='alert alert-danger'><?php echo $error_message; ?></div>
-          <?php endif; ?>
-
-          <div class="email">
-              <input type="email" placeholder="Email" name="email" id="email" required>
-          </div>
-          <div class="password">
-              <input type="password" placeholder="Password" name="password" id="password" required>
-          </div>
-          <div class="form-btn">
-              <input type="submit" value="Login" name="Login" class="login-btn">
-          </div>
-        </form>    
-        <p class="dont-have">Don't have an account? <a class="forgot" href="register.php">Register</a></p>
-        <a class="forgot" href="forgot-password.php">Forgot Password</a>
-      </div>
-    </div>
-  </div>
+    <!-- Bootstrap JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
+
 </html>
