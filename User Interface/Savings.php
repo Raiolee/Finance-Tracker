@@ -489,7 +489,7 @@ if ($stmt3) {
                 <?php
                 if (isset($result3) && $result3->num_rows > 0) {
                     while ($row3 = $result3->fetch_assoc()) {
-                        echo "'" . addslashes($row3['category']) . "',"; // Corrected to fetch category
+                        echo "'" . addslashes($row3['subject']) . "',"; // Corrected to fetch category
                     }
                     echo rtrim(',', ' '); // Remove the trailing comma
                 } else {
@@ -498,7 +498,7 @@ if ($stmt3) {
                 ?>
             ];
 
-            return categories.map(category => `<option value="${category}">${category}</option>`).join('');
+            return categories.map(subject => `<option value="${subject}">${subject}</option>`).join('');
         }
 
         function getGoalOptions() {
