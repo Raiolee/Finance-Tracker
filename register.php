@@ -103,11 +103,11 @@ if (isset($_POST["submit"])) {
             <?php echo $alertMessage; ?>
         </div>
         <form action="register.php" method="post">
-            <input class="form-control bg-dark text-light mb-2" type="text" name="fname" placeholder="First Name" required>
-            <input class="form-control bg-dark text-light mb-2" type="text" name="lname" placeholder="Last Name" required>
-            <input class="form-control bg-dark text-light mb-2" type="email" name="email" placeholder="Email" required>
-            <input class="form-control bg-dark text-light mb-2" type="password" name="password" placeholder="Password" required>
-            <input class="form-control bg-dark text-light mb-2" type="password" name="Confirmpassword" placeholder="Confirm Password" required>
+            <input class="form-control var-input text-light mb-3" type="text" name="fname" placeholder="First Name" required>
+            <input class="form-control var-input text-light mb-3" type="text" name="lname" placeholder="Last Name" required>
+            <input class="form-control var-input text-light mb-3" type="email" name="email" placeholder="Email" required>
+            <input class="form-control var-input text-light mb-3" type="password" name="password" placeholder="Password" required>
+            <input class="form-control var-input text-light mb-3" type="password" name="Confirmpassword" placeholder="Confirm Password" required>
             <button type="submit" name="submit" class="btn btn-custom w-100 mb-3">Register</button>
             <p>Already have an account? <a href="login.php">Log in</a></p>
         </form>
