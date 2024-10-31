@@ -209,87 +209,116 @@ function predictSavingDate($conn, $userId) {
         $targetDate->add(new DateInterval("P{$daysNeeded}D"));
         $predictions[$goalSubject] = $targetDate->format("Y-m-d");
 
-    // Update the prediction date in the goals table for the specific goal
-    $updateQuery = "UPDATE goals SET `date` = ? WHERE user_id = ? AND subject = ?";
-    $stmtUpdate = $conn->prepare($updateQuery);
-    if ($stmtUpdate) {
-        $stmtUpdate->bind_param("sis", $predictions[$goalSubject], $userId, $goalSubject);
-        $stmtUpdate->execute();
-        $stmtUpdate->close();
-    } else {
-        throw new Exception("Error preparing update statement: {$conn->error}");
+        // Update the prediction date in the goals table for the specific goal
+        $updateQuery = "UPDATE goals SET `date` = ? WHERE user_id = ? AND subject = ?";
+        $stmtUpdate = $conn->prepare($updateQuery);
+        if ($stmtUpdate) {
+            $stmtUpdate->bind_param("sis", $predictions[$goalSubject], $userId, $goalSubject);
+            $stmtUpdate->execute();
+            $stmtUpdate->close();
+        } else {
+            throw new Exception("Error preparing update statement: {$conn->error}");
+        }
     }
-}
 }
 return $predictions;
 }
 
-function searchGoalsBySubject($conn, $userId, $query) {
-    $sql = "SELECT subject, category FROM goals WHERE user_id = ? AND subject LIKE ?";
+function searchGoals($conn, $userId, $searchQuery) {
+    $sql = "SELECT subject, category FROM goals WHERE user_id = ? AND (subject LIKE ? OR category LIKE ?)";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
-        $likeQuery = "%{$query}%";
-        $stmt->bind_param("is", $userId, $likeQuery);
+        $likeQuery = "%{$searchQuery}%";
+        $stmt->bind_param("iss", $userId, $likeQuery, $likeQuery);
         $stmt->execute();
-        return $stmt->get_result();
+        $result = $stmt->get_result();
+        $goalsAndSavings = getGoalsAndSavings($conn, $userId);
+        $predictions = predictSavingDate($conn, $userId);
+        return [$result, $goalsAndSavings, $predictions];
     } else {
         throw new Exception("Error preparing statement: {$conn->error}");
     }
 }
 
-// Handle search request
 if (isset($_GET['query'])) {
     $searchQuery = $_GET['query'];
     try {
-        $result = searchGoalsBySubject($conn, $userId, $searchQuery);
+        [$result, $goalsAndSavings, $predictions] = searchGoals($conn, $userId, $searchQuery);
     } catch (Exception $e) {
         $error_message = $e->getMessage();
     }
 }
 
-function fetchGoalsByCategory($conn, $userId, $category, $order = 'ASC') {
-    $query = "SELECT * FROM goals WHERE user_id = ?";
-    if (!empty($category)) {
-        $query .= " AND category LIKE ?";
-    }
-    $query .= " ORDER BY subject " . ($order === 'DESC' ? 'DESC' : 'ASC');
-
-    $stmt = $conn->prepare($query);
-    if (!empty($category)) {
-        $searchParam = "%{$category}%";
-        $stmt->bind_param("is", $userId, $searchParam);
+function filterCategory($conn, $userId, $filterCategory) {
+    $sql = "SELECT subject, category FROM goals WHERE user_id = ? AND category = ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("is", $userId, $filterCategory);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result;
     } else {
+        throw new Exception("Error preparing statement: {$conn->error}");
+    }
+}
+
+if (isset($_GET['FilterGoalsCategory'])) {
+    $filterCategory = $_GET['FilterGoalsCategory'];
+    try {
+        $result = filterCategory($conn, $userId, $filterCategory);
+        $goalsAndSavings = getGoalsAndSavings($conn, $userId);
+        $predictions = predictSavingDate($conn, $userId);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
+}
+
+$currentSortOrderSubject = $_GET['sortOrderSubject'] ?? 'asc';
+$nextSortOrderSubject = getNextSortOrder($currentSortOrderSubject);
+function getNextSortOrder($currentSortOrder) {
+    return $currentSortOrder === 'asc' ? 'desc' : 'asc';
+}
+
+if (isset($_GET['sortOrderSubject'])) {
+    $sortOrderSubject = $_GET['sortOrderSubject'];
+    $sql = "SELECT subject, category FROM goals WHERE user_id = ? ORDER BY subject $sortOrderSubject";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
         $stmt->bind_param("i", $userId);
-    }
-    $stmt->execute();
-    return $stmt->get_result();
-}
-
-function fetchGoalsByDate($conn, $userId, $order = 'ASC') {
-    $query = "SELECT * FROM goals WHERE user_id = ? ORDER BY date " . ($order === 'DESC' ? 'DESC' : 'ASC');
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("i", $userId);
-    $stmt->execute();
-    return $stmt->get_result();
-}
-
-// Get filter and sort parameters from the request
-$currentSortOrder = $_GET['sortOrder'] ?? 'ASC';
-$sortOrderDate = $_GET['sortOrderDate'] ?? 'ASC';
-$nextSortOrder = ($currentSortOrder === 'ASC') ? 'DESC' : 'ASC';
-$nextSortOrderDate = ($sortOrderDate === 'ASC') ? 'DESC' : 'ASC';
-
-// Fetch goals based on the filter and sort order
-try {
-    if (!empty($searchQuery)) {
-        $result = fetchGoalsByCategory($conn, $userId, $searchQuery, $currentSortOrder);
-    } elseif (isset($_GET['sortOrderDate'])) {
-        $result = fetchGoalsByDate($conn, $userId, $sortOrderDate);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $goalsAndSavings = getGoalsAndSavings($conn, $userId);
+        $predictions = predictSavingDate($conn, $userId);
     } else {
-        $result = fetchGoalsByCategory($conn, $userId, '', $currentSortOrder);
+        throw new Exception("Error preparing statement: {$conn->error}");
     }
-} catch (Exception $e) {
-    $error_message = $e->getMessage();
+}
+
+$currentSortOrderDate = $_GET['sortOrderDate'] ?? 'asc';
+$nextSortOrderDate = getNextSortOrder($currentSortOrderDate);
+
+function sortGoalsByDate($conn, $userId, $sortOrderDate) {
+    $sql = "SELECT subject, category, date FROM goals WHERE user_id = ? ORDER BY date $sortOrderDate";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $goalsAndSavings = getGoalsAndSavings($conn, $userId);
+        $predictions = predictSavingDate($conn, $userId);
+        return [$result, $goalsAndSavings, $predictions];
+    } else {
+        throw new Exception("Error preparing statement: {$conn->error}");
+    }
+}
+
+if (isset($_GET['sortOrderDate'])) {
+    $sortOrderDate = $_GET['sortOrderDate'];
+    try {
+        [$result, $goalsAndSavings, $predictions] = sortGoalsByDate($conn, $userId, $sortOrderDate);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
 }
 
 $conn->close();
@@ -406,7 +435,7 @@ $conn->close();
                                 </button>
                             </form>
                             <form class="search-form" action="" method="GET">
-                                <input type="search" name="query" placeholder="Search here ...">
+                                <input type="search" name="query" placeholder="Search here ..." style="text-transform: capitalize;">
                                 <button type="submit">
                                     <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
                                 </button>
@@ -421,7 +450,7 @@ $conn->close();
                         <tr>
                             <th class="tab">
                                 <form class="Subject" action="" method="GET">
-                                    <button type="submit" name="sortOrder" value="<?php echo htmlspecialchars($nextSortOrder); ?>">
+                                    <button type="submit" name="sortOrderSubject" value="<?php echo htmlspecialchars($nextSortOrderSubject); ?>">
                                         SUBJECT
                                     </button>
                                 </form>
@@ -507,7 +536,7 @@ $conn->close();
                     </div>
                     <div class="Goal-Form-Format" id="Target-Amount-Row">
                         <label for="Target-Amount" class="Goals-Label">Target Amount*</label>
-                        <input type="text" id="Target-Amount" name="Target-Amount" required>
+                        <input type="number" id="Target-Amount" name="Target-Amount" required>
                     </div>
                     <div class="Goal-Form" id="Button-Row">
                         <div class="button-div-row">
