@@ -69,7 +69,7 @@ function predictSavingDate($conn, $userId)
     $stmtGoals->close(); // Close the statement after fetching goals
 
     // Fetch savings
-    $savingsPredict = "SELECT subject, category, savings_amount AS balance, date FROM savings WHERE user_id = ?";
+    $savingsPredict = "SELECT subject, category, savings_amount, date FROM savings WHERE user_id = ?";
     $stmtSavings = $conn->prepare($savingsPredict);
     $stmtSavings->bind_param("i", $userId);
     $stmtSavings->execute();
@@ -98,10 +98,7 @@ function predictSavingDate($conn, $userId)
         $budgetLimit = $goal['budget_limit'];
 
         // Check if there is a latest saving for the goal subject
-        $latestTotalSavings = isset($latestSavings[$goalSubject]['savings_amount']) ? $latestSavings[$goalSubject]['savings_amount'] : 0;
-
-        // Initialize total savings
-        $totalSavings = 0;
+        $totalSavings = isset($latestSavings[$goalSubject]) ? $latestSavings[$goalSubject]['savings_amount'] : 0;
 
         // Calculate the remaining amount needed to reach the goal
         $remainingAmount = $budgetLimit - $totalSavings;
@@ -113,13 +110,15 @@ function predictSavingDate($conn, $userId)
         }
 
         // Initialize savings based on frequency
-        $totalSavings = 0; // Initialize a variable to hold the total savings
+        $savingsByCategory = [
+            'Weekly' => 0,
+            'Monthly' => 0,
+        ];
 
+        // Step 3: Accumulate savings based on the latest entries
         foreach ($savings as $saving) {
-            // Check if the saving's subject matches the goal subject
-            if ($saving['subject'] === $goalSubject) {
-                // Accumulate the savings
-                $totalSavings += $saving['savings_amount'] ?? 0;
+            if ($saving['subject'] === $goalSubject && isset($latestSavings[$goalSubject]) && $saving['date'] === $latestSavings[$goalSubject]['date']) {
+                $savingsByCategory[$saving['category']] += $saving['savings_amount'];
             }
         }
 
@@ -127,13 +126,15 @@ function predictSavingDate($conn, $userId)
         $daysNeeded = PHP_INT_MAX;
 
         // Calculate days needed based on savings contributions
-        if ($totalSavings > 0 && isset($latestSavings[$goalSubject]['date'])) {
-            $latestDate = new DateTime($latestSavings[$goalSubject]['date']);
-            $daysSinceStart = $latestDate->diff(new DateTime($goal['start_date']))->days;
-            if ($daysSinceStart > 0) {
-                $dailySavingsRate = $totalSavings / $daysSinceStart;
-                if ($dailySavingsRate > 0) {
-                    $daysNeeded = ceil($remainingAmount / $dailySavingsRate);
+        foreach ($savingsByCategory as $category => $amount) {
+            if ($amount > 0) {
+                switch ($category) {
+                    case 'Weekly':
+                        $daysNeeded = min($daysNeeded, ceil($remainingAmount / $amount) * 7);
+                        break;
+                    case 'Monthly':
+                        $daysNeeded = min($daysNeeded, ceil($remainingAmount / $amount) * 30); // Approximate month as 30 days
+                        break;
                 }
             }
         }
@@ -158,19 +159,31 @@ function predictSavingDate($conn, $userId)
             }
         }
     }
-
     return $predictions;
 }
 
-function searchGoalsBySubject($conn, $userId, $searchQuery)
+function searchGoalsBySubject($conn, $userId, $query)
 {
-    $query = "SELECT * FROM goals WHERE user_id = ? AND subject LIKE ?";
-    $stmt = $conn->prepare($query);
-    $searchParam = "%{$searchQuery}%";
-    $stmt->bind_param("is", $userId, $searchParam);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_all(MYSQLI_ASSOC);
+    $sql = "SELECT subject, category FROM goals WHERE user_id = ? AND subject LIKE ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $likeQuery = "%{$query}%";
+        $stmt->bind_param("is", $userId, $likeQuery);
+        $stmt->execute();
+        return $stmt->get_result();
+    } else {
+        throw new Exception("Error preparing statement: {$conn->error}");
+    }
+}
+
+// Handle search request
+if (isset($_GET['query'])) {
+    $searchQuery = $_GET['query'];
+    try {
+        $result = searchGoalsBySubject($conn, $userId, $searchQuery);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
 }
 
 function fetchGoalsByCategory($conn, $userId, $category, $order = 'ASC')
@@ -200,4 +213,31 @@ function fetchGoalsByDate($conn, $userId, $order = 'ASC')
     $stmt->execute();
     return $stmt->get_result();
 }
+
+// Get filter and sort parameters from the request
+$currentSortOrder = $_GET['sortOrder'] ?? 'ASC';
+$sortOrderDate = $_GET['sortOrderDate'] ?? 'ASC';
+$nextSortOrder = ($currentSortOrder === 'ASC') ? 'DESC' : 'ASC';
+$nextSortOrderDate = ($sortOrderDate === 'ASC') ? 'DESC' : 'ASC';
+
+// Determine which goals to fetch based on request parameters
+if (isset($_GET['filter']) && $_GET['filter'] === 'category') {
+    $category = $_GET['category'] ?? '';
+    $goals = fetchGoalsByCategory($conn, $userId, $category, $currentSortOrder);
+} elseif (isset($_GET['filter']) && $_GET['filter'] === 'date') {
+    $goals = fetchGoalsByDate($conn, $userId, $sortOrderDate);
+} else {
+    [$goals, $goalsAndSavings] = fetchGoals($conn, $userId);
+}
+
+// Format and return the results as JSON
+$response = [
+    'goals' => $goals->fetch_all(MYSQLI_ASSOC),
+    'goalsAndSavings' => $goalsAndSavings,
+    'predictions' => predictSavingDate($conn, $userId),
+    'searchResults' => isset($result) ? $result->fetch_all(MYSQLI_ASSOC) : []
+];
+
+header('Content-Type: application/json');
+echo json_encode($response);
 ?>
