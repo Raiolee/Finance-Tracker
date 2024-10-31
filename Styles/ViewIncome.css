@@ -59,7 +59,7 @@
   
   .modal-content {
     background-color: #2a2a2a;
-    margin: 15% auto;
+    margin: 10% auto; /* Adjusted margin to center better */
     padding: 20px;
     border: none;
     width: 400px;
@@ -68,8 +68,29 @@
   }
   
   .modal-header, .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border: none;
   }
+  
+  .modal-header h5 {
+    margin: 0;
+  }
+  
+  .close {
+    font-size: 1.5em;
+    cursor: pointer;
+  }
+  
+  .modal-footer {
+    margin-top: 20px;
+  }
+  
+  .modal-body .form-group {
+    margin-bottom: 15px; /* Ensure even spacing between form groups */
+  }
+  
   
   .close {
     color: #aaa;
