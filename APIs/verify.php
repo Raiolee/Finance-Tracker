@@ -39,20 +39,34 @@ $conn->close();
     <!-- Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <title>Verify OTP</title>
+    <style>
+        .btn-custom {
+            background-color: #00dac6;
+            border-color: #00dac6;
+            color: #fff;
+        }
+        .btn-custom:hover {
+            background-color: #00b7a9;
+            border-color: #00b7a9;
+        }
+    </style>
 </head>
 
 <body class="bg-dark text-light d-flex align-items-center justify-content-center" style="height: 100vh; margin: 0;">
     <div class="container bg-secondary p-4 rounded shadow text-center" style="max-width: 400px;">
         <h2 class="mb-3">Enter OTP</h2>
+        <p class="mb-3">An OTP has been sent to your email address. Please enter the OTP to verify your account.</p>
+        <?php if ($alertMessage): ?>
+            <div class="mb-3">
+                <?= $alertMessage ?>
+            </div>
+        <?php endif; ?>
         <form action="verify.php?email=<?= htmlspecialchars($email) ?>" method="POST">
             <div class="mb-3">
                 <input type="text" name="otp" class="form-control bg-dark text-light" placeholder="Enter OTP" required>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Verify</button>
+            <button type="submit" class="btn btn-custom w-100">Verify</button>
         </form>
-        <div class="mt-3">
-            <?= $alertMessage ?>
-        </div>
     </div>
     <!-- Bootstrap JS CDN -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
