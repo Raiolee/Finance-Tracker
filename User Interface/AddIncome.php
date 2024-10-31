@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income</title>
-    <link rel="stylesheet" href="../Styles/styles.css">
+    <link rel="stylesheet" href="../Styles/styles.scss">
     <link rel="stylesheet" href="../Styles/AddIncome.css">
     <link href='https://fonts.googleapis.com/css?family=Cabin Condensed' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -203,6 +203,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $bankStmt->close();
                                 ?>
                             </select>
+                            </div>  
+                            <div class="mb-3 row">
+                            <label for="description" class="form-label col-sm-3">Description</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                            </div>
                         </div>
                     </div>   
                     <div class="mb-3 row">

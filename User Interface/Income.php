@@ -99,7 +99,7 @@ if (isset($_GET['id'])) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../Styles/ViewIncome.css">
-    <link rel ="stylesheet" href="../Styles/AddIncome.css">
+    <link rel ="stylesheet" href="../Styles/styles.scss">
     <style>
         body {
     background-color: #1a1a1a;
@@ -108,116 +108,88 @@ if (isset($_GET['id'])) {
         
     </style>
 </head>
-<body class="container">
-    <div class="nav-bar">
-        <div class="Profile">
-            <div class="Profile_img">
-                <img src="https://picsum.photos/100/100" alt="" width="110">
+<body>
+    <div class="container">
+    <div class="navbar">
+            <!-- Profile Picture -->
+            <div class="Profile">
+                <div class="Profile_img">
+                    <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" width="110">
+                </div>
             </div>
-        </div>
+            <!-- Username Section -->
+            <div class="user-name">
+                <p><?php echo htmlspecialchars($username); ?></p>
+            </div>
 
-        <div class="user-name">
-            
-        </div>
+            <!-- Home Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'Dashboard.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/home.svg" alt="Icon">
+                <p><a class="navbar-items" href="Dashboard.php">Home</a></p>
+            </div>
 
-        <div class="Home-Nav <?php echo ($current_page == 'Dashboard.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/home.svg" alt="Icon" width="50px" id="icons">
+            <!-- Expenses Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
+                <p><a class="navbar-items" href="expense.php">Expenses</a></p>
             </div>
-            <div>
-                <p><a href="Dashboard.php">Home</a></p>
-            </div>
-        </div>
 
-        <!-- Section for Expenses -->
-        <div class="Expenses-Nav <?php echo ($current_page == 'expense.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/expenses.svg" alt="Icon" width="50px">
+            <!-- Income Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'income.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/income.svg" alt="Icon">
+                <p><a class="navbar-items" href="Income.php">Income</a></p>
             </div>
-            <div>
-                <p><a href="expense.php">Expenses</a></p> <!-- DON'T CHANGE THIS (DON'T PUSH YOUR CHANGES ON THIS LINE) -->
-            </div>
-        </div>
 
-        <!-- Section for Income -->
-        <div class="Travels-Nav <?php echo ($current_page == 'Income.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/income.svg" alt="Icon" width="50px">
+            <!-- Goal Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'Goals.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/approvals.svg" alt="Icon">
+                <p><a class="navbar-items" href="Goals.php">Goals</a></p>
             </div>
-            <div>
-                <p><a href="Income.php">Income</a></p>
-            </div>
-        </div>
 
-        <!-- Section for Goals -->
-        <div class="Travels-Nav <?php echo ($current_page == 'Goals.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/approvals.svg" alt="Icon" width="50px">
+            <!-- Savings Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'Savings.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/reports.svg" alt="Icon">
+                <p><a class="navbar-items" href="Savings.php">Savings</a></p>
             </div>
-            <div>
-                <p><a href="Goals.php">Goals</a></p>
-            </div>
-        </div>
 
-        <!-- Section for Savings -->
-        <div class="Approvals-Nav <?php echo ($current_page == 'Savings.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/reports.svg" alt="Icon" width="50px">
+            <!-- Settings Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'Settings.php' || $current_page == 'profile.php') ? 'active' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/settings.svg" alt="Icon" width="50px">
+                <p><a class="navbar-items" href="Settings.php">Settings</a></p>
             </div>
-            <div>
-                <p><a href="Savings.php">Savings</a></p>
-            </div>            
-        </div>
-
-        <!-- Settings Section -->
-        <div class="Settings-Nav <?php echo ($current_page == 'Settings.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/settings.svg" alt="Icon" width="50px">
-            </div>
-            <div>
-                <p><a href="Settings.php">Settings</a></p>
-            </div>
-        </div>
-
-        <div class="Logo-Nav" id="Nav_Side">
-            <div class="Penny_Logo">
-                <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
+            <!-- Logo in the navbar -->
+            <div class="Logo-Nav" id="Nav_Side">
+                <div class="Penny_Logo">
+                    <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
+                </div>
             </div>
         </div>
     </div>
 
-<div class="content">
-    <div class="right-container mt-5">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h2 class="card-title">Income List</h2>
-                    <div>
-                        <a href="AddIncome.php">
-                            <button class="btn btn-outline-light me-2">+ New Income</button>
-                        </a>
-                        <form class="search-form" action="" method="GET">
-                            <input type="search" name="query" placeholder="Search here ...">
-                            <button type="submit">
-                                <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
+    <section class="main-section">
+            <div class="main-container">
+                <div class="content">
+                    <!-- Top bar section -->
+                    <div class="top-bar" id="expense">
+                        <h1 class="header">Income</h1>
+                        <div class="button-group">
+                            <a href="AddIncome.php" class="btn btn-outline-light">+ Add Income</a>
+                            <button class="btn btn-outline-light" id="sortBtn">
+                                <i class="fas fa-search"></i>
                             </button>
-                        </form> 
-                        
-                        </button>
+                        </div>
                     </div>
-                </div>
-                <table class="table">
-                    <thead>
-                        <tr class="header-row">
-                            <th class="table-header">Source of Income</th>
-                            <th class="table-header">Amount</th>
-                            <th class="table-header">Category</th>
-                            <th class="table-header">Bank</th>
-                            <th class="table-header">Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
+                    <!-- Put main code here -->
+
+                    <table class="table-approval">
+                        <thead>
+                            <tr class="header-row">
+                                <th class="table-header">Source of Income</th>
+                                <th class="table-header">Amount</th>
+                                <th class="table-header">Category</th>
+                                <th class="table-header">Type of Investment</th>
+                                
+                            </tr>
                         <?php
                  $sql = "SELECT * FROM income";
                  $result = $conn->query($sql);
@@ -302,7 +274,8 @@ if (isset($_GET['id'])) {
             </form>
         </div>
     </div>
-</div>
+    </div>
+</section>
 
     <script>
         var modal = document.getElementById("sortModal");
