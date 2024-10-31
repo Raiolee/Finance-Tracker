@@ -5,7 +5,7 @@ include '../connection/config.php';
 
 $userId = $_SESSION['user_id'] ?? null;
 
-function searchGoalsBySubject($conn, $userId, $query) {
+function searchIncomeBySubject($conn, $userId, $query) {
     $sql = "SELECT subject, category FROM income WHERE user_id = ? AND subject LIKE ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
@@ -21,7 +21,7 @@ function searchGoalsBySubject($conn, $userId, $query) {
 if (isset($_GET['query'])) {
     $searchQuery = $_GET['query'];
     try {
-        $result = searchGoalsBySubject($conn, $userId, $searchQuery);
+        $result = searchIncomeBySubject($conn, $userId, $searchQuery);
     } catch (Exception $e) {
         $error_message = $e->getMessage();
     }
