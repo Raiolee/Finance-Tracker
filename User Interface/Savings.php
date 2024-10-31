@@ -71,34 +71,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         } elseif ($action === 'another_action') {
             // Collect form data
-            $goal = $_POST['subject'] ?? ''; // Now matches the JavaScript
-            $amount = $_POST['amount'] ?? 0; // Corrected name from 'saivings_amount'
+            $goal = $_POST['subject'] ?? ''; 
+            $amount = $_POST['amount'] ?? 0; 
             $category = $_POST['category'] ?? '';
             $date = $_POST['date'] ?? '';
             $bank = $_POST['bank'] ?? '';
-
+            
             // Prepare the SQL statement for the other action
             $stmt = $conn->prepare("INSERT INTO user_db.savings (user_id, date, bank, subject, savings_amount, category) VALUES (?, ?, ?, ?, ?, ?)");
-
+            
             // Ensure $uid is defined; this should be set earlier in your code
             if (isset($uid)) {
+                // Bind parameters for the insert statement
                 $stmt->bind_param("isssis", $uid, $date, $bank, $goal, $amount, $category);
-
-                // Execute the statement
+        
+                // Execute the insert statement
                 if ($stmt->execute()) {
-                    // Redirect or provide success message
-                    header("Location: Savings.php?success=1");
-                    exit();
+                    // Prepare the SQL statement to update the balance
+                    $stmt2 = $conn->prepare("UPDATE user_db.bank SET balance = balance - ? WHERE user_id = ? AND bank = ?");
+                    $stmt2->bind_param("dis", $amount, $uid, $bank); // Bind parameters for the update
+        
+                    // Execute the update statement
+                    if ($stmt2->execute()) {
+                        // Redirect or provide success message
+                        header("Location: Savings.php?success=1");
+                        exit();
+                    } else {
+                        echo "Error updating balance: " . $stmt2->error; // Debugging message for update
+                    }
+        
+                    // Close the update statement
+                    $stmt2->close();
                 } else {
-                    echo "Error inserting data: " . $stmt->error; // This should help you debug any SQL errors
+                    echo "Error inserting data: " . $stmt->error; // Debugging message for insert
                 }
-
-                // Close the statement
+        
+                // Close the insert statement
                 $stmt->close();
             } else {
                 echo "User ID is not set."; // Ensure $uid is set correctly
             }
-        } else {
+        }
+         else {
             echo "Unknown action.";
         }
     } else {
@@ -257,24 +271,24 @@ if ($stmt3) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php
+                                <?php
                                     if (isset($result) && $result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             // Use the correct variables from the current row
                                             echo "<tr>
-                                                     <td>" . htmlspecialchars($row['user_bank_id']) . "</td>
-                                                     <td>" . htmlspecialchars($row['bank']) . "</td>
-                                                     <td>" . htmlspecialchars($row['balance']) . "</td>
-                                                     <td>
-                                                         <button onclick=\"BankForm('" . htmlspecialchars($row['bank']) . "')\">Allocate</button>
-                                                     </td>
-                                                 </tr>";
+                                                    <td>" . htmlspecialchars($row['user_bank_id']) . "</td>
+                                                    <td>" . htmlspecialchars($row['bank']) . "</td>
+                                                    <td>" . htmlspecialchars($row['balance']) . "</td>
+                                                    <td>
+                                                        <button onclick=\"BankForm('" . htmlspecialchars($row['bank']) . "', '" . htmlspecialchars($row['balance']) . "')\">Allocate</button>
+                                                    </td>
+                                                </tr>";
                                         }
-
                                     } else {
                                         echo "<tr><td colspan='4'>No results found</td></tr>"; // Ensure column span matches the number of columns
                                     }
-                                    ?>
+                                ?>
+
                                 </tbody>
                             </table><!--Table End-->
                         </div>
@@ -381,91 +395,94 @@ if ($stmt3) {
             document.getElementById('popup').style.display = 'block';
         }
 
-        function BankForm(bank) {
+        function BankForm(bank, balance) {
             document.getElementById('popup-title-Bank').innerText = `Manage Savings`;
 
             // Create the form HTML
             const formHTML = `
-        <p>Bank: ${bank}</p>
-        <form id="bank-form" method="post" action="">
-            <input type="hidden" name="action" value="another_action">
+                <p>Bank: ${bank}</p>
+                <p>Balance: ${balance}</p>
+                <form id="bank-form" method="post" action="">
+                    <input type="hidden" name="action" value="another_action">
 
-            
-            <label for="goal">Subject:</label>
-            <select class="var-input large" name="goal" id="goal">
-                ${getCategoryOptions()}
-            </select>
-            <br>
-            
-            <label for="amount">Amount:</label>
-            <input type="number" id="amount" name="amount" required>
-            <br>
+                    
+                    <label for="goal">Subject:</label>
+                    <select class="var-input large" name="goal" id="goal">
+                        ${getCategoryOptions()}
+                    </select>
+                    <br>
+                    
+                    <label for="amount">Amount:</label>
+                    <input type="number" id="amount" name="amount" required>
+                    <br>
 
-            <label for="date" class="Savings-Label">Date:</label>
-            <input type="date" id="date" name="date" required>
-            <br> 
-            
-            <label for="category">Category:</label>
-            <select class="var-input large" name="category" id="category">
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-            </select>
-            <br>
+                    <label for="date" class="Savings-Label">Date:</label>
+                    <input type="date" id="date" name="date" required>
+                    <br> 
+                    
+                    <label for="category">Category:</label>
+                    <select class="var-input large" name="category" id="category">
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                    <br>
 
-            <button type="submit">Submit</button>
-        </form>
-    `;
+                    <button type="submit">Submit</button>
+                </form>
+            `;
 
-            // Set the innerHTML of the popup description
-            document.getElementById('popup-description-Bank').innerHTML = formHTML;
+                    // Set the innerHTML of the popup description
+                    document.getElementById('popup-description-Bank').innerHTML = formHTML;
 
-            // Show the popup
-            document.getElementById('popup-Bank').style.display = 'block';
+                    // Show the popup
+                    document.getElementById('popup-Bank').style.display = 'block';
 
-            // Attach an event listener to handle form submission
-            document.getElementById('bank-form').addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent default form submission
+                    // Attach an event listener to handle form submission
+                    document.getElementById('bank-form').addEventListener('submit', function (event) {
+                        event.preventDefault(); // Prevent default form submission
 
-                // Retrieve values from the form
-                const bankValue = bank; // The bank passed to the function
-                const goal = document.getElementById('goal').value; // This is the subject now
-                const amount = document.getElementById('amount').value;
-                const date = document.getElementById('date').value; // Make sure the ID is 'date'
-                const category = document.getElementById('category').value;
+                        // Retrieve values from the form
+                        const balanceValue = balance;
+                        const bankValue = bank; // The bank passed to the function
+                        const goal = document.getElementById('goal').value; // This is the subject now
+                        const amount = document.getElementById('amount').value;
+                        const date = document.getElementById('date').value; // Make sure the ID is 'date'
+                        const category = document.getElementById('category').value;
 
-                // Process the data as needed
-                console.log(`Bank: ${bankValue}, Subject: ${goal}, Amount: ${amount}, Date: ${date}, Category: ${category}`);
+                        // Process the data as needed
+                        console.log(`Bank: ${bankValue}, Subject: ${goal}, Amount: ${amount}, Date: ${date}, Category: ${category}`);
 
-                // Send the data to the server using fetch
-                fetch(window.location.href, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        action: 'another_action',
-                        bank: bankValue,
-                        subject: goal,  // Changed from 'goal' to 'subject'
-                        amount: amount,
-                        date: date,
-                        category: category,
-                    }),
+                        // Send the data to the server using fetch
+                        fetch(window.location.href, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: new URLSearchParams({
+                                action: 'another_action',
+                                balance: balanceValue,
+                                bank: bankValue,
+                                subject: goal,  // Changed from 'goal' to 'subject'
+                                amount: amount,
+                                date: date,
+                                category: category,
+                            }),
 
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            // Handle successful response
-                            document.getElementById('popup-Bank').style.display = 'none'; // Hide the popup
-                            window.location.href = 'Savings.php?success=1'; // Redirect on success
-                        } else {
-                            console.error('Error:', response.statusText);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Request failed:', error);
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    // Handle successful response
+                                    document.getElementById('popup-Bank').style.display = 'none'; // Hide the popup
+                                    window.location.href = 'Savings.php?success=1'; // Redirect on success
+                                } else {
+                                    console.error('Error:', response.statusText);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Request failed:', error);
+                            });
                     });
-            });
-        }
+                }
 
 
 
