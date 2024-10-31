@@ -407,8 +407,8 @@ if ($stmt3) {
             
             <label for="category">Category:</label>
             <select class="var-input large" name="category" id="category">
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
             </select>
             <br>
 
