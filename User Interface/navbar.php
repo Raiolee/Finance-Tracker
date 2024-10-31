@@ -66,7 +66,7 @@ if ($user && $user['user_dp']) {
     <!-- Savings Nav Item -->
     <div class="navbar-div <?php echo ($current_page == 'Savings.php') ? 'active' : ''; ?>" id="Nav_Button">
         <img class="navbar-icon" src="../Assets/Icons/reports.svg" alt="Icon">
-        <p><a class="navbar-items" href="Savings.php">Savings</a></p>
+        <p><a class="navbar-items" href="Savings.php">Banks</a></p>
     </div>
 
     <!-- Settings Nav Item -->

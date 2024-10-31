@@ -54,8 +54,8 @@ if (isset($_POST["Login"])) {
             <div class='alert alert-danger'><?php echo $error_message; ?></div>
         <?php endif; ?>
         <form class="column" action="" method="POST">
-            <input class="form-control bg-dark text-light" type="email" placeholder="Email" name="email" id="email" required></input>
-            <input class="form-control bg-dark text-light" type="password" placeholder="Password" name="password" id="password" required></input>
+            <input class="form-control var-input text-light" type="email" placeholder="Email" name="email" id="email" required></input>
+            <input class="form-control var-input text-light" type="password" placeholder="Password" name="password" id="password" required></input>
             <button type="submit" value="Login" name="Login" class="btn btn-custom w-100 mb-3">Log in</button>
             <p>Don't have an account? <a href="register.php">Register</a></p>
             <a class="font" href="forgot-password.php">Forgot Password</a>
