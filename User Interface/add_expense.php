@@ -102,7 +102,7 @@ if ($user['user_dp']) {
         <!-- Main Section -->
         <section class="main-section">
             <div class="main-container">
-                <div class="content">
+                <div class="content scrollable-content">
                     <div class="top-bar">
                         <h1 class="header">Add an Expense</h1>
                     </div>
@@ -125,7 +125,7 @@ if ($user['user_dp']) {
                                     <label for="name" class="form-labels row">Date</label>
                                     <input type="date" class="date-input" id="name" name="date">
                                     <label for="recurrence_type" class="form-labels row">Frequency</label>
-                                    <select class="var-input large" name="recurrence_type" id="recurrence_type">
+                                    <select class="var-input large pointer" name="recurrence_type" id="recurrence_type">
                                         <option value="weekly">Weekly</option>
                                         <option value="monthly">Monthly</option>
                                         <option value="custom">Custom</option>
@@ -147,7 +147,7 @@ if ($user['user_dp']) {
                                     <input class="radio" type="radio" name="reimbursable" id="reimbursable-no" value="no" checked>
                                     <label class="form-labels center no-margin" for="reimbursable-no">No</label>
                                 </div>
-                                
+
                                 <!-- file input/ photo input -->
                                 <label for="attachment" class="file-label" id="file-label">Attach Receipt</label>
                                 <input class="file-input" type="file" name="attachment" accept="image/*" id="file-input">

@@ -17,11 +17,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("s", $email);
         $stmt->execute();
 
-        $alertMessage = "<div class='alert alert-success'>Your account is verified! You will be redirected in 5 seconds. <br> Didn't redirect? <a href='../index.php'>Click here</a>.</div>";
+        $alertMessage = "<div class='alert alert-success'>Your account is verified! You will be redirected in 5 seconds. <br> Didn't redirect? <a href='../login.php'>Click here</a>.</div>";
         // Script for redirection
         $alertMessage .= "<script>
             setTimeout(function() {
-                window.location.href = '../index.php';
+                window.location.href = '../login.php';
             }, 5000);
         </script>";
     } else {
@@ -34,15 +34,28 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Verify OTP</title></head>
-<body>
-    <div class="container">
-        <h2>Enter OTP</h2>
+
+<head>
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <title>Verify OTP</title>
+</head>
+
+<body class="bg-dark text-light d-flex align-items-center justify-content-center" style="height: 100vh; margin: 0;">
+    <div class="container bg-secondary p-4 rounded shadow text-center" style="max-width: 400px;">
+        <h2 class="mb-3">Enter OTP</h2>
         <form action="verify.php?email=<?= htmlspecialchars($email) ?>" method="POST">
-            <input type="text" name="otp" placeholder="Enter OTP" required>
-            <button type="submit">Verify</button>
+            <div class="mb-3">
+                <input type="text" name="otp" class="form-control bg-dark text-light" placeholder="Enter OTP" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Verify</button>
         </form>
-        <?= $alertMessage ?>
+        <div class="mt-3">
+            <?= $alertMessage ?>
+        </div>
     </div>
+    <!-- Bootstrap JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
+
 </html>

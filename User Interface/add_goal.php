@@ -62,13 +62,13 @@ if ($user['user_dp']) {
             </div>
 
             <!-- Expenses Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'Dashboard.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
                 <p><a class="navbar-items" href="expense.php">Expenses</a></p>
             </div>
 
             <!-- Income Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'income.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
+            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
                 <img class="navbar-icon" src="../Assets/Icons/income.svg" alt="Icon">
                 <p><a class="navbar-items" href="Income.php">Income</a></p>
             </div>
@@ -100,36 +100,61 @@ if ($user['user_dp']) {
         <!-- Main Section -->
         <section class="main-section">
             <div class="main-container">
-                <div class="content">
-                    <!-- Top bar section -->
-                    <div class="top-bar space-between" id="expense">
-                        <h1 class="header">Goals</h1>
-                        <a href="add_goal.php"><button class="New-Saving" id="NewExpenseButton">+ Add a Goal</button></a>
+                <div class="content scrollable-content">
+                    <div class="top-bar">
+                        <h1 class="header">Add a Goal</h1>
                     </div>
-                    <!-- Put main code here -->
+                    <form id="addExpense" class="pfp-form" action="add_expense.php" method="POST" enctype="multipart/form-data">
+                        <div class="big-divider full center">
+                            <div class="row-form no-margin large">
+                                <div class="column-form x-large">
+                                    <!-- Subject -->
+                                    <label for="name" class="form-labels row">Subject</label>
+                                    <input type="text" class="var-input medium" id="name" name="name">
+                                    <!-- Category -->
+                                    <label for="category" class="form-labels row medium">Category</label>
+                                    <select class="date-input medium" id="category" name="category">
+                                        <option value="food">Food</option>
+                                        <option value="transport">Transport</option>
+                                        <option value="entertainment">Entertainment</option>
+                                        <option value="utilities">Utilities</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="column-form x-large">
+                                    <!-- Date -->
+                                    <label for="name" class="form-labels row">Start Date</label>
+                                    <input type="date" class="date-input" id="name" name="name">
+                                    <label for="recurrence_type" class="form-labels row">Frequency</label>
+                                    <select class="var-input medium pointer" name="recurrence_type" id="recurrence_type">
+                                        <option value="weekly">Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                </div>
+                                
+                                <label for="name" class="form-labels">Amount</label>
+                                <input type="number" class="var-input x-large" id="amount" name="amount" step="100.00">
+                                <label for="name" class="form-labels">Description</label>
+                                <textarea class="text-input x-large" name="description" id="description"></textarea>
 
-                    <table class="table-approval">
-                        <thead>
-                            <tr> <!-- The headers here are the only values I want to be seen in the goals section -->
-                                <th>SUBJECT</th>
-                                <th>CATEGORY</th>
-                                <th>BANK</th>
-                                <th>DATE</th>
-                                <th>PROGRESS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Put PHP code here (Back-End boys)-->
+                                <!-- file input/ photo input -->
+                                <label for="attachment" class="file-label" id="file-label">Attach Receipt</label>
+                                <input class="file-input" type="file" name="attachment" accept="image/*" id="file-input">
 
-                        </tbody>
-                    </table>
-
+                                <div class="btn-options center" id="report-btns">
+                                    <a href="goal.php" class="link-btn"><button type="button" class="cancel">Cancel</button></a>
+                                    <button type="submit" name="save" class="save">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </section>
     </div>
+    </div>
     <!-- APIs (Put APIs below this comment)-->
-
 </body>
 
 </html>
