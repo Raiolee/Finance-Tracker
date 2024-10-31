@@ -51,7 +51,7 @@
                                         <option value="custom">Custom</option>
                                     </select>
                                 </div>
-                                
+
                                 <label for="name" class="form-labels">Amount</label>
                                 <input type="number" class="var-input x-large" id="amount" name="amount" step="100.00">
                                 <label for="name" class="form-labels">Description</label>
@@ -62,7 +62,7 @@
                                 <input class="file-input" type="file" name="attachment" accept="image/*" id="file-input">
 
                                 <div class="btn-options center" id="report-btns">
-                                    <a href="goal.php" class="link-btn"><button type="button" class="cancel">Cancel</button></a>
+                                    <a href="goals.php" class="link-btn"><button type="button" class="cancel">Cancel</button></a>
                                     <button type="submit" name="save" class="save">Submit</button>
                                 </div>
                             </div>
@@ -71,7 +71,6 @@
                 </div>
             </div>
         </section>
-    </div>
     </div>
     <!-- APIs (Put APIs below this comment)-->
 </body>

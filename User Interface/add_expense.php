@@ -44,6 +44,7 @@
                                     <input type="date" class="date-input" id="name" name="date">
                                     <label for="recurrence_type" class="form-labels row">Frequency</label>
                                     <select class="var-input large pointer" name="recurrence_type" id="recurrence_type">
+                                        <option value="weekly">Once</option>
                                         <option value="weekly">Weekly</option>
                                         <option value="monthly">Monthly</option>
                                         <option value="custom">Custom</option>

@@ -1,5 +1,6 @@
 <?php
 include '../connection/config.php';
+include '../APIs/goals_api.php'; // Include the new API file
 
 // Create a connection
 $conn = new mysqli($DB_Host, $DB_User, $DB_Password, $DB_Name);
@@ -20,10 +21,11 @@ if (!isset($_SESSION["user"])) {
 
 // Get the user ID
 $userId = $_SESSION['user_id'] ?? null;
+$username = $_SESSION["name"];
 
 // Error handling for unknown user ID
 if (empty($userId)) {
-    $error_message = "User  ID is not set. Please log in again.";
+    $error_message = "User ID is not set. Please log in again.";
 } else {
     // Handle form submission
     if (isset($_POST['submit-form'])) {
@@ -65,6 +67,7 @@ try {
     $error_message = $e->getMessage();
 }
 
+<<<<<<< HEAD
 // Function definitions
 $goalsAndSavings = getGoalsAndSavings($conn, $userId);
 function fetchGoals($conn, $userId) {
@@ -328,19 +331,12 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../Styles/Interface1.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/styles.scss">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Goals</title>
 </head>
-<body class="container">
-    <div class="nav-bar">
-        <div class="Profile">
-            <div class="Profile_img">
-                <img src="https://picsum.photos/100/100" alt="" width="110">
-            </div>
-        </div>
 
+<<<<<<< HEAD
         <div class="user-name">
         </div>
 
@@ -505,8 +501,157 @@ $conn->close();
 
                     </tbody>
                 </table>
+=======
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="Profile">
+                <div class="Profile_img">
+                    <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" width="110">
+                </div>
+>>>>>>> f2195ada70cbbbcbba663ef04a3b1cab9d14c5c2
             </div>
 
+            <div class="user-name">
+                <p><?php echo htmlspecialchars($username); ?></p>
+            </div>
+
+            <!-- Home Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'Dashboard.php') ? 'active' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/home.svg" alt="Icon">
+                <p><a class="navbar-items" href="Dashboard.php">Home</a></p>
+            </div>
+
+            <!-- Expenses Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
+                <p><a class="navbar-items" href="expense.php">Expenses</a></p>
+            </div>
+
+            <!-- Income Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'Income.php') ? 'active' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/income.svg" alt="Icon">
+                <p><a class="navbar-items" href="Income.php">Income</a></p>
+            </div>
+
+            <!-- Goal Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'Goals.php') ? 'active' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/approvals.svg" alt="Icon">
+                <p><a class="navbar-items" href="Goals.php">Goals</a></p>
+            </div>
+
+            <!-- Savings Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'Savings.php') ? 'active' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/reports.svg" alt="Icon">
+                <p><a class="navbar-items" href="Savings.php">Banks</a></p>
+            </div>
+
+            <!-- Settings Nav Item -->
+            <div class="navbar-div <?php echo ($current_page == 'Settings.php' || $current_page == 'profile.php') ? 'active' : ''; ?>" id="Nav_Button">
+                <img class="navbar-icon" src="../Assets/Icons/settings.svg" alt="Icon" width="50px">
+                <p><a class="navbar-items" href="Settings.php">Settings</a></p>
+            </div>
+
+            <div class="Logo-Nav" id="Nav_Side">
+                <div class="Penny_Logo">
+                    <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
+                </div>
+            </div>
+        </div>
+        <section class="main-section">
+            <div class="main-container">
+                <div class="content scrollable">
+                    <!-- Top bar section -->
+                    <div class="top-bar space-between" id="expense">
+                        <h1 class="header">Goals</h1>
+                        <a href="add_goal.php"><button class="New-Saving">+ Add a Goal</button></a>
+
+                        <!-- Filter form -->
+                        <form class="filter-form" action="" method="GET">
+                            <select id="FilterGoalsCategory" name="FilterGoalsCategory">
+                                <option value="" disabled selected>Category</option>
+                                <option value="Travels">Travels</option>
+                                <option value="Miscellaneous">Miscellaneous</option>
+                                <option value="Others">Others</option>
+                            </select>
+                            <button type="submit">
+                                <i class="fa"><img src="../Assets/Icons/filter.svg" alt="" width="20px"></i>
+                            </button>
+                        </form>
+
+                        <!-- Search form -->
+                        <form class="search-form" action="" method="GET">
+                            <input type="search" name="query" placeholder="Search here ...">
+                            <button type="submit">
+                                <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Goals table -->
+                    <table class="table-approval">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <form class="Subject" action="" method="GET">
+                                        <button type="submit" name="sortOrder" value="<?php echo htmlspecialchars($nextSortOrder); ?>">
+                                            SUBJECT
+                                        </button>
+                                    </form>
+                                </th>
+                                <th>CATEGORY</th>
+                                <th>
+                                    <form class="accomplishmentDate" action="" method="GET">
+                                        <button type="submit" name="sortOrderDate" value="<?php echo htmlspecialchars($nextSortOrderDate); ?>">
+                                            ACCOMPLISHMENT DATE
+                                        </button>
+                                    </form>
+                                </th>
+                                <th>PROGRESS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if (isset($result) && $result->num_rows > 0) {
+                                $rowCounter = 0;
+                                foreach ($result as $row) {
+                                    $percentage = 0;
+                                    foreach ($goalsAndSavings as $goal) {
+                                        if ($goal['subject'] === $row['subject']) {
+                                            $percentage = $goal['percentage'];
+                                            break;
+                                        }
+                                    }
+                                    $rowClass = ($rowCounter % 2 == 0) ? 'row-color-1' : 'row-color-2';
+
+                                    echo "<tr class='" . htmlspecialchars($rowClass) . "'>
+                                    <td><div class='sub'>" . htmlspecialchars($row['subject']) . "</div></td>
+                                    <td>" . htmlspecialchars($row['category']) . "</td>
+                                    <td>" . htmlspecialchars($predictions[$row['subject']] ?? 'N/A') . "</td>
+                                    <td class='progress-row'>
+                                        <div class='progress-container'>
+                                            <div class='progress-bar1' style='width: " . htmlspecialchars($percentage) . "%;'></div>
+                                        </div>
+                                        <div class='progress-text'>
+                                            <span>" . htmlspecialchars($percentage) . "%</span>
+                                        </div>
+                                    </td>
+                                </tr>";
+
+                                    $rowCounter++;
+                                }
+                            } else {
+                                echo "<tr><td colspan='4'>No results found</td></tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </section>
+        
+        <section class="newGoalForm">
             <div id="newGoalForm" class="new-goal-form" style="display:none;">
                 <div class="newform">
                     <h1 id="goals-title">New Goal</h1>
@@ -550,48 +695,8 @@ $conn->close();
                     <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
                 <?php endif; ?>
             </div>
-        </div>
+        </section>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if URL contains #newGoalForm, show the form if true
-            if (window.location.hash === '#newGoalForm') {
-                const rightContainer = document.querySelector('.inner');
-                const form = document.getElementById('newGoalForm');
-
-                rightContainer.style.display = 'none'; // Hide the right container
-                form.style.display = 'block'; // Show the new goal form
-            }
-
-            // Show form when the "New Goal" button is clicked and update the URL
-            document.getElementById('newGoalsBTN').addEventListener('click', function() {
-                const rightContainer = document.querySelector('.inner');
-                const form = document.getElementById('newGoalForm');
-
-                rightContainer.style.display = 'none'; // Hide the right container
-                form.style.display = 'block'; // Show the new goal form
-
-            });
-        });
-
-        // Close form and clear URL hash
-        function closeGoalForm() {
-            const rightContainer = document.querySelector('.inner');
-            const form = document.getElementById('newGoalForm');
-
-            form.style.display = 'none'; // Hide the new goal form
-            rightContainer.style.display = 'block'; // Show the right container again
-            clearForm(); // Clear the form fields
-
-            // Remove the URL fragment
-            window.history.pushState({}, '', window.location.pathname);
-        }
-
-        // Clear the form
-        function clearForm() {
-            document.getElementById('GoalForm').reset(); // Clear all form fields
-        }
-    </script>
 </body>
+
 </html>
