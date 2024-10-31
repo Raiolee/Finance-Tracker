@@ -39,20 +39,10 @@ $conn->close();
     <!-- Bootstrap CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <title>Verify OTP</title>
-    <style>
-        .btn-custom {
-            background-color: #00dac6;
-            border-color: #00dac6;
-            color: #fff;
-        }
-        .btn-custom:hover {
-            background-color: #00b7a9;
-            border-color: #00b7a9;
-        }
-    </style>
+    <link rel="stylesheet" href="../Styles/non-user.css">
 </head>
 
-<body class="bg-dark text-light d-flex align-items-center justify-content-center" style="height: 100vh; margin: 0;">
+<body class="bg-dark text-light d-flex align-items-center justify-content-center font" style="height: 100vh; margin: 0;">
     <div class="container bg-secondary p-4 rounded shadow text-center" style="max-width: 400px;">
         <h2 class="mb-3">Enter OTP</h2>
         <p class="mb-3">An OTP has been sent to your email address. Please enter the OTP to verify your account.</p>
