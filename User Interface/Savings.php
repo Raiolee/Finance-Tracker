@@ -71,36 +71,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         } elseif ($action === 'another_action') {
             // Collect form data
-            $goal = $_POST['goal']; // This should be the subject
-            $amount = $_POST['amount'];
-            $category = $_POST['category'];
-            $date = $_POST['date']; // Ensure this is collected from the form
-            $bank = $_POST['bank']; // Collect bank value as well
-        
+            $goal = $_POST['subject'] ?? ''; // Now matches the JavaScript
+            $amount = $_POST['amount'] ?? 0; // Corrected name from 'saivings_amount'
+            $category = $_POST['category'] ?? '';
+            $date = $_POST['date'] ?? '';
+            $bank = $_POST['bank'] ?? '';
+
             // Prepare the SQL statement for the other action
             $stmt = $conn->prepare("INSERT INTO user_db.savings (user_id, date, bank, subject, savings_amount, category) VALUES (?, ?, ?, ?, ?, ?)");
-        
-            // Ensure $user_id is defined; this should be set earlier in your code
+
+            // Ensure $uid is defined; this should be set earlier in your code
             if (isset($uid)) {
                 $stmt->bind_param("isssis", $uid, $date, $bank, $goal, $amount, $category);
-        
+
                 // Execute the statement
                 if ($stmt->execute()) {
                     // Redirect or provide success message
                     header("Location: Savings.php?success=1");
                     exit();
                 } else {
-                    echo "Error inserting data: " . $stmt->error;
+                    echo "Error inserting data: " . $stmt->error; // This should help you debug any SQL errors
                 }
-        
+
                 // Close the statement
                 $stmt->close();
             } else {
-                echo "User ID is not set.";
+                echo "User ID is not set."; // Ensure $uid is set correctly
             }
-        }
-        
-        else {
+        } else {
             echo "Unknown action.";
         }
     } else {
@@ -304,38 +302,38 @@ if ($stmt3) {
                                     </div>
                                 </div>
                             </form>
-                    </div> <!--Form End-->
+                        </div> <!--Form End-->
 
-                </div>
+                    </div>
 
-                <?php if (isset($error_message)): ?>
-                    <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
-                <?php endif; ?>
+                    <?php if (isset($error_message)): ?>
+                        <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
+                    <?php endif; ?>
 
-                <div id="popup" class="popup" style="display:none;">
-                    <div class="popup-content">
-                        <h2 id="popup-title"></h2>
-                        <p id="popup-description"></p>
-                        <div class="popup-buttons">
-                            <button id="cancel-btn" onclick="closePopup()">Close</button>
+                    <div id="popup" class="popup" style="display:none;">
+                        <div class="popup-content">
+                            <h2 id="popup-title"></h2>
+                            <p id="popup-description"></p>
+                            <div class="popup-buttons">
+                                <button id="cancel-btn" onclick="closePopup()">Close</button>
+                            </div>
+                        </div>
+                    </div> <!-- Popup End -->
+                    <div id="popup-Bank" class="popup" style="display: none;">
+                        <div class="popup-content">
+                            <h2 id="popup-title-Bank"></h2>
+                            <p id="popup-description-Bank"></p>
+                            <div class="popup-buttons">
+                                <button id="cancel-btn" onclick="closePopupBank()">Close</button>
+                            </div>
                         </div>
                     </div>
-                </div> <!-- Popup End -->
-                <div id="popup-Bank" class="popup" style="display: none;">
-                    <div class="popup-content">
-                        <h2 id="popup-title-Bank"></h2>
-                        <p id="popup-description-Bank"></p>
-                        <div class="popup-buttons">
-                            <button id="cancel-btn" onclick="closePopupBank()">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div><!--Content End-->
+                </div><!--Content End-->
 
 
 
-    </div> <!--Main-Container End-->
-    </section> <!--Section End-->
+            </div> <!--Main-Container End-->
+        </section> <!--Section End-->
 
     </div>
 
@@ -384,13 +382,14 @@ if ($stmt3) {
         }
 
         function BankForm(bank) {
-    document.getElementById('popup-title-Bank').innerText = `Manage Savings`;
+            document.getElementById('popup-title-Bank').innerText = `Manage Savings`;
 
-    // Create the form HTML
-    const formHTML = `
+            // Create the form HTML
+            const formHTML = `
         <p>Bank: ${bank}</p>
         <form id="bank-form" method="post" action="">
             <input type="hidden" name="action" value="another_action">
+
             
             <label for="goal">Subject:</label>
             <select class="var-input large" name="goal" id="goal">
@@ -417,58 +416,56 @@ if ($stmt3) {
         </form>
     `;
 
-    // Set the innerHTML of the popup description
-    document.getElementById('popup-description-Bank').innerHTML = formHTML;
+            // Set the innerHTML of the popup description
+            document.getElementById('popup-description-Bank').innerHTML = formHTML;
 
-    // Show the popup
-    document.getElementById('popup-Bank').style.display = 'block';
+            // Show the popup
+            document.getElementById('popup-Bank').style.display = 'block';
 
-    // Optionally, reset the form if it's already displayed
-    document.getElementById('bank-form').reset();
+            // Attach an event listener to handle form submission
+            document.getElementById('bank-form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
 
-    // Attach an event listener to handle form submission
-    document.getElementById('bank-form').addEventListener('submit', function (event) {
-        event.preventDefault(); // Prevent default form submission
-        
-        // Retrieve values from the form
-        const bankValue = bank; // The bank passed to the function
-        const goal = document.getElementById('goal').value; // This is the subject now
-        const amount = document.getElementById('amount').value;
-        const date = document.getElementById('date').value; // Make sure the ID is 'date'
-        const category = document.getElementById('category').value;
+                // Retrieve values from the form
+                const bankValue = bank; // The bank passed to the function
+                const goal = document.getElementById('goal').value; // This is the subject now
+                const amount = document.getElementById('amount').value;
+                const date = document.getElementById('date').value; // Make sure the ID is 'date'
+                const category = document.getElementById('category').value;
 
-        // Process the data as needed
-        console.log(`Bank: ${bankValue}, Subject: ${goal}, Amount: ${amount}, Date: ${date}, Category: ${category}`);
+                // Process the data as needed
+                console.log(`Bank: ${bankValue}, Subject: ${goal}, Amount: ${amount}, Date: ${date}, Category: ${category}`);
 
-        // Send the data to the server using fetch
-        fetch(window.location.href, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: new URLSearchParams({
-                action: 'another_action',
-                bank: bankValue,
-                goal: goal,
-                amount: amount,
-                date: date,
-                category: category,
-            }),
-        })
-        .then(response => {
-            if (response.ok) {
-                // Handle successful response
-                document.getElementById('popup-Bank').style.display = 'none'; // Hide the popup
-                window.location.href = 'Savings.php?success=1'; // Redirect on success
-            } else {
-                console.error('Error:', response.statusText);
-            }
-        })
-        .catch(error => {
-            console.error('Request failed:', error);
-        });
-    });
-}
+                // Send the data to the server using fetch
+                fetch(window.location.href, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'another_action',
+                        bank: bankValue,
+                        subject: goal,  // Changed from 'goal' to 'subject'
+                        amount: amount,
+                        date: date,
+                        category: category,
+                    }),
+
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Handle successful response
+                            document.getElementById('popup-Bank').style.display = 'none'; // Hide the popup
+                            window.location.href = 'Savings.php?success=1'; // Redirect on success
+                        } else {
+                            console.error('Error:', response.statusText);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Request failed:', error);
+                    });
+            });
+        }
 
 
 
