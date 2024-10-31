@@ -97,67 +97,15 @@ if (isset($_GET['id'])) {
     <title>Income List</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../Styles/ViewIncome.css">
+    <link rel="stylesheet" href="../Styles/styles.css">
     <link href='https://fonts.googleapis.com/css?family=Cabin Condensed' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-    <div class="navbar">
-            <!-- Profile Picture -->
-            <div class="Profile">
-                <div class="Profile_img">
-                    <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" width="110">
-                </div>
-            </div>
-            <!-- Username Section -->
-            <div class="user-name">
-                
-            </div>
+    <?php include '../User Interface/navbar.php'; ?>
 
-            <!-- Home Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Dashboard.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/home.svg" alt="Icon">
-                <p><a class="navbar-items" href="Dashboard.php">Home</a></p>
-            </div>
-
-            <!-- Expenses Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
-                <p><a class="navbar-items" href="expense.php">Expenses</a></p>
-            </div>
-
-            <!-- Income Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'income.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/income.svg" alt="Icon">
-                <p><a class="navbar-items" href="Income.php">Income</a></p>
-            </div>
-
-            <!-- Goal Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Goals.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/approvals.svg" alt="Icon">
-                <p><a class="navbar-items" href="Goals.php">Goals</a></p>
-            </div>
-
-            <!-- Savings Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Savings.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/reports.svg" alt="Icon">
-                <p><a class="navbar-items" href="Savings.php">Savings</a></p>
-            </div>
-
-            <!-- Settings Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Settings.php' || $current_page == 'profile.php') ? 'active' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/settings.svg" alt="Icon" width="50px">
-                <p><a class="navbar-items" href="Settings.php">Settings</a></p>
-            </div>
-            <!-- Logo in the navbar -->
-            <div class="Logo-Nav" id="Nav_Side">
-                <div class="Penny_Logo">
-                    <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
-                </div>
-            </div>
-        </div>
-    </div>
 
     <section class="main-section">
             <div class="main-container">
@@ -180,9 +128,8 @@ if (isset($_GET['id'])) {
                                 <th class="table-header">Source of Income</th>
                                 <th class="table-header">Amount</th>
                                 <th class="table-header">Category</th>
-                                <th class="table-header">Type of Investment</th>
                                 <th class="table-header">Date</th>
-                                
+                                <th class="table-header">Bank</th>
                             </tr>
                         <?php
                  $sql = "SELECT * FROM income";
@@ -197,8 +144,8 @@ if (isset($_GET['id'])) {
                              echo "<td>" . htmlspecialchars($row['source']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['total']) . " " . htmlspecialchars($row['currency']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                             echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                              echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                             echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                              echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['income_id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
                              echo "</tr>";
                          }
