@@ -12,7 +12,7 @@ if (!isset($_SESSION["user_id"])) {
 $uid = $_SESSION["user_id"];
 
 // Prepare SQL to fetch expenses grouped by category
-$sql = "SELECT subject, SUM(total) as total_expense FROM expenses WHERE user_id = ? GROUP BY subject";
+$sql = "SELECT subject, SUM(amount) as total_expense FROM expenses WHERE user_id = ? GROUP BY subject";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $uid);
 $stmt->execute();

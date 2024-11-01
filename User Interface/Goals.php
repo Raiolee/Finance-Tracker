@@ -67,7 +67,7 @@ try {
     $error_message = $e->getMessage();
 }
 
-<<<<<<< HEAD
+<<< HEAD
 // Function definitions
 $goalsAndSavings = getGoalsAndSavings($conn, $userId);
 function fetchGoals($conn, $userId) {
