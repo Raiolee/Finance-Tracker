@@ -245,9 +245,8 @@ $conn->close();
                     <?php endif; ?>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
     <script src="../js/goals-form.js"></script>
 </body>
-
 </html>

@@ -132,7 +132,7 @@ if ($stmt) {
 }
 
 // Fetch existing savings for the income
-$sql2 = "SELECT investment, total FROM user_db.income WHERE user_id = ?";
+$sql2 = "SELECT total FROM user_db.income WHERE user_id = ?";
 $stmt2 = $conn->prepare($sql2);
 
 if ($stmt2) {
