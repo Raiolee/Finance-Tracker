@@ -71,26 +71,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         } elseif ($action === 'another_action') {
             // Collect form data
-            $goal = $_POST['subject'] ?? ''; 
-            $amount = $_POST['amount'] ?? 0; 
+            $goal = $_POST['subject'] ?? '';
+            $amount = $_POST['amount'] ?? 0;
             $category = $_POST['category'] ?? '';
             $date = $_POST['date'] ?? '';
             $bank = $_POST['bank'] ?? '';
-            
+
             // Prepare the SQL statement for the other action
             $stmt = $conn->prepare("INSERT INTO user_db.savings (user_id, date, bank, subject, savings_amount, category) VALUES (?, ?, ?, ?, ?, ?)");
-            
+
             // Ensure $uid is defined; this should be set earlier in your code
             if (isset($uid)) {
                 // Bind parameters for the insert statement
                 $stmt->bind_param("isssis", $uid, $date, $bank, $goal, $amount, $category);
-        
+
                 // Execute the insert statement
                 if ($stmt->execute()) {
                     // Prepare the SQL statement to update the balance
                     $stmt2 = $conn->prepare("UPDATE user_db.bank SET balance = balance - ? WHERE user_id = ? AND bank = ?");
                     $stmt2->bind_param("dis", $amount, $uid, $bank); // Bind parameters for the update
-        
+
                     // Execute the update statement
                     if ($stmt2->execute()) {
                         // Redirect or provide success message
@@ -99,20 +99,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     } else {
                         echo "Error updating balance: " . $stmt2->error; // Debugging message for update
                     }
-        
+
                     // Close the update statement
                     $stmt2->close();
                 } else {
                     echo "Error inserting data: " . $stmt->error; // Debugging message for insert
                 }
-        
+
                 // Close the insert statement
                 $stmt->close();
             } else {
                 echo "User ID is not set."; // Ensure $uid is set correctly
             }
-        }
-         else {
+        } else {
             echo "Unknown action.";
         }
     } else {
@@ -179,76 +178,8 @@ if ($stmt3) {
 </head>
 
 <body>
-    <!-- All content is stored in container -->
     <div class="container">
-        <div class="burger" onclick="toggleMenu()">
-            <div class="burger-outer">
-                <div class="burger-icon">
-                    <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
-                </div>
-                <div class="search-icon">
-                    <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
-                </div>
-            </div>
-            <hr class="bottom-line">
-        </div> <!--Burger End-->
-
-        <div class="navbar" id="burger-nav-bar">
-            <!-- Profile Picture -->
-            <div class="Profile">
-                <div class="Profile_img">
-                    <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" width="110">
-                </div>
-            </div>
-            <!-- Username Section -->
-            <div class="user-name">
-                <p><?php echo htmlspecialchars($username); ?></p>
-            </div>
-
-            <!-- Home Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Dashboard.php') ? 'active-tab' : ''; ?>"
-                id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/home.svg" alt="Icon">
-                <p><a class="navbar-items" href="Dashboard.php">Home</a></p>
-            </div>
-
-            <!-- Expenses Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'expense.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
-                <p><a class="navbar-items" href="expense.php">Expenses</a></p>
-            </div>
-
-            <!-- Income Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Income.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/income.svg" alt="Icon">
-                <p><a class="navbar-items" href="Income.php">Income</a></p>
-            </div>
-
-            <!-- Goal Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Goals.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/approvals.svg" alt="Icon">
-                <p><a class="navbar-items" href="Goals.php">Goals</a></p>
-            </div>
-
-            <!-- Savings Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Savings.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/reports.svg" alt="Icon">
-                <p><a class="navbar-items" href="Savings.php">Savings</a></p>
-            </div>
-
-            <!-- Settings Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Settings.php' || $current_page == 'profile.php') ? 'active' : ''; ?>"
-                id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/settings.svg" alt="Icon" width="50px">
-                <p><a class="navbar-items" href="Settings.php">Settings</a></p>
-            </div>
-            <!-- Logo in the navbar -->
-            <div class="Logo-Nav" id="Nav_Side">
-                <div class="Penny_Logo">
-                    <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
-                </div>
-            </div>
-        </div>
+        <?php include("navbar.php") ?>
         <!-- Main Section -->
         <section class="main-section">
             <div class="main-container">
@@ -271,7 +202,7 @@ if ($stmt3) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php
+                                    <?php
                                     if (isset($result) && $result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             // Use the correct variables from the current row
@@ -287,7 +218,7 @@ if ($stmt3) {
                                     } else {
                                         echo "<tr><td colspan='4'>No results found</td></tr>"; // Ensure column span matches the number of columns
                                     }
-                                ?>
+                                    ?>
 
                                 </tbody>
                             </table><!--Table End-->
@@ -343,19 +274,12 @@ if ($stmt3) {
                         </div>
                     </div>
                 </div><!--Content End-->
-
-
-
             </div> <!--Main-Container End-->
         </section> <!--Section End-->
-
     </div>
 
-
     <script>
-
-
-        document.getElementById('BankButton').addEventListener('click', function () {
+        document.getElementById('BankButton').addEventListener('click', function() {
             const rightContainer = document.getElementById('Bank-Content');
             const form = document.getElementById('BankSavingForm');
 
@@ -431,58 +355,58 @@ if ($stmt3) {
                 </form>
             `;
 
-                    // Set the innerHTML of the popup description
-                    document.getElementById('popup-description-Bank').innerHTML = formHTML;
+            // Set the innerHTML of the popup description
+            document.getElementById('popup-description-Bank').innerHTML = formHTML;
 
-                    // Show the popup
-                    document.getElementById('popup-Bank').style.display = 'block';
+            // Show the popup
+            document.getElementById('popup-Bank').style.display = 'block';
 
-                    // Attach an event listener to handle form submission
-                    document.getElementById('bank-form').addEventListener('submit', function (event) {
-                        event.preventDefault(); // Prevent default form submission
+            // Attach an event listener to handle form submission
+            document.getElementById('bank-form').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default form submission
 
-                        // Retrieve values from the form
-                        const balanceValue = balance;
-                        const bankValue = bank; // The bank passed to the function
-                        const goal = document.getElementById('goal').value; // This is the subject now
-                        const amount = document.getElementById('amount').value;
-                        const date = document.getElementById('date').value; // Make sure the ID is 'date'
-                        const category = document.getElementById('category').value;
+                // Retrieve values from the form
+                const balanceValue = balance;
+                const bankValue = bank; // The bank passed to the function
+                const goal = document.getElementById('goal').value; // This is the subject now
+                const amount = document.getElementById('amount').value;
+                const date = document.getElementById('date').value; // Make sure the ID is 'date'
+                const category = document.getElementById('category').value;
 
-                        // Process the data as needed
-                        console.log(`Bank: ${bankValue}, Subject: ${goal}, Amount: ${amount}, Date: ${date}, Category: ${category}`);
+                // Process the data as needed
+                console.log(`Bank: ${bankValue}, Subject: ${goal}, Amount: ${amount}, Date: ${date}, Category: ${category}`);
 
-                        // Send the data to the server using fetch
-                        fetch(window.location.href, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            body: new URLSearchParams({
-                                action: 'another_action',
-                                balance: balanceValue,
-                                bank: bankValue,
-                                subject: goal,  // Changed from 'goal' to 'subject'
-                                amount: amount,
-                                date: date,
-                                category: category,
-                            }),
+                // Send the data to the server using fetch
+                fetch(window.location.href, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            action: 'another_action',
+                            balance: balanceValue,
+                            bank: bankValue,
+                            subject: goal, // Changed from 'goal' to 'subject'
+                            amount: amount,
+                            date: date,
+                            category: category,
+                        }),
 
-                        })
-                            .then(response => {
-                                if (response.ok) {
-                                    // Handle successful response
-                                    document.getElementById('popup-Bank').style.display = 'none'; // Hide the popup
-                                    window.location.href = 'Savings.php?success=1'; // Redirect on success
-                                } else {
-                                    console.error('Error:', response.statusText);
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Request failed:', error);
-                            });
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            // Handle successful response
+                            document.getElementById('popup-Bank').style.display = 'none'; // Hide the popup
+                            window.location.href = 'Savings.php?success=1'; // Redirect on success
+                        } else {
+                            console.error('Error:', response.statusText);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Request failed:', error);
                     });
-                }
+            });
+        }
 
 
 
@@ -494,7 +418,7 @@ if ($stmt3) {
             document.getElementById('popup-Bank').style.display = 'none';
         }
 
-        window.onclick = function (event) {
+        window.onclick = function(event) {
             if (event.target == document.getElementById('popup')) {
                 closePopup();
             }
@@ -535,7 +459,6 @@ if ($stmt3) {
 
             return subjects.map(subject => `<option value="${subject}">${subject}</option>`).join('');
         }
-
     </script>
 </body>
 
