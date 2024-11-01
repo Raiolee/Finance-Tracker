@@ -2,6 +2,23 @@
 include '../connection/config.php';
 session_start();
 $user_id = $_SESSION['user_id'];
+$username = $_SESSION["name"];
+// Fetch only the user_dp (profile picture) from the database
+$user_id = $_SESSION['user_id'];
+$query = "SELECT user_dp FROM user WHERE user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+
+if ($user && $user['user_dp']) {
+    $profile_pic = 'data:image/jpeg;base64,' . base64_encode($user['user_dp']);
+} else {
+    $profile_pic = '../Assets/blank-profile.webp';
+}
+
 function searchIncome($conn, $userId, $IncomesearchQuery) {
     $sql = "SELECT * FROM income WHERE user_id = ? AND (source LIKE ? OR date LIKE ?)";
     $stmt = $conn->prepare($sql);
