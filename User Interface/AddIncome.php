@@ -1,17 +1,11 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-//session_start();
-//$uid = $_SESSION["user_id"];
 include '../connection/config.php';
-
-
-$message = ''; // Variable to store success/error messages
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    session_start();
+    $uid = $_SESSION["user_id"];
+    
     // Get form data
     $date = $_POST['date'];
     $source = $_POST['source'];
@@ -69,8 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close connection
     $conn->close();
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -135,17 +127,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <select class="form-select" id="bank_name" name="bank_name" required>
                                     <option value="" disabled selected>Select a bank</option>
                                     <?php
-                                    $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";
-                                    $bankStmt = $conn->prepare($bankQuery);
-                                    $bankStmt->bind_param("i", $uid);
-                                    $bankStmt->execute();
-                                    $bankResult = $bankStmt->get_result();
-
-                                    while ($row = $bankResult->fetch_assoc()) {
-                                        echo '<option value="' . htmlspecialchars($row['bank']) . '">' . htmlspecialchars($row['bank']) . '</option>';
-                                    }
-
-                                    $bankStmt->close();
+                                        session_start();
+                                        $uid = $_SESSION["user_id"];
+                                        // Fetch bank names from the database
+                                        $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";
+                                        $bankStmt = $conn->prepare($bankQuery);
+                                        $bankStmt->bind_param("i", $uid);
+                                        $bankStmt->execute();
+                                        $bankResult = $bankStmt->get_result();
+                                        while ($row = $bankResult->fetch_assoc()) {
+                                            echo '<option value="' . htmlspecialchars($row['bank']) . '">' . htmlspecialchars($row['bank']) . '</option>';
+                                        }
+                                        $bankStmt->close();
                                     ?>
                                 </select>
                             </div>

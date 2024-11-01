@@ -1,91 +1,92 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 include '../connection/config.php';
-
-$userId = $_SESSION['user_id'] ?? null;
-
-function searchIncomeBySubject($conn, $userId, $query) {
-    $sql = "SELECT subject, category FROM income WHERE user_id = ? AND subject LIKE ?";
+session_start();
+$user_id = $_SESSION['user_id'];
+function searchIncome($conn, $userId, $IncomesearchQuery) {
+    $sql = "SELECT * FROM income WHERE user_id = ? AND (source LIKE ? OR date LIKE ?)";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
-        $likeQuery = "%{$query}%";
-        $stmt->bind_param("is", $userId, $likeQuery);
+        $likeQuery = "%{$IncomesearchQuery}%";
+        $stmt->bind_param("iss", $userId, $likeQuery, $likeQuery);
         $stmt->execute();
-        return $stmt->get_result();
+        $result = $stmt->get_result();
+        return $result;
     } else {
         throw new Exception("Error preparing statement: {$conn->error}");
     }
 }
 
-if (isset($_GET['query'])) {
-    $searchQuery = $_GET['query'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['incomeId'])) {
+    $incomeId = $_POST['incomeId'];
+
+    $sql = "DELETE FROM income WHERE income_id = ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        // Bind parameters to the prepared statement
+        $stmt->bind_param("i", $incomeId);
+        
+        // Start the transaction
+        $conn->begin_transaction();
+        
+        // Execute the first statement
+        if ($stmt->execute()) {
+            $total = $_POST['incomeTotal']; // Assuming the total amount is passed in the POST request
+            $uid = $_SESSION['user_id'];
+            $bank = $_POST['incomeBank']; // Assuming the bank name is passed in the POST request
+
+            echo "Total: $total, User ID: $uid, Bank: $bank";
+    
+            // Prepare the update statement
+            $updateStmt = $conn->prepare("UPDATE bank SET balance = balance - ? WHERE user_id = ? AND bank = ?");
+            if ($updateStmt === false) {
+                $conn->rollback();
+                throw new Exception("Prepare failed: {$conn->error}");
+            }
+    
+            // Bind parameters to the update statement
+            $updateStmt->bind_param("dis", $total, $uid, $bank);
+    
+            // Execute the update statement
+            if (!$updateStmt->execute()) {
+                $conn->rollback();
+                throw new Exception("Execute failed: {$updateStmt->error}");
+            }
+    
+            // Commit transaction
+            $conn->commit();
+        } else {
+            $conn->rollback();
+            throw new Exception("Execute failed for the first statement: {$stmt->error}");
+        }
+    } else {
+        echo "Error preparing statement: {$conn->error}";
+    }
+}
+
+function sortIncomeByDate($conn, $userId, $sortOrder) {
+    $sql = "SELECT * FROM income WHERE user_id = ? ORDER BY date " . ($sortOrder === 'asc' ? 'ASC' : 'DESC');
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result;
+    } else {
+        throw new Exception("Error preparing statement: {$conn->error}");
+    }
+}
+
+if (isset($_GET['sortIncomeDate'])) {
+    $sortOrder = $_GET['sortIncomeDate'];
+    $nextSortOrderDate = $sortOrder === 'asc' ? 'desc' : 'asc';
     try {
-        $result = searchIncomeBySubject($conn, $userId, $searchQuery);
+        $result = sortIncomeByDate($conn, $user_id, $sortOrder);
     } catch (Exception $e) {
         $error_message = $e->getMessage();
     }
+} else {
+    $nextSortOrderDate = 'asc';
 }
-
-// Handle Edit Operation
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['incomeId'])) {
-    $incomeId = $_POST['incomeId'];
-    $incomeSource = $_POST['incomeSource'];
-    $incomeTotal = $_POST['incomeTotal'];
-    $incomeCurrency = $_POST['incomeCurrency'];
-    $incomeCategory = $_POST['incomeCategory'];
-    $incomeInvestment = $_POST['incomeInvestment'];
-
-    // Prepare the SQL statement for updating the record
-    $stmt = $conn->prepare("UPDATE income SET source = ?, total = ?, currency = ?, category = ?, investment = ? WHERE income_id = ?");
-    
-    if ($stmt === false) {
-        die('Prepare failed: ' . htmlspecialchars($conn->error));
-    }
-
-    // Bind parameters
-    $stmt->bind_param("sssssi", $incomeSource, $incomeTotal, $incomeCurrency, $incomeCategory, $incomeInvestment, $incomeId);
-    
-    // Execute the statement and check for errors
-    if ($stmt->execute()) {
-        $message = "Record updated successfully!";
-    } else {
-        $message = "Error updating record: " . $stmt->error;
-    }
-
-    $stmt->close();
-    $conn->close();
-    header("Location: Income.php?message=" . urlencode($message)); // Redirect back with message
-    exit();
-}
-
-// Handle Delete Operation
-if (isset($_GET['id'])) {
-    $incomeId = $_GET['id'];
-
-    // Prepare the SQL statement for deleting the record
-    $stmt = $conn->prepare("DELETE FROM income WHERE income_id = ?");
-    
-    if ($stmt === false) {
-        die('Prepare failed: ' . htmlspecialchars($conn->error));
-    }
-
-    // Bind parameters
-    $stmt->bind_param("i", $incomeId);
-    
-    // Execute the statement and check for errors
-    if ($stmt->execute()) {
-        $message = "Record deleted successfully!";
-    } else {
-        $message = "Error deleting record: " . $stmt->error;
-    }
-
-    $stmt->close();
-    $conn->close();
-    header("Location: Income.php?message=" . urlencode($message)); // Redirect back with message
-    exit();
-}
-
 ?>
 
 
@@ -99,12 +100,11 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="../Styles/ViewIncome.css">
     <link rel="stylesheet" href="../Styles/styles.css">
     <link href='https://fonts.googleapis.com/css?family=Cabin Condensed' rel='stylesheet'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display =swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-    <?php include '../User Interface/navbar.php'; ?>
+    <?php include '../User Interface/navbar1.php'; ?>
 
 
     <section class="main-section">
@@ -115,49 +115,76 @@ if (isset($_GET['id'])) {
                         <h1 class="header">Income</h1>
                         <div class="button-group">
                             <a href="AddIncome.php" class="btn btn-outline-light">+ Add Income</a>
-                            <button class="btn btn-outline-light" id="sortBtn">
-                                <i class="fas fa-search"></i>
-                            </button>
+                            <form class="search-form" action="" method="GET">
+                                <input type="search" name="Incomequery" placeholder="Search here ..." style="text-transform: capitalize;">
+                                <button type="submit">
+                                    <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
+                                </button>
+                            </form> 
                         </div>
                     </div>
                     <!-- Put main code here -->
 
-                    <table class="table-approval">
-                        <thead>
-                            <tr class="header-row">
-                                <th class="table-header">Source of Income</th>
-                                <th class="table-header">Amount</th>
-                                <th class="table-header">Category</th>
-                                <th class="table-header">Date</th>
-                                <th class="table-header">Bank</th>
-                            </tr>
-                        <?php
-                 $sql = "SELECT * FROM income";
-                 $result = $conn->query($sql);
-                 
-                 if ($result === false) {
-                     echo "Error: " . $conn->error;
-                 } else {
-                     if ($result->num_rows > 0) {
-                         while ($row = $result->fetch_assoc()) {
-                             echo "<tr>";
-                             echo "<td>" . htmlspecialchars($row['source']) . "</td>";
-                             echo "<td>" . htmlspecialchars($row['total']) . " " . htmlspecialchars($row['currency']) . "</td>";
-                             echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                             echo "<td>" . htmlspecialchars($row['date']) . "</td>";
-                             echo "<td>" . htmlspecialchars($row['category']) . "</td>";
-                             echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['income_id']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
-                             echo "</tr>";
-                         }
-                     } else {
-                         echo "<tr><td colspan='5'>No income records found</td></tr>";
-                     }
-                 }
-                 
-                ?>
-                    
+                <table class="table-approval">
+                    <thead>
+                        <tr class="header-row">
+                            <th class="table-header">Source of Income</th>
+                            <th class="table-header">Amount</th>
+                            <th class="table-header">Category</th>
+                            <th class="table-header">
+                                <form class="SortIncomeDate" action="" method="GET">
+                                    <button type="submit" name="sortIncomeDate" value="<?php echo htmlspecialchars($nextSortOrderDate); ?>">
+                                        DATE
+                                    </button>
+                                </form>
+                            </th>
+                            <th class="table-header">Bank</th>
+                        </tr>
+                    <tbody> 
+                    <?php
+                        $userId = $_SESSION["user_id"];
+
+                        // Check if a search query is provided
+                        if (isset($_GET['Incomequery'])) {
+                            $IncomesearchQuery = $_GET['Incomequery'];
+                            try {
+                                $result = searchIncome($conn, $userId, $IncomesearchQuery);
+                            } catch (Exception $e) {
+                                $error_message = $e->getMessage();
+                            }
+                        } elseif (isset($_GET['sortIncomeDate'])) {
+                            $sortOrder = $_GET['sortIncomeDate'];
+                            $nextSortOrderDate = $sortOrder === 'asc' ? 'desc' : 'asc';
+                            try {
+                                $result = sortIncomeByDate($conn, $userId, $sortOrder);
+                            } catch (Exception $e) {
+                                $error_message = $e->getMessage();
+                            }
+                        } else {
+                            $nextSortOrderDate = 'asc';
+                            $sql = "SELECT * FROM income WHERE user_id = ?";
+                            $stmt = $conn->prepare($sql);
+                            $stmt->bind_param("i", $userId);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                        }
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<tr>";
+                                echo "<td>" . htmlspecialchars($row['source']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['total']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['category']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['date']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
+                                echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['income_id']) . "' data-source='" . htmlspecialchars($row['source']) . "' data-total='" . htmlspecialchars($row['total']) . "' data-category='" . htmlspecialchars($row['category']) . "' data-bank='" . htmlspecialchars($row['bank']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='6'>No income records found</td></tr>";
+                        }
+                    ?>
                     </tbody>
-                   
                 </table>
             </div>
             </div>
@@ -174,103 +201,76 @@ if (isset($_GET['id'])) {
             </form>
         </div>
     </div>
-<!-- Edit/Delete Modal -->
-<div id="editDeleteModal" class="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title">Edit/Delete Income Record</h5>
-      <span class="close">&times;</span>
+
+    <!-- Edit/Delete Modal -->
+    <div id="editDeleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h3 class="modal-title">Show Income Record</h3>
+            <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editDeleteForm" method="POST" action="Income.php">
+                    <input type="hidden" id="incomeId" name="incomeId">
+                    <div class="form-group">
+                    <label for="incomeSource">Source of Income</label>
+                    <input type="text" class="form-control" id="incomeSource" name="incomeSource" readonly>
+                    </div>
+                    <div class="form-group">
+                    <label for="incomeTotal">Amount</label>
+                    <input type="text" class="form-control" id="incomeTotal" name="incomeTotal" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="incomeCategory">Category</label>
+                        <select class="form-control" id="incomeCategory" name="incomeCategory" readonly>
+                            <option value="Monthly">Monthly</option>
+                            <option value="Weekly">Weekly</option>
+                            <option value="Yearly">Yearly</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="incomeBank">Bank</label>
+                        <input type="text" class="form-control" id="incomeBank" name="incomeBank" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-danger" id="deleteBtn">Delete</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <div class="modal-body">
-      <form id="editDeleteForm" method="POST" action="">
-        <input type="hidden" id="incomeId" name="incomeId">
-        <div class="form-group">
-          <label for="incomeSource">Source of Income</label>
-          <input type="text" class="form-control" id="incomeSource" name="incomeSource" required>
-        </div>
-        <div class="form-group">
-          <label for="incomeTotal">Amount</label>
-          <input type="text" class="form-control" id="incomeTotal" name="incomeTotal" required>
-        </div>
-        <div class="form-group">
-          <label for="incomeCurrency">Currency</label>
-          <input type="text" class="form-control" id="incomeCurrency" name="incomeCurrency" required>
-        </div>
-        <div class="form-group">
-          <label for="incomeCategory">Category</label>
-          <select class="form-control" id="incomeCategory" name="incomeCategory" required>
-            <option value="Monthly">Monthly</option>
-            <option value="Weekly">Weekly</option>
-            <option value="Yearly">Yearly</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="incomeInvestment">Type of Investment</label>
-          <input type="text" class="form-control" id="incomeInvestment" name="incomeInvestment" required>
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn btn-primary">Update</button>
-      <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
-    </div>
-  </div>
-</div>
 
 </section>
 
     <script>
-        var modal = document.getElementById("sortModal");
-        var btn = document.getElementById("sortBtn");
-        var span = document.getElementsByClassName("close")[0];
+    var editDeleteModal = document.getElementById("editDeleteModal");
+    var editDeleteClose = editDeleteModal.getElementsByClassName("close")[0];
 
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
+    document.querySelectorAll('.btn-outline-light[data-id]').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var id = this.getAttribute('data-id');
+            var source = this.getAttribute('data-source');
+            var total = this.getAttribute('data-total');
+            var category = this.getAttribute('data-category');
+            var bank = this.getAttribute('data-bank');
 
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
+            document.getElementById('incomeId').value = id;
+            document.getElementById('incomeSource').value = source;
+            document.getElementById('incomeTotal').value = total;
+            document.getElementById('incomeCategory').value = category;
+            document.getElementById('incomeBank').value = bank;
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
-<script>
-var editDeleteModal = document.getElementById("editDeleteModal");
-var editDeleteClose = editDeleteModal.getElementsByClassName("close")[0];
-
-document.querySelectorAll('.btn-outline-light[data-id]').forEach(function(button) {
-    button.addEventListener('click', function() {
-        var id = this.getAttribute('data-id');
-        var source = this.getAttribute('data-source');
-        var total = this.getAttribute('data-total');
-        var currency = this.getAttribute('data-currency');
-        var category = this.getAttribute('data-category');
-        var investment = this.getAttribute('data-investment');
-
-        document.getElementById('incomeId').value = id;
-        document.getElementById('incomeSource').value = source;
-        document.getElementById('incomeTotal').value = total;
-        document.getElementById('incomeCurrency').value = currency;
-        document.getElementById('incomeCategory').value = category;
-        document.getElementById('incomeInvestment').value = investment;
-
-        editDeleteModal.style.display = "block";
+            editDeleteModal.style.display = "block";
+        });
     });
-});
 
-editDeleteClose.onclick = function() {
-    editDeleteModal.style.display = "none";
-};
-
-window.onclick = function(event) {
-    if (event.target == editDeleteModal) {
+    editDeleteClose.onclick = function() {
         editDeleteModal.style.display = "none";
-    }
-};
-   </script>
+    };
+
+    window.onclick = function(event) {
+        if (event.target == editDeleteModal) {
+            editDeleteModal.style.display = "none";
+        }
+    };
+    </script>
 </body>
 </html>

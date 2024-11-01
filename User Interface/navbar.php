@@ -1,9 +1,5 @@
 <?php
 session_start();
-if (!isset($_SESSION["user"])) {
-    header("Location: ../Login.php");
-    exit();
-}
 
 $username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);
