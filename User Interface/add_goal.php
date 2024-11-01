@@ -23,7 +23,7 @@
                     <div class="top-bar">
                         <h1 class="header">Add a Goal</h1>
                     </div>
-                    <form id="addExpense" class="pfp-form" action="add_expense.php" method="POST" enctype="multipart/form-data">
+                    <form id="addExpense" class="pfp-form" action="../APIs/goals_api.php" method="POST" enctype="multipart/form-data">
                         <div class="big-divider full center">
                             <div class="row-form no-margin large">
                                 <div class="column-form x-large">

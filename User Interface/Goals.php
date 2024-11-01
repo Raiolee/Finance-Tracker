@@ -25,7 +25,7 @@ $username = $_SESSION["name"];
 
 // Error handling for unknown user ID
 if (empty($userId)) {
-    $error_message = "User ID is not set. Please log in again.";
+    $error_message = "User  ID is not set. Please log in again.";
 } else {
     // Handle form submission
     if (isset($_POST['submit-form'])) {
@@ -34,7 +34,6 @@ if (empty($userId)) {
         $category = $_POST['GoalsCategory'];
         $description = $_POST['Description'];
         $budgetLimit = $_POST['Target-Amount'];
-
         // Validate required fields
         if (empty($startDate) || empty($subject) || empty($category) || empty($description) || empty($budgetLimit)) {
             $error_message = "Please fill in all fields.";
@@ -45,7 +44,6 @@ if (empty($userId)) {
                 $stmt = $conn->prepare($sql);
                 // Use 'd' for double (for budget limit) and 'i' for integer (for user_id)
                 $stmt->bind_param("issssd", $userId, $subject, $startDate, $category, $budgetLimit, $description);
-
                 if ($stmt->execute()) {
                     header("Location: Goals.php");
                     exit();
@@ -558,16 +556,17 @@ $conn->close();
                 </div>
             </div>
         </div>
+
         <section class="main-section">
             <div class="main-container">
                 <div class="content scrollable">
                     <!-- Top bar section -->
                     <div class="top-bar space-between" id="expense">
-                        <h1 class="header">Goals</h1>
-                        <a href="add_goal.php"><button class="New-Saving">+ Add a Goal</button></a>
+                        <h1 class="header" id="headerText">Goals</h1>
+                        <button class="New-Saving" id="newGoalsBtn" onclick="showGoalForm()">+ Add a Goal</button>
 
                         <!-- Filter form -->
-                        <form class="filter-form" action="" method="GET">
+                        <form class="filter-form" id="filterForm" action="" method="GET">
                             <select id="FilterGoalsCategory" name="FilterGoalsCategory">
                                 <option value="" disabled selected>Category</option>
                                 <option value="Travels">Travels</option>
@@ -580,7 +579,7 @@ $conn->close();
                         </form>
 
                         <!-- Search form -->
-                        <form class="search-form" action="" method="GET">
+                        <form class="search-form" id="searchForm" action="" method="GET">
                             <input type="search" name="query" placeholder="Search here ...">
                             <button type="submit">
                                 <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
@@ -589,7 +588,7 @@ $conn->close();
                     </div>
 
                     <!-- Goals table -->
-                    <table class="table-approval">
+                    <table id="goalsTable" class="table-approval">
                         <thead>
                             <tr>
                                 <th>
@@ -647,56 +646,47 @@ $conn->close();
                         </tbody>
                     </table>
 
-                </div>
-            </div>
-        </section>
-        
-        <section class="newGoalForm">
-            <div id="newGoalForm" class="new-goal-form" style="display:none;">
-                <div class="newform">
-                    <h1 id="goals-title">New Goal</h1>
-                </div>
-                <hr class="new1">
-                <form id="GoalForm" method="post">
-                    <div class="Goal-Form-Format" id="Start-Date-Row">
-                        <label for="Start-Date" class="Goals-Label">Start Date*</label>
-                        <input type="date" id="Start-Date" name="Start-Date" required>
-                    </div>
-                    <div class="Goal-Form-Format" id="Subject-Row">
-                        <label for="Subject" class="Goals-Label">Subject*</label>
-                        <input type="text" id="Subject" name="Subject" required style="text-transform: capitalize;">
-                    </div>
-                    <div class="Goal-Form-Format" id="Category-Row">
-                        <label for="GoalsCategory" class="Goals-Label">Category*</label>
-                        <select id="GoalsCategory" name="GoalsCategory" required>
-                            <option value="" disabled selected>Category</option>
-                            <option value="Travels">Travels</option>
-                            <option value="Miscellaneous">Miscellaneous</option>
-                            <option value="Others">Others</option>
-                        </select>
-                    </div>
-                    <div class="Goal-Form-Format" id="Description-Row">
-                        <label for="Description" class="Goals-Label">Description*</label>
-                        <textarea id="Description" name="Description" required></textarea>
-                    </div>
-                    <div class="Goal-Form-Format" id="Target-Amount-Row">
-                        <label for="Target-Amount" class="Goals-Label">Target Amount*</label>
-                        <input type="number" id="Target-Amount" name="Target-Amount" required>
-                    </div>
-                    <div class="Goal-Form" id="Button-Row">
-                        <div class="button-div-row">
-                            <button type="button" class="button-goals" onclick="closeGoalForm()">Cancel</button>
-                            <button type="submit" name="submit-form" class="button-goals">Save</button>
+                    <form id="GoalForm" method="post" style="display:none;">
+                        <div class="Goal-Form-Format" id="Start-Date-Row">
+                            <label for="Start-Date" class="Goals-Label">Start Date*</label>
+                            <input type="date" id="Start-Date" name="Start-Date" required>
                         </div>
-                    </div>
-                </form>
-
-                <?php if (isset($error_message)): ?>
-                    <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
-                <?php endif; ?>
+                        <div class="Goal-Form-Format" id="Subject-Row">
+                            <label for="Subject" class="Goals-Label">Subject*</label>
+                            <input type="text" id="Subject" name="Subject" required style="text-transform: capitalize;">
+                        </div>
+                        <div class="Goal-Form-Format" id="Category-Row">
+                            <label for="GoalsCategory" class="Goals-Label">Category*</label>
+                            <select id="GoalsCategory" name="GoalsCategory" required>
+                                <option value="" disabled selected>Category</option>
+                                <option value="Travels">Travels</option>
+                                <option value="Miscellaneous">Miscellaneous</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="Goal-Form-Format" id="Description-Row">
+                            <label for="Description" class="Goals-Label">Description*</label>
+                            <textarea id="Description" name="Description" required></textarea>
+                        </div>
+                        <div class="Goal-Form-Format" id="Target-Amount-Row">
+                            <label for="Target-Amount" class="Goals-Label">Target Amount*</label>
+                            <input type="text" id="Target-Amount" name="Target-Amount" required>
+                        </div>
+                        <div class="Goal-Form" id="Button-Row">
+                            <div class="button-div-row">
+                                <button type="button" class="button-goals" onclick="closeGoalForm()">Cancel</button>
+                                <button type="submit" name="submit-form" class="button-goals">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                    <?php if (isset($error_message)): ?>
+                        <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
+                    <?php endif; ?>
+                </div>
             </div>
         </section>
     </div>
+    <script src="../js/goals-form.js"></script>
 </body>
 
 </html>
