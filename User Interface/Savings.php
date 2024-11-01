@@ -171,7 +171,6 @@ if ($stmt3) {
     <link rel="stylesheet" href="../Styles/styles.scss">
     <link href='https://fonts.googleapis.com/css?family=Cabin Condensed' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../Styles/mobilestyles.scss">
     <style>
     </style>
@@ -183,73 +182,49 @@ if ($stmt3) {
         <!-- Main Section -->
         <section class="main-section">
             <div class="main-container">
-                <div class="content">
-                    <div class="top-bar">
+                <div class="content scrollable">
+                    <div class="top-bar space-between">
                         <h1 class="header">Bank</h1>
                         <button class="New-Saving" id="BankButton">New Bank</button>
                     </div>
+                    <table id="goalsTable" class="table-approval">
+                        <thead>
+                            <tr>
+                                <th class="th-interact" onclick="sortTable('subject')">
+                                    NUMBER
+                                </th>
+                                <th>
+                                    BANK
+                                </th>
+                                <th class="th-interact" onclick="sortTable('accomplishment_date')">
+                                    BALANCE
+                                </th>
+                                <th>
+                                    MANAGE
+                                </th>
+                            </tr>
+                        </thead>
 
-                    <div class="Bank">
-                        <div id="Bank-Content">
-                            <table class="table-Bank">
-
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Bank</th>
-                                        <th>Balance</th>
-                                        <th>Manage Savings</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    if (isset($result) && $result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            // Use the correct variables from the current row
-                                            echo "<tr>
-                                                    <td>" . htmlspecialchars($row['user_bank_id']) . "</td>
-                                                    <td>" . htmlspecialchars($row['bank']) . "</td>
-                                                    <td>" . htmlspecialchars($row['balance']) . "</td>
-                                                    <td>
-                                                        <button onclick=\"BankForm('" . htmlspecialchars($row['bank']) . "', '" . htmlspecialchars($row['balance']) . "')\">Allocate</button>
-                                                    </td>
-                                                </tr>";
-                                        }
-                                    } else {
-                                        echo "<tr><td colspan='4'>No results found</td></tr>"; // Ensure column span matches the number of columns
-                                    }
-                                    ?>
-
-                                </tbody>
-                            </table><!--Table End-->
-                        </div>
-                        <div id="BankSavingForm" class="new-expense-form" style="display:none;">
-                            <h3>New Saving</h3>
-                            <hr class="bottom-line">
-                            <form id="SavingForm" method="post" action="">
-                                <input type="hidden" name="action" value="insert_bank">
-
-                                <div class="Saving-Form-Format" id="Date-Row">
-                                    <label for="SavingsDate" class="Savings-Label">Date</label>
-                                    <input type="date" id="SavingsDate" name="date" required>
-                                    <!-- Ensure the name matches in PHP -->
-                                </div>
-                                <div class="Saving-Form-Format" id="Bank-Row">
-                                    <label for="Bank" class="Savings-Label">Bank</label>
-                                    <input type="text" id="Bank" name="bank" required>
-                                    <!-- Ensure the name matches in PHP -->
-                                </div>
-                                <div class="Saving-Form-Format" id="Savings-Button-Row">
-                                    <div class="Savings-button-div-row">
-                                        <button type="submit" class="button-savings">Save</button>
-                                        <button type="button" class="button-savings"
-                                            onclick="closeExpenseForm()">Cancel</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div> <!--Form End-->
-
-                    </div>
+                        <tbody>
+                            <?php
+                            if (isset($result) && $result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    // Use the correct variables from the current row
+                                    echo "<tr>
+                                            <td>" . htmlspecialchars($row['user_bank_id']) . "</td>
+                                            <td>" . htmlspecialchars($row['bank']) . "</td>
+                                            <td>" . htmlspecialchars($row['balance']) . "</td>
+                                            <td>
+                                                <button onclick=\"BankForm('" . htmlspecialchars($row['bank']) . "', '" . htmlspecialchars($row['balance']) . "')\">Allocate</button>
+                                            </td>
+                                        </tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='4'>No results found</td></tr>"; // Ensure column span matches the number of columns
+                            }
+                            ?>
+                        </tbody>
+                    </table>
 
                     <?php if (isset($error_message)): ?>
                         <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
