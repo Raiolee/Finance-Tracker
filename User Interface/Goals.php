@@ -334,10 +334,6 @@ if (isset($_GET['sortOrderDate'])) {
     } catch (Exception $e) {
         $error_message = $e->getMessage();
     }
-        $result = fetchGoalsByCategory($conn, $userId, '', $currentSortOrder);
-    }
-} catch (Exception $e) {
-    $error_message = $e->getMessage();
 }
 
 $conn->close();
@@ -349,9 +345,8 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../Styles/Interface1.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Styles/styles.scss">
+    <link rel="stylesheet" href="../Styles/custom-style.css">
     <title>Goals</title>
 </head>
 

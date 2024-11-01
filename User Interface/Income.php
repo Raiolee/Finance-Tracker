@@ -106,7 +106,7 @@ if (isset($_GET['sortIncomeDate'])) {
 </head>
 <body>
     <div class="container">
-    <?php include '../User Interface/navbar1.php'; ?>
+    <?php include '../User Interface/navbar.php'; ?>
 
 
     <section class="main-section">
