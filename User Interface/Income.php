@@ -1,10 +1,35 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-include '../connection/config.php';
+// Start session and check if the user is logged in
+session_start();
+if (!isset($_SESSION["user"])) {
+    header("Location: ../Login.php");
+    exit();
+}
 
-$userId = $_SESSION['user_id'] ?? null;
+$username = $_SESSION["name"];
+$current_page = basename($_SERVER['PHP_SELF']);
 
+// Include database connection
+include('../connection/config.php');
+
+// Fetch the user's profile picture from the database
+$user_id = $_SESSION['user_id'];
+$query = "SELECT user_dp FROM user WHERE user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+
+// Set the profile picture path or default image
+if ($user && $user['user_dp']) {
+    $profile_pic = 'data:image/jpeg;base64,' . base64_encode($user['user_dp']);
+} else {
+    $profile_pic = '../Assets/blank-profile.webp';
+}
+
+// Define other functions and handle income operations
 function searchIncomeBySubject($conn, $userId, $query) {
     $sql = "SELECT subject, category FROM income WHERE user_id = ? AND subject LIKE ?";
     $stmt = $conn->prepare($sql);
@@ -17,6 +42,8 @@ function searchIncomeBySubject($conn, $userId, $query) {
         throw new Exception("Error preparing statement: {$conn->error}");
     }
 }
+
+$userId = $_SESSION['user_id'] ?? null;
 
 if (isset($_GET['query'])) {
     $searchQuery = $_GET['query'];
@@ -36,57 +63,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['incomeId'])) {
     $incomeCategory = $_POST['incomeCategory'];
     $incomeInvestment = $_POST['incomeInvestment'];
 
-    // Prepare the SQL statement for updating the record
     $stmt = $conn->prepare("UPDATE income SET source = ?, total = ?, currency = ?, category = ?, investment = ? WHERE income_id = ?");
-    
     if ($stmt === false) {
         die('Prepare failed: ' . htmlspecialchars($conn->error));
     }
-
-    // Bind parameters
     $stmt->bind_param("sssssi", $incomeSource, $incomeTotal, $incomeCurrency, $incomeCategory, $incomeInvestment, $incomeId);
-    
-    // Execute the statement and check for errors
     if ($stmt->execute()) {
         $message = "Record updated successfully!";
     } else {
         $message = "Error updating record: " . $stmt->error;
     }
-
     $stmt->close();
-    $conn->close();
-    header("Location: Income.php?message=" . urlencode($message)); // Redirect back with message
+    header("Location: Income.php?message=" . urlencode($message));
     exit();
 }
 
 // Handle Delete Operation
 if (isset($_GET['id'])) {
     $incomeId = $_GET['id'];
-
-    // Prepare the SQL statement for deleting the record
     $stmt = $conn->prepare("DELETE FROM income WHERE income_id = ?");
-    
     if ($stmt === false) {
         die('Prepare failed: ' . htmlspecialchars($conn->error));
     }
-
-    // Bind parameters
     $stmt->bind_param("i", $incomeId);
-    
-    // Execute the statement and check for errors
     if ($stmt->execute()) {
         $message = "Record deleted successfully!";
     } else {
         $message = "Error deleting record: " . $stmt->error;
     }
-
     $stmt->close();
-    $conn->close();
-    header("Location: Income.php?message=" . urlencode($message)); // Redirect back with message
+    header("Location: Income.php?message=" . urlencode($message));
     exit();
 }
-
 ?>
+
 
 
 <!DOCTYPE html>

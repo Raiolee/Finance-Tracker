@@ -25,3 +25,18 @@ function closeGoalForm() {
     // Reset the header text
     document.getElementById('headerText').textContent = 'Goals';
 }
+
+function sortTable(column) {
+    const currentUrl = new URL(window.location.href);
+    const params = new URLSearchParams(currentUrl.search);
+    
+    // Check the current sort order for the selected column and toggle it
+    let nextSortOrder = params.get('sortOrder') === 'asc' ? 'desc' : 'asc';
+    
+    // Set the sort order and the column to sort
+    params.set('sortOrder', nextSortOrder);
+    params.set('sortColumn', column); // You can set the column name to sort by
+    
+    // Update the URL and reload the page
+    window.location.search = params.toString();
+}
