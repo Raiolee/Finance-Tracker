@@ -162,7 +162,7 @@ $stmt->close();
                     <div class="quick-access-section">
                         <h2>Quick Access</h2>
                         <div class="quick-access-items">
-                            <button class="quick-access-item" onclick="window.location.href='Expenses.php#newExpenseForm'">
+                            <button class="quick-access-item" onclick="handleNewExpense()">
                                 <i class="icon-credit-card"></i>
                                 <span>+ New Expense</span>
                             </button>
@@ -170,7 +170,7 @@ $stmt->close();
                                 <i class="icon-receipt"></i>
                                 <span>+ Add Income</span>
                             </button>
-                            <button class="quick-access-item" onclick="window.location.href='Goals.php#newGoalForm'">
+                            <button class="quick-access-item" onclick="handleNewGoal()">
                                 <i class="icon-report"></i>
                                 <span>+ New Goal</span>
                             </button>
@@ -210,7 +210,7 @@ $stmt->close();
                                 echo "<tr>";
                                 echo "<td>" . htmlspecialchars($row['subject']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['merchant']) . "</td>";
-                                echo "<td>₱" . number_format($row['total'], 2) . "</td>";
+                                echo "<td>₱" . number_format($row['amount'], 2) . "</td>";
                                 echo "<td>" . date("F j, Y", strtotime($row['date'])) . "</td>"; // Formatting the date
                                 echo "</tr>";
                             }
@@ -229,6 +229,14 @@ $stmt->close();
         <script>
                 function handleNewReceipt() {
                 window.location.href = 'AddIncome.php';
+                }
+
+                function handleNewExpense() {
+                window.location.href = 'add_expense.php';
+                }
+
+                function handleNewGoal() {
+                window.location.href = 'add_goal.php';
                 }
 
                 function handleNewSaving(){

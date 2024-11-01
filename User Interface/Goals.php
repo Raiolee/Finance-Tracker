@@ -18,6 +18,22 @@ if (!isset($_SESSION["user"])) {
     exit();
 }
 
+// Fetch only the user_dp (profile picture) from the database
+$user_id = $_SESSION['user_id'];
+$query = "SELECT user_dp FROM user WHERE user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+
+if ($user && $user['user_dp']) {
+    $profile_pic = 'data:image/jpeg;base64,' . base64_encode($user['user_dp']);
+} else {
+    $profile_pic = '../Assets/blank-profile.webp';
+}
+
 // Get the user ID
 $userId = $_SESSION['user_id'] ?? null;
 
@@ -32,7 +48,6 @@ if (empty($userId)) {
         $category = $_POST['GoalsCategory'];
         $description = $_POST['Description'];
         $budgetLimit = $_POST['Target-Amount'];
-
         // Validate required fields
         if (empty($startDate) || empty($subject) || empty($category) || empty($description) || empty($budgetLimit)) {
             $error_message = "Please fill in all fields.";
@@ -43,7 +58,6 @@ if (empty($userId)) {
                 $stmt = $conn->prepare($sql);
                 // Use 'd' for double (for budget limit) and 'i' for integer (for user_id)
                 $stmt->bind_param("issssd", $userId, $subject, $startDate, $category, $budgetLimit, $description);
-
                 if ($stmt->execute()) {
                     header("Location: Goals.php");
                     exit();
@@ -320,12 +334,18 @@ if (isset($_GET['sortOrderDate'])) {
     } catch (Exception $e) {
         $error_message = $e->getMessage();
     }
+        $result = fetchGoalsByCategory($conn, $userId, '', $currentSortOrder);
+    }
+} catch (Exception $e) {
+    $error_message = $e->getMessage();
 }
 
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -334,266 +354,134 @@ $conn->close();
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Goals</title>
 </head>
-<body class="container">
-    <div class="nav-bar">
-        <div class="Profile">
-            <div class="Profile_img">
-                <img src="https://picsum.photos/100/100" alt="" width="110">
-            </div>
-        </div>
 
-        <div class="user-name">
-        </div>
+<body>
+    <div class="container">
+        <?php include('navbar.php'); ?>
 
-        <!-- Section for Dashboard -->
-        <div class="Home-Nav <?php echo ($current_page == 'Dashboard.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/home.svg" alt="Icon" width="50px" id="icons">
-            </div>
-            <div>
-                <p><a href="Dashboard.php">Home</a></p>
-            </div>
-        </div>
-
-        <!-- Section for Expenses -->
-        <div class="Expenses-Nav <?php echo ($current_page == 'expense.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/expenses.svg" alt="Icon" width="50px">
-            </div>
-            <div>
-                <p><a href="expense.php">Expenses</a></p>
-            </div>
-        </div>
-
-        <!-- Section for Income -->
-        <div class="Travels-Nav <?php echo ($current_page == 'Income.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/income.svg" alt="Icon" width="50px">
-            </div>
-            <div>
-                <p><a href="Income.php">Income</a></p>
-            </div>
-        </div>
-
-        <!-- Section for Goals -->
-        <div class="Travels-Nav <?php echo ($current_page == 'Goals.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/approvals.svg" alt="Icon" width="50px">
-            </div>
-            <div>
-                <p><a href="Goals.php">Goals</a></p>
-            </div>
-        </div>
-
-        <!-- Section for Savings -->
-        <div class="Approvals-Nav <?php echo ($current_page == 'Savings.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/reports.svg" alt="Icon" width="50px">
-            </div>
-            <div>
-                <p><a href="Savings.php">Savings</a></p>
-            </div>            
-        </div>
-
-        <!-- Settings Section -->
-        <div class="Settings-Nav <?php echo ($current_page == 'Settings.php') ? 'active' : ''; ?>" id="Nav_Button">
-            <div>
-                <img src="../Assets/Icons/settings.svg" alt="Icon" width="50px">
-            </div>
-            <div>
-                <p><a href="Settings.php">Settings</a></p>
-            </div>
-        </div>
-
-        <div class="Logo-Nav" id="Nav_Side">
-            <div class="Penny_Logo">
-                <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
-            </div>
-        </div>
-    </div>
-
-    <div class="content">
-        <div class="right-container">
-            <div class="inner">
-                <div class="goals-container">
-                    <div class="left">
-                        <h1 id="goals-title">Goals</h1>
-                    </div>
-                    <div class="right">
-                        <div class="box">
-                            <div class="add">
-                                <button id="newGoalsBTN" class="new-goal">+ New Goal</button>
-                            </div>
-                            <form class="filter-form" action="" method="GET">
-                                <select id="FilterGoalsCategory" name="FilterGoalsCategory">
+        <section class="main-section">
+            <div class="main-container">
+                <div class="content scrollable">
+                    <!-- Top bar section -->
+                    <div class="top-bar space-between" id="expense">
+                        <h1 class="header" id="headerText">Goals</h1>
+                        <div class="goals-header">
+                            <button class="New-Saving" id="newGoalsBtn" onclick="showGoalForm()">+ Add a Goal</button>
+                            <!-- Filter form -->
+                            <form class="filter-form" id="filterForm" action="" method="GET">
+                                <select class="var-input medium pointer" id="FilterGoalsCategory" name="FilterGoalsCategory">
                                     <option value="" disabled selected>Category</option>
                                     <option value="Travels">Travels</option>
                                     <option value="Miscellaneous">Miscellaneous</option>
                                     <option value="Others">Others</option>
                                 </select>
                                 <button type="submit">
-                                    <i class="fa"><img src="../Assets/Icons/filter.svg" alt="" width="20px"></i>
+                                    <i class="fa"><img src="../Assets/Icons/filter.svg" alt=""></i>
                                 </button>
                             </form>
-                            <form class="search-form" action="" method="GET">
-                                <input type="search" name="query" placeholder="Search here ..." style="text-transform: capitalize;">
+
+                            <!-- Search form -->
+                            <form class="search-form" id="searchForm" action="" method="GET">
+                                <input type="search" name="query" placeholder="Search here ...">
                                 <button type="submit">
                                     <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
                                 </button>
-                            </form> 
+                            </form>
                         </div>
                     </div>
-                </div>
-                <hr class="new">
-                
-                <table class="goal-travel">
-                    <thead> 
-                        <tr>
-                            <th class="tab">
-                                <form class="Subject" action="" method="GET">
-                                    <button type="submit" name="sortOrderSubject" value="<?php echo htmlspecialchars($nextSortOrderSubject); ?>">
-                                        SUBJECT
-                                    </button>
-                                </form>
-                            </th>
-                            <th class="tab">CATEGORY</th>
-                            <th class="tab">
-                                <form class="accomplishmentDate" action="" method="GET">
-                                    <button type="submit" name="sortOrderDate" value="<?php echo htmlspecialchars($nextSortOrderDate); ?>">
-                                        ACCOMPLISHMENT DATE
-                                    </button>
-                                </form>
-                            </th>
-                            <th class="tab">PROGRESS</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    <?php
-                        if (isset($result) && $result->num_rows > 0) {
-                            $rowCounter = 0;
-                            foreach ($result as $row) {
-                                // Find the corresponding goal in $goalsAndSavings to get the percentage
-                                $percentage = 0;
-                                foreach ($goalsAndSavings as $goal) {
-                                    if ($goal['subject'] === $row['subject']) {
-                                        $percentage = $goal['percentage'];
-                                        break;
+
+                    <!-- Goals table -->
+                    <table id="goalsTable" class="table-approval">
+                        <thead>
+                            <tr>
+                                <th class="th-interact" onclick="sortTable('subject')">
+                                    SUBJECT
+                                </th>
+                                <th>
+                                    CATEGORY
+                                </th>
+                                <th onclick="sortTable('accomplishment_date')">
+                                    ACCOMPLISHMENT DATE
+                                </th>
+                                <th>
+                                    PROGRESS
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <?php
+                            if (isset($result) && $result->num_rows > 0) {
+                                $rowCounter = 0;
+                                foreach ($result as $row) {
+                                    $percentage = 0;
+                                    foreach ($goalsAndSavings as $goal) {
+                                        if ($goal['subject'] === $row['subject']) {
+                                            $percentage = $goal['percentage'];
+                                            break;
+                                        }
                                     }
+                                    $rowClass = ($rowCounter % 2 == 0) ? 'row-color-1' : 'row-color-2';
+
+                                    echo "<tr class='" . htmlspecialchars($rowClass) . "'>
+                                    <td><div class='sub'>" . htmlspecialchars($row['subject']) . "</div></td>
+                                    <td>" . htmlspecialchars($row['category']) . "</td>
+                                    <td>" . htmlspecialchars($predictions[$row['subject']] ?? 'N/A') . "</td>
+                                    <td class='progress-row'>
+                                        <div class='progress-container'>
+                                            <div class='progress-bar1' style='width: " . htmlspecialchars($percentage) . "%;'></div>
+                                        </div>
+                                        <div class='progress-text'>
+                                            <span>" . htmlspecialchars($percentage) . "%</span>
+                                        </div>
+                                    </td>
+                                </tr>";
+
+                                    $rowCounter++;
                                 }
-                                $rowClass = ($rowCounter % 2 == 0) ? 'row-color-1' : 'row-color-2';
-
-                                echo "<tr class='" . htmlspecialchars($rowClass) . "'> 
-                                        <td><div class='sub'>" . htmlspecialchars($row['subject']) . "</div></td>
-                                        <td>" . htmlspecialchars($row['category']) . "</td>
-                                        <td>" . htmlspecialchars($predictions[$row['subject']] ?? 'N/A') . "</td>
-                                        <td class='progress-row'>
-                                            <div class='progress-container'>
-                                                <div class='progress-bar1' style='width: " . htmlspecialchars($percentage) . "%;'></div>
-                                            </div>
-                                            <div class='progress-text'>
-                                                <span>" . htmlspecialchars($percentage) . "%</span>
-                                            </div>
-                                        </td>
-                                    </tr>";
-
-                                $rowCounter++;
+                            } else {
+                                echo "<tr><td colspan='4'>No results found</td></tr>";
                             }
-                        } else {
-                            echo "<tr><td colspan='4'>No results found</td></tr>";
-                        }
-                    ?>
+                            ?>
+                        </tbody>
+                    </table>
 
-                    </tbody>
-                </table>
-            </div>
+                    <!-- Add Goal Form -->
+                    <form id="GoalForm" method="post" class="pfp-form" style="display:none;">
+                        <div class="big-divider full">
+                            <label for="Start-Date" class="form-labels">Start Date*</label>
+                            <input class="date-input medium" type="date" id="Start-Date" name="Start-Date" required>
 
-            <div id="newGoalForm" class="new-goal-form" style="display:none;">
-                <div class="newform">
-                    <h1 id="goals-title">New Goal</h1>
+                            <label for="Subject" class="form-labels">Subject*</label>
+                            <input class="var-input medium" type="text" id="Subject" name="Subject" required style="text-transform: capitalize;">
+
+                            <label for="GoalsCategory" class="form-labels">Category*</label>
+                            <select class="date-input" id="GoalsCategory" name="GoalsCategory" required>
+                                <option value="" disabled selected>Category</option>
+                                <option value="Travels">Travels</option>
+                                <option value="Miscellaneous">Miscellaneous</option>
+                                <option value="Others">Others</option>
+                            </select>
+
+                            <label for="Target-Amount" class="form-labels">Target Amount*</label>
+                            <input class="var-input" type="number" id="Target-Amount" name="Target-Amount" required>
+
+                            <label for="Description" class="form-labels">Description*</label>
+                            <textarea class="text-input medium" id="Description" name="Description" required></textarea>
+
+
+                            <div class="btn-options">
+                                <button type="button" class="cancel" onclick="closeGoalForm()">Cancel</button>
+                                <button type="submit" name="submit-form" class="save">Save</button>
+                            </div>
+                    </form>
+                    <?php if (isset($error_message)): ?>
+                        <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
+                    <?php endif; ?>
                 </div>
-                <hr class="new1">
-                <form id="GoalForm" method="post">
-                    <div class="Goal-Form-Format" id="Start-Date-Row">
-                        <label for="Start-Date" class="Goals-Label">Start Date*</label>
-                        <input type="date" id="Start-Date" name="Start-Date" required>
-                    </div>
-                    <div class="Goal-Form-Format" id="Subject-Row">
-                        <label for="Subject" class="Goals-Label">Subject*</label>
-                        <input type="text" id="Subject" name="Subject" required style="text-transform: capitalize;">
-                    </div>
-                    <div class="Goal-Form-Format" id="Category-Row">
-                        <label for="GoalsCategory" class="Goals-Label">Category*</label>
-                        <select id="GoalsCategory" name="GoalsCategory" required>
-                            <option value="" disabled selected>Category</option>
-                            <option value="Travels">Travels</option>
-                            <option value="Miscellaneous">Miscellaneous</option>
-                            <option value="Others">Others</option>
-                        </select>
-                    </div>
-                    <div class="Goal-Form-Format" id="Description-Row">
-                        <label for="Description" class="Goals-Label">Description*</label>
-                        <textarea id="Description" name="Description" required></textarea>
-                    </div>
-                    <div class="Goal-Form-Format" id="Target-Amount-Row">
-                        <label for="Target-Amount" class="Goals-Label">Target Amount*</label>
-                        <input type="number" id="Target-Amount" name="Target-Amount" required>
-                    </div>
-                    <div class="Goal-Form" id="Button-Row">
-                        <div class="button-div-row">
-                            <button type="button" class="button-goals" onclick="closeGoalForm()">Cancel</button>
-                            <button type="submit" name="submit-form" class="button-goals">Save</button>
-                        </div>
-                    </div>
-                </form>
-
-                <?php if (isset($error_message)): ?>
-                    <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
-                <?php endif; ?>
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if URL contains #newGoalForm, show the form if true
-            if (window.location.hash === '#newGoalForm') {
-                const rightContainer = document.querySelector('.inner');
-                const form = document.getElementById('newGoalForm');
-
-                rightContainer.style.display = 'none'; // Hide the right container
-                form.style.display = 'block'; // Show the new goal form
-            }
-
-            // Show form when the "New Goal" button is clicked and update the URL
-            document.getElementById('newGoalsBTN').addEventListener('click', function() {
-                const rightContainer = document.querySelector('.inner');
-                const form = document.getElementById('newGoalForm');
-
-                rightContainer.style.display = 'none'; // Hide the right container
-                form.style.display = 'block'; // Show the new goal form
-
-            });
-        });
-
-        // Close form and clear URL hash
-        function closeGoalForm() {
-            const rightContainer = document.querySelector('.inner');
-            const form = document.getElementById('newGoalForm');
-
-            form.style.display = 'none'; // Hide the new goal form
-            rightContainer.style.display = 'block'; // Show the right container again
-            clearForm(); // Clear the form fields
-
-            // Remove the URL fragment
-            window.history.pushState({}, '', window.location.pathname);
-        }
-
-        // Clear the form
-        function clearForm() {
-            document.getElementById('GoalForm').reset(); // Clear all form fields
-        }
-
-    </script>
+    <script src="../js/goals-form.js"></script>
 </body>
 </html>

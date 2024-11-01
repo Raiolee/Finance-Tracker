@@ -6,10 +6,34 @@
     min-height: 100vh; /* Allows the container to expand if needed */
 }
 
-.nav-bar{
+/* Sidebar Styling */
+.nav-bar {
     width: 20%;
-    margin-right: 50px;
+    background-color: #333;
+    color:#333;
+    transition: transform 0.3s ease; /* Smooth transition for slide-in/out */
 }
+
+/* Active Class Styling */
+.active {
+    background-color: #1b1b1b;
+    font-weight: bold;
+    border-left: 1px solid #00bfa5;
+    padding: 10px 1px; /* Less vertical padding */
+    height: auto; /* Ensure height adjusts automatically */
+    
+}
+
+/* Apply Collapse Transition Only on Smaller Screens */
+@media (max-width: 768px) {
+    .collapse:not(.show) {
+        transform: translateX(-100%); /* Hide sidebar on smaller screens */
+    }
+    .collapse.show {
+        transform: translateX(0); /* Slide-in effect on toggle */
+    }
+}
+
 
 .Profile_img{
     display: flex; /* Use flexbox */
