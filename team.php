@@ -108,11 +108,11 @@
 		</div>
 	</div>
 	<!-- Name -->
-	<h3>Jonathon Andrew</h3>
+	<h3>Nathaniel Almeria</h3>
 	<!-- Position -->
-	<cite>Head Of Marketing</cite>
+	<cite>BSCS221A</cite>
 	<!-- Description -->
-	<p>Vivamus magna justo, lacinia eget consectetur sed, convallis at tellus. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui. Vivamus suscipit tortor eget felis porttitor volutpat.</p>
+	<p>3rd Year Computer Science Student</p>
 </div>
 			</div>
 			<div class="col-lg-4 col-md-6">
