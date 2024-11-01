@@ -1,6 +1,9 @@
 <?php
 include '../connection/config.php';
 
+
+$message = ''; // Variable to store success/error messages
+
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     session_start();

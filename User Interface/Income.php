@@ -1,9 +1,12 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 include '../connection/config.php';
-session_start();
-$user_id = $_SESSION['user_id'];
-function searchIncome($conn, $userId, $IncomesearchQuery) {
-    $sql = "SELECT * FROM income WHERE user_id = ? AND (source LIKE ? OR date LIKE ?)";
+
+$userId = $_SESSION['user_id'] ?? null;
+
+function searchIncomeBySubject($conn, $userId, $query) {
+    $sql = "SELECT subject, category FROM income WHERE user_id = ? AND subject LIKE ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $likeQuery = "%{$IncomesearchQuery}%";
@@ -16,78 +19,67 @@ function searchIncome($conn, $userId, $IncomesearchQuery) {
     }
 }
 
+$userId = $_SESSION['user_id'] ?? null;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['incomeId'])) {
     $incomeId = $_POST['incomeId'];
+    $incomeSource = $_POST['incomeSource'];
+    $incomeTotal = $_POST['incomeTotal'];
+    $incomeCurrency = $_POST['incomeCurrency'];
+    $incomeCategory = $_POST['incomeCategory'];
+    $incomeInvestment = $_POST['incomeInvestment'];
 
-    $sql = "DELETE FROM income WHERE income_id = ?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt) {
-        // Bind parameters to the prepared statement
-        $stmt->bind_param("i", $incomeId);
-        
-        // Start the transaction
-        $conn->begin_transaction();
-        
-        // Execute the first statement
-        if ($stmt->execute()) {
-            $total = $_POST['incomeTotal']; // Assuming the total amount is passed in the POST request
-            $uid = $_SESSION['user_id'];
-            $bank = $_POST['incomeBank']; // Assuming the bank name is passed in the POST request
+    // Prepare the SQL statement for updating the record
+    $stmt = $conn->prepare("UPDATE income SET source = ?, total = ?, currency = ?, category = ?, investment = ? WHERE income_id = ?");
+    
+    if ($stmt === false) {
+        die('Prepare failed: ' . htmlspecialchars($conn->error));
+    }
 
-            echo "Total: $total, User ID: $uid, Bank: $bank";
+    // Bind parameters
+    $stmt->bind_param("sssssi", $incomeSource, $incomeTotal, $incomeCurrency, $incomeCategory, $incomeInvestment, $incomeId);
     
-            // Prepare the update statement
-            $updateStmt = $conn->prepare("UPDATE bank SET balance = balance - ? WHERE user_id = ? AND bank = ?");
-            if ($updateStmt === false) {
-                $conn->rollback();
-                throw new Exception("Prepare failed: {$conn->error}");
-            }
-    
-            // Bind parameters to the update statement
-            $updateStmt->bind_param("dis", $total, $uid, $bank);
-    
-            // Execute the update statement
-            if (!$updateStmt->execute()) {
-                $conn->rollback();
-                throw new Exception("Execute failed: {$updateStmt->error}");
-            }
-    
-            // Commit transaction
-            $conn->commit();
-        } else {
-            $conn->rollback();
-            throw new Exception("Execute failed for the first statement: {$stmt->error}");
-        }
+    // Execute the statement and check for errors
+    if ($stmt->execute()) {
+        $message = "Record updated successfully!";
     } else {
         echo "Error preparing statement: {$conn->error}";
     }
+
+    $stmt->close();
+    $conn->close();
+    header("Location: Income.php?message=" . urlencode($message)); // Redirect back with message
+    exit();
 }
 
-function sortIncomeByDate($conn, $userId, $sortOrder) {
-    $sql = "SELECT * FROM income WHERE user_id = ? ORDER BY date " . ($sortOrder === 'asc' ? 'ASC' : 'DESC');
-    $stmt = $conn->prepare($sql);
-    if ($stmt) {
-        $stmt->bind_param("i", $userId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result;
+// Handle Delete Operation
+if (isset($_GET['id'])) {
+    $incomeId = $_GET['id'];
+
+    // Prepare the SQL statement for deleting the record
+    $stmt = $conn->prepare("DELETE FROM income WHERE income_id = ?");
+    
+    if ($stmt === false) {
+        die('Prepare failed: ' . htmlspecialchars($conn->error));
+    }
+
+    // Bind parameters
+    $stmt->bind_param("i", $incomeId);
+    
+    // Execute the statement and check for errors
+    if ($stmt->execute()) {
+        $message = "Record deleted successfully!";
     } else {
         throw new Exception("Error preparing statement: {$conn->error}");
     }
-}
 
-if (isset($_GET['sortIncomeDate'])) {
-    $sortOrder = $_GET['sortIncomeDate'];
-    $nextSortOrderDate = $sortOrder === 'asc' ? 'desc' : 'asc';
-    try {
-        $result = sortIncomeByDate($conn, $user_id, $sortOrder);
-    } catch (Exception $e) {
-        $error_message = $e->getMessage();
-    }
-} else {
-    $nextSortOrderDate = 'asc';
+    $stmt->close();
+    $conn->close();
+    header("Location: Income.php?message=" . urlencode($message)); // Redirect back with message
+    exit();
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -96,7 +88,6 @@ if (isset($_GET['sortIncomeDate'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Income List</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../Styles/ViewIncome.css">
     <link rel="stylesheet" href="../Styles/styles.css">
     <link href='https://fonts.googleapis.com/css?family=Cabin Condensed' rel='stylesheet'>
