@@ -38,6 +38,7 @@ if ($user && $user['user_dp']) {
 // Get the user ID
 $userId = $_SESSION['user_id'] ?? null;
 $username = $_SESSION["name"];
+$current_page = basename($_SERVER['PHP_SELF']);
 
 // Error handling for unknown user ID
 if (empty($userId)) {
@@ -164,7 +165,7 @@ $conn->close();
                                 <th>
                                     CATEGORY
                                 </th>
-                                <th onclick="sortTable('accomplishment_date')">
+                                <th class="th-interact" onclick="sortTable('accomplishment_date')">
                                     ACCOMPLISHMENT DATE
                                 </th>
                                 <th>
