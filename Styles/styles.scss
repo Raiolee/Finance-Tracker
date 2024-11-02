@@ -801,3 +801,45 @@ body {
 }
 
 
+/* Hide navbar items and show hamburger icon on smaller screens */
+.hamburger-menu {
+  display: none; /* Hidden by default */
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.navbar-items {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Media query for smaller screens */
+@media only screen and (min-width: 425px) and (max-width: 767px) {
+  .navbar-items {
+      display: none; /* Hide nav items by default on smaller screens */
+      flex-direction: column;
+  }
+
+  .navbar-items.show {
+      display: flex; /* Show when hamburger is clicked */
+  }
+
+  .hamburger-menu {
+      display: block; /* Show hamburger icon */
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  .navbar-items {
+      display: none; /* Hide nav items by default on smaller screens */
+      flex-direction: column;
+  }
+
+  .navbar-items.show {
+      display: flex; /* Show when hamburger is clicked */
+  }
+
+  .hamburger-menu {
+      display: block; /* Show hamburger icon */
+  }
+}

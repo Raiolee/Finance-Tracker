@@ -2,6 +2,11 @@
     <link rel="stylesheet" href="../Styles/styles.scss">
 </head>
 <div class="navbar-custom">
+    <!-- Hamburger Icon -->
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        &#9776; <!-- Unicode character for hamburger icon -->
+    </div>
+<div class="navbar-items">
     <div class="Profile">
         <div class="Profile_img">
             <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" width="110">
@@ -54,3 +59,10 @@
         </div>
     </div>
 </div>
+</div>
+
+<script>
+    function toggleMenu() {
+        document.querySelector('.navbar-items').classList.toggle('show');
+    }
+</script>
