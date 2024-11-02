@@ -37,39 +37,35 @@ $userId = $_SESSION['user_id'] ?? null;
 $username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);
 
-// Error handling for unknown user ID
-if (empty($userId)) {
-    $error_message = "User  ID is not set. Please log in again.";
-} else {
-    // Handle form submission
-    if (isset($_POST['submit-form'])) {
-        $startDate = $_POST['Start-Date'];
-        $subject = $_POST['Subject'];
-        $category = $_POST['GoalsCategory'];
-        $description = $_POST['Description'];
-        $budgetLimit = $_POST['Target-Amount'];
-        // Validate required fields
-        if (empty($startDate) || empty($subject) || empty($category) || empty($description) || empty($budgetLimit)) {
-            $error_message = "Please fill in all fields.";
-        } else {
-            try {
-                // Prepare and execute the insert statement
-                $sql = "INSERT INTO goals (user_id, subject, start_date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                // Use 'd' for double (for budget limit) and 'i' for integer (for user_id)
-                $stmt->bind_param("issssd", $userId, $subject, $startDate, $category, $budgetLimit, $description);
-                if ($stmt->execute()) {
-                    header("Location: Goals.php");
-                    exit();
-                } else {
-                    $error_message = "Error executing statement: {$stmt->error}";
-                }
-            } catch (Exception $e) {
-                $error_message = "An error occurred: " . $e->getMessage();
+
+if (isset($_POST['submit-form'])) {
+    $startDate = $_POST['start-date'];
+    $subject = $_POST['name'];
+    $category = $_POST['goal-category'];
+    $description = $_POST['goal-description'];
+    $budgetLimit = $_POST['target-amount'];
+    // Validate required fields
+    if (empty($startDate) || empty($subject) || empty($category) || empty($description) || empty($budgetLimit)) {
+        $error_message = "Please fill in all fields.";
+    } else {
+        try {
+            // Prepare and execute the insert statement
+            $sql = "INSERT INTO goals (user_id, subject, start_date, category, budget_limit, description) VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            // Use 'd' for double (for budget limit) and 'i' for integer (for user_id)
+            $stmt->bind_param("issssd", $userId, $subject, $startDate, $category, $budgetLimit, $description);
+            if ($stmt->execute()) {
+                header("Location: Goals.php");
+                exit();
+            } else {
+                $error_message = "Error executing statement: {$stmt->error}";
             }
+        } catch (Exception $e) {
+            $error_message = "An error occurred: " . $e->getMessage();
         }
     }
 }
+
 
 // Fetch goals and savings
 try {
