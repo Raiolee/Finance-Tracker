@@ -1,3 +1,33 @@
+<?php
+session_start();
+if (!isset($_SESSION["user"])) {
+    header("Location: ../Login.php");
+    exit();
+}
+
+$username = $_SESSION["name"];
+$current_page = basename($_SERVER['PHP_SELF']);
+
+// Include database connection
+include('../connection/config.php');
+
+// Fetch only the user_dp (profile picture) from the database
+$user_id = $_SESSION['user_id'];
+$query = "SELECT user_dp FROM user WHERE user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+
+if ($user && $user['user_dp']) {
+    $profile_pic = 'data:image/jpeg;base64,' . base64_encode($user['user_dp']);
+} else {
+    $profile_pic = '../Assets/blank-profile.webp';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,6 +74,7 @@
                                     <input type="date" class="date-input" id="name" name="date">
                                     <label for="recurrence_type" class="form-labels row">Frequency</label>
                                     <select class="var-input large pointer" name="recurrence_type" id="recurrence_type">
+                                        <option value="weekly">Once</option>
                                         <option value="weekly">Weekly</option>
                                         <option value="monthly">Monthly</option>
                                         <option value="custom">Custom</option>
@@ -52,7 +83,7 @@
                                 <label for="name" class="form-labels">Merchant</label>
                                 <input type="text" class="var-input" id="name" name="merchant">
                                 <label for="name" class="form-labels">Amount</label>
-                                <input type="number" class="var-input" id="amount" name="amount" step="100.00">
+                                <input type="number" class="var-input" id="amount" name="amount">
                                 <label for="name" class="form-labels">Description</label>
                                 <textarea class="text-input" name="description" id="description"></textarea>
 

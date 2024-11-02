@@ -1,3 +1,33 @@
+<?php
+session_start();
+if (!isset($_SESSION["user"])) {
+    header("Location: ../Login.php");
+    exit();
+}
+
+$username = $_SESSION["name"];
+$current_page = basename($_SERVER['PHP_SELF']);
+
+// Include database connection
+include('../connection/config.php');
+
+// Fetch only the user_dp (profile picture) from the database
+$user_id = $_SESSION['user_id'];
+$query = "SELECT user_dp FROM user WHERE user_id = ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+$stmt->close();
+
+if ($user && $user['user_dp']) {
+    $profile_pic = 'data:image/jpeg;base64,' . base64_encode($user['user_dp']);
+} else {
+    $profile_pic = '../Assets/blank-profile.webp';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,7 +53,7 @@
                     <div class="top-bar">
                         <h1 class="header">Add a Goal</h1>
                     </div>
-                    <form id="addExpense" class="pfp-form" action="add_expense.php" method="POST" enctype="multipart/form-data">
+                    <form id="addExpense" class="pfp-form" action="../APIs/goals_api.php" method="POST" enctype="multipart/form-data">
                         <div class="big-divider full center">
                             <div class="row-form no-margin large">
                                 <div class="column-form x-large">
@@ -51,7 +81,7 @@
                                         <option value="custom">Custom</option>
                                     </select>
                                 </div>
-                                
+
                                 <label for="name" class="form-labels">Amount</label>
                                 <input type="number" class="var-input x-large" id="amount" name="amount" step="100.00">
                                 <label for="name" class="form-labels">Description</label>
@@ -62,7 +92,7 @@
                                 <input class="file-input" type="file" name="attachment" accept="image/*" id="file-input">
 
                                 <div class="btn-options center" id="report-btns">
-                                    <a href="goal.php" class="link-btn"><button type="button" class="cancel">Cancel</button></a>
+                                    <a href="goals.php" class="link-btn"><button type="button" class="cancel">Cancel</button></a>
                                     <button type="submit" name="save" class="save">Submit</button>
                                 </div>
                             </div>
@@ -71,7 +101,6 @@
                 </div>
             </div>
         </section>
-    </div>
     </div>
     <!-- APIs (Put APIs below this comment)-->
 </body>

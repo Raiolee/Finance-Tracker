@@ -17,32 +17,37 @@ include '../connection/config.php';
 
 // Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data
-    $date = $_POST['Date'];
-    $bank = $_POST['Bank'];
-    $balance = $_POST['Balance'];
-    $category = $_POST['SavingsCategory'];
-    $subject = $_POST['Subject'];
-    $description = $_POST['Description'];
+    // Collect and validate form data
+    $date = $_POST['Date'] ?? null;
+    $bank = $_POST['Bank'] ?? null;
+    $savingsamount = $_POST['SavingsAmount'] ?? null;
+    $category = $_POST['SavingsCategory'] ?? null;
+    $subject = $_POST['Subject'] ?? null;
+    $description = $_POST['Description'] ?? null;
 
-    // Prepare and bind the SQL statement
-    $sql = "INSERT INTO user_db.savings (user_id, date, bank, balance, category, subject, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
+    // Check that required fields are not empty
+    if ($date && $bank && $savingsamount && $category && $subject) {
+        // Prepare and bind the SQL statement
+        $sql = "INSERT INTO user_db.savings (user_id, date, bank, savings_amount, category, subject) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
 
-    if ($stmt) {
-        // Bind parameters
-        $stmt->bind_param("issdsss", $uid, $date, $bank, $balance, $category, $subject, $description);
+        if ($stmt) {
+            // Bind parameters
+            $stmt->bind_param("issdss", $uid, $date, $bank, $savingsamount, $category, $subject);
 
-        // Execute the statement
-        if ($stmt->execute()) {
-            // Redirect back to the savings page with success message
-            header("Location: Savings.php?success=1");
-            exit();
+            // Execute the statement
+            if ($stmt->execute()) {
+                // Redirect back to the savings page with success message
+                header("Location: Savings.php?success=1");
+                exit();
+            } else {
+                $error_message = "Error executing statement: " . $stmt->error;
+            }
         } else {
-            $error_message = "Error executing statement: {$stmt->error}";
+            $error_message = "Error preparing statement: " . $conn->error;
         }
     } else {
-        $error_message = "Error preparing statement: {$conn->error}";
+        $error_message = "Please fill in all required fields.";
     }
 }
 ?>
@@ -64,87 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
 <div class="container">
-    <div class="burger"  onclick="toggleMenu()">
-        <div class="burger-outer">
-            <div class="burger-icon">
-                <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
-            </div>
-            <div class="search-icon">
-                <img src="../Assets/Icons/magnifying-glass.svg" alt="" width="30px">
-            </div>
-        </div>
-        <hr class="bottom-line">
-    </div>
-
-    <div class="nav-bar" id="burger-nav-bar">
-        <div class="Profile" id='mobile'>
-            <div class="Profile_img">
-                <img src="https://picsum.photos/100/100" alt="" width="110">
-            </div>
-        </div>
-
-        <div class="user-name" id='mobile'>
-            <p><?php echo htmlspecialchars($username); ?></p>
-        </div>
-
-        <!-- Section for Dashboard -->
-        <body>
-   
-    <div class="container">
-        <div class="navbar">
-            
-            <div class="Profile">
-                <div class="Profile_img">
-                    <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" width="110">
-                </div>
-            </div>
-            <!-- Username Section -->
-            <div class="user-name">
-                <p><?php echo htmlspecialchars($username); ?></p>
-            </div>
-
-            <!-- Home Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Dashboard.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/home.svg" alt="Icon">
-                <p><a class="navbar-items" href="Dashboard.php">Home</a></p>
-            </div>
-
-            <!-- Expenses Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Dashboard.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/expenses.svg" alt="Icon">
-                <p><a class="navbar-items" href="Expenses.php">Expenses</a></p>
-            </div>
-
-            <!-- Income Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Expenses.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/income.svg" alt="Icon">
-                <p><a class="navbar-items" href="Income.php">Income</a></p>
-            </div>
-
-            <!-- Goal Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Goals.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/approvals.svg" alt="Icon">
-                <p><a class="navbar-items" href="Goals.php">Goals</a></p>
-            </div>
-
-            <!-- Savings Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Savings.php') ? 'active-tab' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/reports.svg" alt="Icon">
-                <p><a class="navbar-items" href="Savings.php">Savings</a></p>
-            </div>
-
-            <!-- Settings Nav Item -->
-            <div class="navbar-div <?php echo ($current_page == 'Settings.php' || $current_page == 'profile.php') ? 'active' : ''; ?>" id="Nav_Button">
-                <img class="navbar-icon" src="../Assets/Icons/settings.svg" alt="Icon" width="50px">
-                <p><a class="navbar-items" href="Settings.php">Settings</a></p>
-            </div>
-            <!-- Logo in the navbar -->
-            <div class="Logo-Nav" id="Nav_Side">
-                <div class="Penny_Logo">
-                    <img src="../Assets/PENNY_WISE_Logo.png" alt="" width="200">
-                </div>
-            </div>
-        </div>
+<?php include '../User Interface/navbar.php'; ?>
 
     <section class="main-section">
             <div class="main-container">
@@ -164,9 +89,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <label for="Bank" class="Savings-Label">Bank*</label>
                                 <input type="text" id="Bank" name="Bank" required>
                             </div>
-                            <div class="Saving-Form-Format" id="Balance-Row">
-                                <label for="Balance" class="Savings-Label">Balance*</label>
-                                <input type="number" id="Balance" name="Balance" required>
+                            <div class="Saving-Form-Format" id="SavingsAmount-Row">
+                                <label for="SavingsAmount" class="Savings-Label">Amount*</label>
+                                <input type="number" name="SavingsAmount" id="SavingsAmount" required>
                             </div>
                             <div class="Saving-Form-Format" id="Category-Row">
                                 <label for="SavingsCategory" class="Savings-Label">Category*</label>
@@ -181,10 +106,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="Saving-Form-Format" id="Subject-Row">
                                 <label for="SavingsSubject" class="Savings-Label">Subject*</label>
                                 <input type="text" id="SavingsSubject" name="Subject" required>
-                            </div>
-                            <div class="Saving-Form-Format" id="Description-Row">
-                                <label for="SavingsDescription" class="Savings-Label">Description</label>
-                                <textarea id="SavingsDescription" name="Description" required></textarea>
                             </div>
                             <div class="Saving-Form-Format" id="Savings-Button-Row">
                                 <div class="Savings-button-div-row">
@@ -247,9 +168,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </script>
 
     <script>
-         function showPopup(subject, balance, bank , category, date) {
+         function showPopup(subject, savings_amount, bank , category, date) {
             document.getElementById('popup-title').innerText = `Description`;
-            document.getElementById('popup-description').innerText = `Bank: ${bank}\nAmount: ${balance}\nDate: ${date}\nSubject: ${subject}\nCategory: ${category}`;
+            document.getElementById('popup-description').innerText = `Bank: ${bank}\nAmount: ${savings_amount}\nDate: ${date}\nSubject: ${subject}\nCategory: ${category}`;
             document.getElementById('popup').style.display = 'block';
         }
 
