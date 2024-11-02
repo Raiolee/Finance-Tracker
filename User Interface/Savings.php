@@ -185,7 +185,7 @@ if ($stmt3) {
                 <div class="content scrollable">
                     <div class="top-bar space-between">
                         <h1 class="header">Bank</h1>
-                        <button class="New-Saving" id="BankButton">New Bank</button>
+                        <button class="New-Saving" id="BankButton">+ New Bank</button>
                     </div>
                     <table class="table-approval" id="Bank-Content">
                         <thead>
@@ -380,7 +380,9 @@ if ($stmt3) {
             return subjects.map(subject => `<option value="${subject}">${subject}</option>`).join('');
         }
     </script>
-    <?php include("modal-savings.php"); ?>
+    
+    <?php include("modals/modal-allocate.php"); ?>
+    <?php include("modals/modal-savings.php"); ?>
     <script src="../js/modal.js"></script>
 </body>
 
