@@ -57,7 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($stmt) {
                 // Bind parameters
-                $stmt->bind_param("issd", $uid, $bankName, $bank, $amount); // Updated parameter types
+                $stmt->bind_param("issi", $uid, $bankName, $bank, $amount);
+                // Updated parameter types
 
                 // Execute the statement
                 if ($stmt->execute()) {
