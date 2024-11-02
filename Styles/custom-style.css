@@ -114,7 +114,7 @@
     /* Make the image round */
 }
 
-.goals-header {
+.custom-header {
     display: flex;
     flex-direction: row;
 }

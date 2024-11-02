@@ -130,7 +130,7 @@ $conn->close();
                     <!-- Top bar section -->
                     <div class="top-bar space-between" id="expense">
                         <h1 class="header" id="headerText">Goals</h1>
-                        <div class="goals-header">
+                        <div class="custom-header">
                             <button class="New-Saving" id="newGoalsBtn" onclick="showGoalForm()">+ Add a Goal</button>
                             <!-- Filter form -->
                             <form class="filter-form" id="filterForm" action="" method="GET">
@@ -235,8 +235,8 @@ $conn->close();
                             <textarea class="text-input medium" id="Description" name="Description" required></textarea>
 
 
-                            <div class="btn-options">
-                                <button type="button" class="cancel" onclick="closeGoalForm()">Cancel</button>
+                            <div class="btn-options center" id="report-btns">
+                                <button type="link-button" class="cancel link-btn" onclick="closeGoalForm()">Cancel</button>
                                 <button type="submit" name="submit-form" class="save">Save</button>
                             </div>
                     </form>
