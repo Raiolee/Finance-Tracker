@@ -47,16 +47,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($action === 'insert_bank') {
             // Collect form data for bank insertion
-            $date = $_POST['date']; // Ensure the form input name is consistent
+            $bankName = $_POST['bank-name'];  // Updated input name
             $bank = $_POST['bank'];
+            $amount = $_POST['bank-amount'];   // New input for amount
 
             // Prepare and bind the SQL statement
-            $sql = "INSERT INTO user_db.bank (user_id, date, bank) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO user_db.bank (user_id, purpose, bank, balance) VALUES (?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
 
             if ($stmt) {
                 // Bind parameters
-                $stmt->bind_param("iss", $uid, $date, $bank);
+                $stmt->bind_param("issi", $uid, $bankName, $bank, $amount);
+                // Updated parameter types
 
                 // Execute the statement
                 if ($stmt->execute()) {
@@ -282,7 +284,7 @@ if ($stmt3) {
             document.getElementById('popup-Bank').style.display = 'block';
 
             // Attach an event listener to handle form submission
-            document.getElementById('bank-form').addEventListener('submit', function(event) {
+            document.getElementById('bank-form').addEventListener('submit', function (event) {
                 event.preventDefault(); // Prevent default form submission
 
                 // Retrieve values from the form
@@ -298,21 +300,21 @@ if ($stmt3) {
 
                 // Send the data to the server using fetch
                 fetch(window.location.href, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: new URLSearchParams({
-                            action: 'another_action',
-                            balance: balanceValue,
-                            bank: bankValue,
-                            subject: goal, // Changed from 'goal' to 'subject'
-                            amount: amount,
-                            date: date,
-                            category: category,
-                        }),
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'another_action',
+                        balance: balanceValue,
+                        bank: bankValue,
+                        subject: goal, // Changed from 'goal' to 'subject'
+                        amount: amount,
+                        date: date,
+                        category: category,
+                    }),
 
-                    })
+                })
                     .then(response => {
                         if (response.ok) {
                             // Handle successful response
@@ -328,8 +330,6 @@ if ($stmt3) {
             });
         }
 
-
-
         function closePopup() {
             document.getElementById('popup').style.display = 'none';
         }
@@ -338,7 +338,7 @@ if ($stmt3) {
             document.getElementById('popup-Bank').style.display = 'none';
         }
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target == document.getElementById('popup')) {
                 closePopup();
             }
