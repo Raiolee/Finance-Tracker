@@ -13,7 +13,9 @@
                 <input class="var-input" type="date" name="start-date" required>
                 <label class="form-labels" for="goal-category">Category*</label>
                 <select class="var-input" name="goal-category" id="goal-category" required>
-                    <option value="CHANGE ME">Option 1</option> <!-- Palagay na lang sa value yung backend code to get the specific goal -->
+                    <option value="Travels">Travels</option>
+                    <option value="Miscellaneous">Miscellaneous</option>
+                    <option value="Others">Others</option>
                 </select>
                 <label class="form-labels" for="target-amount">Target Amount*</label> <!-- Put error handling para di sosobra yung amount sa remaining balance -->
                 <input class="var-input" type="number" id="bank-amount" name="target-amount" placeholder="0.00" required>
