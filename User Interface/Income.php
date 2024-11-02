@@ -138,7 +138,7 @@ if (isset($_GET['sortIncomeDate'])) {
                     <div class="top-bar space-between" id="expense">
                         <h1 class="header">Income</h1>
                         <div class="custom-header">
-                            <a href="AddIncome.php"><button class="New-Saving" action="AddIncome.php">+ Add Income</button></a>
+                            <button class="New-Saving" id="newIncomeBtn">+ Add Income</button>
                             <!-- Filter form -->
                             <form class="filter-form" id="filterForm" action="" method="GET">
                                 <select class="var-input medium pointer" id="FilterGoalsCategory" name="FilterGoalsCategory">
@@ -293,6 +293,9 @@ if (isset($_GET['sortIncomeDate'])) {
             }
         };
     </script>
+
+    <?php include("modals/modal-income.php"); ?>
+    <script src="../js/modal.js"></script>
 </body>
 
 </html>
