@@ -148,7 +148,7 @@ $conn->close();
                     <div class="top-bar space-between" id="expense">
                         <h1 class="header" id="headerText">Goals</h1>
                         <div class="custom-header">
-                            <button class="New-Saving" id="newGoalsBtn" onclick="showGoalForm()">+ Add a Goal</button>
+                            <button class="New-Saving" id="newGoalBtn">+ Add a Goal</button>
                             <!-- Filter form -->
                             <form class="filter-form" id="filterForm" action="" method="GET">
                                 <select class="var-input medium pointer" id="FilterGoalsCategory" name="FilterGoalsCategory">
@@ -223,43 +223,12 @@ $conn->close();
                             ?>
                         </tbody>
                     </table>
-
-                    <!-- Add Goal Form -->
-                    <form id="GoalForm" method="post" class="pfp-form" style="display:none;">
-                        <div class="big-divider full">
-                            <label for="Start-Date" class="form-labels">Start Date*</label>
-                            <input class="date-input medium" type="date" id="Start-Date" name="Start-Date" required>
-
-                            <label for="Subject" class="form-labels">Subject*</label>
-                            <input class="var-input medium" type="text" id="Subject" name="Subject" required style="text-transform: capitalize;">
-
-                            <label for="GoalsCategory" class="form-labels">Category*</label>
-                            <select class="date-input" id="GoalsCategory" name="GoalsCategory" required>
-                                <option value="" disabled selected>Category</option>
-                                <option value="Travels">Travels</option>
-                                <option value="Miscellaneous">Miscellaneous</option>
-                                <option value="Others">Others</option>
-                            </select>
-
-                            <label for="Target-Amount" class="form-labels">Target Amount*</label>
-                            <input class="var-input" type="number" id="Target-Amount" name="Target-Amount" required>
-
-                            <label for="Description" class="form-labels">Description*</label>
-                            <textarea class="text-input medium" id="Description" name="Description" required></textarea>
-
-
-                            <div class="btn-options center" id="report-btns">
-                                <button type="link-button" class="cancel link-btn" onclick="closeGoalForm()">Cancel</button>
-                                <button type="submit" name="submit-form" class="save">Save</button>
-                            </div>
-                    </form>
-                    <?php if (isset($error_message)): ?>
-                        <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
-                    <?php endif; ?>
                 </div>
             </div>
-        </div>
     </div>
-    <script src="../js/goals-form.js"></script>
+    </div>
+    <?php include('modals/modal-goals.php'); ?>
+    <script src="../js/modal.js"></script>
 </body>
+
 </html>

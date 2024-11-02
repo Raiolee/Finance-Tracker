@@ -19,7 +19,13 @@
                 <input class="var-input" type="number" id="bank-amount" name="allocate-amount" placeholder="0.00" required>
                 <label class="form-labels" for="allocate-date">Date</label>
                 <input class="var-input" type="date" id="allocate-date" name="allocate-date" required>
-                
+                <label class="form-labels" for="frequency">Frequency</label>
+                <select class="var-input" name="frequency" id="frequency">
+                    <option value="Once">Once</option>
+                    <option value="Daily">Weekly</option>
+                    <option value="Monthly">Monthly</option>
+                </select>
+
                 <div class="btn-options">
                     <button type="button" class="link-btn cancel" onclick="closeModalAllocate()">Cancel</button>
                     <button type="submit" class="save">Save</button>
