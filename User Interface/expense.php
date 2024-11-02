@@ -55,7 +55,7 @@ if ($user && $user['user_dp']) {
                     <div class="top-bar space-between" id="expense">
                         <h1 class="header">Expenses</h1>
                         <div class="custom-header">
-                            <a href="add_expense.php"><button class="New-Saving" action="AddIncome.php">+ Add an Expense</button></a>
+                            <button class="New-Saving" id="newExpenseBtn">+ Add an Expense</button>
                             <!-- Filter form -->
                             <form class="filter-form" id="filterForm" action="" method="GET">
                                 <select class="var-input medium pointer" id="FilterGoalsCategory" name="FilterGoalsCategory">
@@ -116,14 +116,13 @@ if ($user && $user['user_dp']) {
                             ?>
                         </tbody>
                     </table>
-
-
-
                 </div>
             </div>
         </section>
     </div>
     <!-- APIs (Put APIs below this comment)-->
+    <?php include('modals/modal-expense.php'); ?>
+    <script src="../js/modal.js"></script>
     <script src="../js/expense.js"></script>
 </body>
 

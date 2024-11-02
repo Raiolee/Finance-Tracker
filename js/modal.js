@@ -14,6 +14,10 @@ const goalModal = document.getElementById('goalModal');
 const incomeButton = document.getElementById('newIncomeBtn');
 const incomeModal = document.getElementById('incomeModal');
 
+// Get elements for Expense Modal
+const expenseButton = document.getElementById('newExpenseBtn');
+const expenseModal = document.getElementById('expenseModal');
+
 // Show the New Goal modal when "New Goal" button is clicked
 if (goalButton && goalModal) {
     goalButton.addEventListener('click', function () {
@@ -38,6 +42,8 @@ window.onclick = function (event) {
         closeModalAllocate();
     } else if (event.target == incomeModal) {
         closeModalIncome();
+    } else if (event.target == expenseModal) {
+        closeModalExpense();
     }
 }
 
@@ -87,5 +93,19 @@ if (incomeButton && incomeModal) {
 function closeModalIncome() {
     if (incomeModal) {
         incomeModal.style.display = 'none'; // Hide modal
+    }
+}
+
+// Show the New Expense modal when "New Expense" button is clicked
+if (expenseButton && expenseModal) {
+    expenseButton.addEventListener('click', function () {
+        expenseModal.style.display = 'flex'; // Show modal as a flex container
+    });
+}
+
+// Close the New Expense modal
+function closeModalExpense() {
+    if (expenseModal) {
+        expenseModal.style.display = 'none'; // Hide modal
     }
 }
