@@ -826,6 +826,32 @@ body {
   .hamburger-menu {
       display: block; /* Show hamburger icon */
   }
+
+  .New-Saving {
+    font-size: 8px !important;
+    height: 40px!important;
+    margin: 3px 15px 0 0!important;
+  }
+
+  h1.header {
+    margin: 10px 10px 15px 20px!important;
+    font: 20px "Atkinson Hyperlegible", sans-serif !important;
+  }
+
+  .table-approval {
+    width: 80% !important;
+  }
+
+  .table-approval thead th {
+    padding: 10px !important;
+    font-size: 13px!important;
+  }
+
+  .table-approval td {
+    font-size: 14px!important;
+    text-align: center;
+  }
+
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
