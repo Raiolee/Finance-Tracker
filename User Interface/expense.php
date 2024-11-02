@@ -36,6 +36,7 @@ if ($user && $user['user_dp']) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="../Styles/styles.scss">
+    <link rel="stylesheet" href="../Styles/custom-style.css">
     <link href='https://fonts.googleapis.com/css?family=Cabin Condensed' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -52,8 +53,29 @@ if ($user && $user['user_dp']) {
                 <div class="content">
                     <!-- Top bar section -->
                     <div class="top-bar space-between" id="expense">
-                        <h1 class="header">Expenses</h1>
-                        <a href="add_expense.php"><button class="New-Saving" id="NewExpenseButton">+ Add an Expense</button></a>
+                        <h1 class="header">Income</h1>
+                        <div class="custom-header">
+                            <a href="add_expense.php"><button class="New-Saving" action="AddIncome.php">+ Add an Expense</button></a>
+                            <!-- Filter form -->
+                            <form class="filter-form" id="filterForm" action="" method="GET">
+                                <select class="var-input medium pointer" id="FilterGoalsCategory" name="FilterGoalsCategory">
+                                    <option value="" disabled selected>Category</option>
+                                    <option value="Travels">Travels</option>
+                                    <option value="Miscellaneous">Miscellaneous</option>
+                                    <option value="Others">Others</option>
+                                </select>
+                                <button type="submit">
+                                    <i class="fa"><img src="../Assets/Icons/filter.svg" alt=""></i>
+                                </button>
+                            </form>
+                            <!-- Search Form -->
+                            <form class="search-form" action="" method="GET">
+                                <input type="search" name="Incomequery" placeholder="Search here ..." style="text-transform: capitalize;">
+                                <button type="submit">
+                                    <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
+                                </button>
+                            </form>
+                        </div>
                     </div>
                     <!-- Put main code here -->
 
@@ -79,11 +101,11 @@ if ($user && $user['user_dp']) {
                                 // Output data of each row
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";
-                                        echo "<td>" . htmlspecialchars($row['details']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['merchant']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['amount']) . "</td>";
-                                        echo "<td>" . htmlspecialchars($row['reimbursable']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['details']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['merchant']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['amount']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['reimbursable']) . "</td>";
                                     echo "</tr>";
                                 }
                             } else {

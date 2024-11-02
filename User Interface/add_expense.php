@@ -83,7 +83,7 @@ if ($user && $user['user_dp']) {
                                 <label for="name" class="form-labels">Merchant</label>
                                 <input type="text" class="var-input" id="name" name="merchant">
                                 <label for="name" class="form-labels">Amount</label>
-                                <input type="number" class="var-input" id="amount" name="amount" step="100.00">
+                                <input type="number" class="var-input" id="amount" name="amount">
                                 <label for="name" class="form-labels">Description</label>
                                 <textarea class="text-input" name="description" id="description"></textarea>
 
