@@ -151,6 +151,24 @@
     max-width: 300px;  /* Prevent buttons from getting too wide */
 }
 
+/* Media query for smaller screens */
+@media only screen and (min-width: 425px) and (max-width: 767px) {
+    .quick-access-items {
+        gap: 10px;
+    }
+
+    .quick-access-item {
+        font-size: 12px; /* Smaller font size */
+        padding: 8px 10px; /* Smaller padding */
+        gap: 3px; /* Reduce space between icon and text */
+    }
+
+    .quick-access-item i {
+        font-size: 14px; /* Reduce icon size */
+    }
+
+  }
+
 .quick-access-item i {
     font-size: 2rem;
     margin-bottom: 10px;
@@ -238,6 +256,16 @@
     color: #ddd;
 }
 
+@media only screen and (min-width: 425px) and (max-width: 767px) {
+    .expense-table {
+        width: 50%;
+        font-size: 0.9rem; /* Slightly smaller font size */
+    }
+    
+    .expense-table th, .expense-table td {
+        padding: 10px; /* Smaller padding for cells */
+    }
+  }
 
 
 

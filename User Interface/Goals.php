@@ -101,6 +101,28 @@ if (isset($_GET['FilterGoalsCategory'])) {
     }
 }
 
+if (isset($_GET['sortforsubject'])) {
+    try {
+        $order = $_GET['order'] ?? 'desc';
+        $result = sortGoalsBySubject($conn, $userId,  $order);
+        $goalsAndSavings = getGoalsAndSavings($conn, $userId);
+        $predictions = predictSavingDate($conn, $userId);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
+}
+
+if (isset($_GET['sort'])) {
+    try {
+        $order = $_GET['order'] ?? 'asc';
+        $result = sortGoalsByDate($conn, $userId, $order);
+        $goalsAndSavings = getGoalsAndSavings($conn, $userId);
+        $predictions = predictSavingDate($conn, $userId);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
+}
+
 $conn->close();
 ?>
 
@@ -154,15 +176,11 @@ $conn->close();
                     <table id="goalsTable" class="table-approval">
                         <thead>
                             <tr>
-                                <th class="th-interact" onclick="sortTable('subject')">
-                                    SUBJECT
-                                </th>
+                                <th class="th-interact" onclick="window.location.href='?sortforsubject&order=<?php echo ($_GET['order'] ?? 'asc') === 'asc' ? 'desc' : 'asc'; ?>'">SUBJECT</th>
                                 <th>
                                     CATEGORY
                                 </th>
-                                <th class="th-interact" onclick="sortTable('accomplishment_date')">
-                                    ACCOMPLISHMENT DATE
-                                </th>
+                                <th class="th-interact" onclick="window.location.href='?sort=date&order=<?php echo ($_GET['order'] ?? 'asc') === 'asc' ? 'desc' : 'asc'; ?>'">ACCOMPLISHMENT DATE</th>
                                 <th>
                                     PROGRESS
                                 </th>

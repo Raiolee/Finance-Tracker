@@ -240,26 +240,25 @@ if ($stmt3) {
             document.getElementById('popup').style.display = 'block';
         }
 
-        function BankForm(bank, balance) {
+        function BankForm(bank, balance, user_bank_id) {
             document.getElementById('popup-title-Bank').innerText = `Manage Savings`;
 
             // Create the form HTML
             const formHTML = `
-                <p>Bank: ${bank}</p>
-                <p>Balance: ${balance}</p>
-                <form id="bank-form" method="post" action="">
-                    <input type="hidden" name="action" value="another_action">
+        <p>Bank: ${bank}</p>
+        <p>Balance: ${balance}</p>
+        <form id="bank-form" method="post" action="">
+            <input type="hidden" name="action" value="another_action">
 
-                    
-                    <label for="goal">Subject:</label>
-                    <select class="var-input large" name="goal" id="goal">
-                        ${getCategoryOptions()}
-                    </select>
-                    <br>
-                    
-                    <label for="amount">Amount:</label>
-                    <input type="number" id="amount" name="amount" required>
-                    <br>
+            <label for="goal">Subject:</label>
+            <select class="var-input large" name="goal" id="goal">
+                ${getCategoryOptions()}
+            </select>
+            <br>
+
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required>
+            <br>
 
             <label for="date" class="Savings-Label">Date:</label>
             <input type="date" id="date" name="date" required>
@@ -272,9 +271,9 @@ if ($stmt3) {
             </select>
             <br>
 
-                    <button type="submit">Submit</button>
-                </form>
-            `;
+            <button type="submit">Submit</button>
+        </form>
+    `;
 
             // Set the innerHTML of the popup description
             document.getElementById('popup-description-Bank').innerHTML = formHTML;
