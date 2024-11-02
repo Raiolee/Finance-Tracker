@@ -12,7 +12,7 @@
                 <label for="Bank" class="form-labels">Bank</label>
                 <input class="var-input" type="text" id="bank" name="bank" placeholder="Bank Name" required>
                 <label class="form-labels" for="amount">Amount</label>
-                <input class="var-input" type="number" id="bank-amount" placeholder="bank-amount" value="0.00" required>
+                <input class="var-input" type="number" id="bank-amount" placeholder="0.00" required>
                 <div class="btn-options">
                     <button type="button" class="link-btn cancel" onclick="closeModal()">Cancel</button>
                     <button type="submit" class="save">Save</button>
