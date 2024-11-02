@@ -109,9 +109,6 @@
     width: 20px;
     /* Adjust width */
     height: 20px;
-    /* Set height equal to width for round shape */
-    border-radius: 50%;
-    /* Make the image round */
 }
 
 .custom-header {
@@ -123,4 +120,5 @@
     &:hover {
         cursor: pointer;
     }
+
 }

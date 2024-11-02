@@ -168,7 +168,7 @@ if (isset($_GET['sortIncomeDate'])) {
                                 <th class="table-header">Amount</th>
                                 <th class="table-header">Category</th>
                                 <th class="th-interact" onclick="document.querySelector('.SortIncomeDate').submit();">
-                                    DATE
+                                    Date
                                     <form class="SortIncomeDate" action="" method="GET" style="display: inline;">
                                         <input type="hidden" name="sortIncomeDate" value="<?php echo htmlspecialchars($nextSortOrderDate); ?>">
                                     </form>

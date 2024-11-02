@@ -53,7 +53,7 @@ if ($user && $user['user_dp']) {
                 <div class="content">
                     <!-- Top bar section -->
                     <div class="top-bar space-between" id="expense">
-                        <h1 class="header">Income</h1>
+                        <h1 class="header">Expenses</h1>
                         <div class="custom-header">
                             <a href="add_expense.php"><button class="New-Saving" action="AddIncome.php">+ Add an Expense</button></a>
                             <!-- Filter form -->
@@ -82,11 +82,11 @@ if ($user && $user['user_dp']) {
                     <table class="table-approval">
                         <thead>
                             <tr>
-                                <th>DETAILS</th>
-                                <th>MERCHANT</th>
-                                <th>BANK</th>
-                                <th>AMOUNT</th>
-                                <th>REIMBURSABLE</th>
+                                <th>Details</th>
+                                <th>Merchant</th>
+                                <th>Bank</th>
+                                <th>Amount</th>
+                                <th>Reimbursable</th>
                             </tr>
                         </thead>
                         <tbody>
