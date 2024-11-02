@@ -2,6 +2,17 @@
     <link rel="stylesheet" href="../Styles/styles.scss">
 </head>
 <div class="navbar-custom">
+    <!-- Hamburger Icon -->
+    <div class="hamburger-menu" onclick="toggleMenu()">
+        &#9776; <!-- Unicode character for hamburger icon -->
+    </div>
+<div class="navbar-items">
+    <div class="Profile">
+        <div class="Profile_img">
+            <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" width="110">
+        </div>
+    </div>
+
     <div class="user-name">
         <p class=""><?php echo htmlspecialchars($username); ?></p>
     </div>
@@ -48,10 +59,9 @@
         </div>
     </div>
 </div>
-
+</div>
 <script>
-    document.getElementById('hamburger').addEventListener('click', function() {
-        const navbarItems = document.getElementById('navbar-items');
-        navbarItems.classList.toggle('show'); // Toggle the "show" class
-    });
+    function toggleMenu() {
+        document.querySelector('.navbar-items').classList.toggle('show');
+    }
 </script>

@@ -10,9 +10,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Start the session
-session_start();
-
 // Check if the user is logged in
 if (!isset($_SESSION["user"])) {
     header("Location: ../index.php");
@@ -82,28 +79,26 @@ try {
     $error_message = $e->getMessage();
 }
 
-// Fetch goals based on the filter and sort order
-$currentSortOrder = $_GET['sortOrder'] ?? 'ASC';
-$sortOrderDate = $_GET['sortOrderDate'] ?? 'ASC';
-$nextSortOrder = ($currentSortOrder === 'ASC') ? 'DESC' : 'ASC';
-$nextSortOrderDate = ($sortOrderDate === 'ASC') ? 'DESC' : 'ASC';
-
-$searchResults = [];
-if (isset($_GET['query']) && !empty(trim($_GET['query']))) {
-    $searchQuery = trim($_GET['query']);
-    $searchResults = searchGoalsBySubject($conn, $userId, $searchQuery);
+if (isset($_GET['query'])) {
+    $searchQuery = $_GET['query'];
+    $user_id = $_SESSION['user_id']; // Assuming user_id is stored in session
+    try {
+        [$result] = searchGoals($conn, $user_id, $searchQuery);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
 }
 
-try {
-    if (!empty($searchQuery)) {
-        $result = fetchGoalsByCategory($conn, $userId, $searchQuery, $currentSortOrder);
-    } elseif (isset($_GET['sortOrderDate'])) {
-        $result = fetchGoalsByDate($conn, $userId, $sortOrderDate);
-    } else {
-        $result = fetchGoalsByCategory($conn, $userId, '', $currentSortOrder);
+if (isset($_GET['FilterGoalsCategory'])) {
+    $filterCategory = $_GET['FilterGoalsCategory'];
+    $user_id = $_SESSION['user_id']; // Assuming user_id is stored in session
+    try {
+        $result = filterCategory($conn, $user_id, $filterCategory);
+        $goalsAndSavings = getGoalsAndSavings($conn, $user_id);
+        $predictions = predictSavingDate($conn, $user_id);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
     }
-} catch (Exception $e) {
-    $error_message = $e->getMessage();
 }
 
 $conn->close();

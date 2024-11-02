@@ -187,44 +187,74 @@ if ($stmt3) {
                         <h1 class="header">Bank</h1>
                         <button class="New-Saving" id="BankButton">New Bank</button>
                     </div>
-                    <table id="goalsTable" class="table-approval">
-                        <thead>
-                            <tr>
-                                <th class="th-interact" onclick="sortTable('subject')">
-                                    NUMBER
-                                </th>
-                                <th>
-                                    BANK
-                                </th>
-                                <th class="th-interact" onclick="sortTable('accomplishment_date')">
-                                    BALANCE
-                                </th>
-                                <th>
-                                    MANAGE
-                                </th>
-                            </tr>
-                        </thead>
+                    <div class="Bank">
+                    <div id="Bank-Content">
+                        <table id="goalsTable" class="table-approval">
+                            <thead>
+                                <tr>
+                                    <th class="th-interact" onclick="sortTable('subject')">
+                                        NUMBER
+                                    </th>
+                                    <th>
+                                        BANK
+                                    </th>
+                                    <th class="th-interact" onclick="sortTable('accomplishment_date')">
+                                        BALANCE
+                                    </th>
+                                    <th>
+                                        MANAGE
+                                    </th>
+                                </tr>
+                            </thead>
 
-                        <tbody>
-                            <?php
-                            if (isset($result) && $result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    // Use the correct variables from the current row
-                                    echo "<tr>
-                                            <td>" . htmlspecialchars($row['user_bank_id']) . "</td>
-                                            <td>" . htmlspecialchars($row['bank']) . "</td>
-                                            <td>" . htmlspecialchars($row['balance']) . "</td>
-                                            <td>
-                                                <button onclick=\"BankForm('" . htmlspecialchars($row['bank']) . "', '" . htmlspecialchars($row['balance']) . "')\">Allocate</button>
-                                            </td>
-                                        </tr>";
+                            <tbody>
+                                <?php
+                                if (isset($result) && $result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        // Use the correct variables from the current row
+                                        echo "<tr>
+                                                <td>" . htmlspecialchars($row['user_bank_id']) . "</td>
+                                                <td>" . htmlspecialchars($row['bank']) . "</td>
+                                                <td>" . htmlspecialchars($row['balance']) . "</td>
+                                                <td>
+                                                    <button onclick=\"BankForm('" . htmlspecialchars($row['bank']) . "', '" . htmlspecialchars($row['balance']) . "')\">Allocate</button>
+                                                </td>
+                                            </tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='4'>No results found</td></tr>"; // Ensure column span matches the number of columns
                                 }
-                            } else {
-                                echo "<tr><td colspan='4'>No results found</td></tr>"; // Ensure column span matches the number of columns
-                            }
-                            ?>
-                        </tbody>
-                    </table>
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="BankSavingForm" class="new-expense-form" style="display:none;">
+                        <h3>New Saving</h3>
+                        <hr class="bottom-line">
+                        <form id="SavingForm" method="post" action="">
+                            <input type="hidden" name="action" value="insert_bank">
+
+                            <div class="Saving-Form-Format" id="Date-Row">
+                                <label for="SavingsDate" class="Savings-Label">Date</label>
+                                <input type="date" id="SavingsDate" name="date" required>
+                                <!-- Ensure the name matches in PHP -->
+                            </div>
+                            <div class="Saving-Form-Format" id="Bank-Row">
+                                <label for="Bank" class="Savings-Label">Bank</label>
+                                <input type="text" id="Bank" name="bank" required>
+                                <!-- Ensure the name matches in PHP -->
+                            </div>
+                            <div class="Saving-Form-Format" id="Savings-Button-Row">
+                                <div class="Savings-button-div-row">
+                                    <button type="submit" class="button-savings">Save</button>
+                                    <button type="button" class="button-savings"
+                                        onclick="closeExpenseForm()">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    </div> <!--Form End-->
 
                     <?php if (isset($error_message)): ?>
                         <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
@@ -248,13 +278,14 @@ if ($stmt3) {
                             </div>
                         </div>
                     </div>
+
                 </div><!--Content End-->
             </div> <!--Main-Container End-->
         </section> <!--Section End-->
     </div>
 
     <script>
-        document.getElementById('BankButton').addEventListener('click', function() {
+        document.getElementById('BankButton').addEventListener('click', function () {
             const rightContainer = document.getElementById('Bank-Content');
             const form = document.getElementById('BankSavingForm');
 

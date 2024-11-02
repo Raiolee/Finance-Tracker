@@ -2,7 +2,7 @@
     background-color: #1b1b1b;
     display: flex;
     height: 100vh;
-    width: auto;
+    width: 100%;
     min-height: 100vh;
     /* Allows the container to expand if needed */
 }
