@@ -2,12 +2,6 @@
     <link rel="stylesheet" href="../Styles/styles.scss">
 </head>
 <div class="navbar-custom">
-    <div class="Profile">
-        <div class="Profile_img">
-            <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" width="110">
-        </div>
-    </div>
-
     <div class="user-name">
         <p class=""><?php echo htmlspecialchars($username); ?></p>
     </div>
@@ -25,7 +19,7 @@
     </div>
 
     <!-- Income Nav Item -->
-    <div class="navbar-div <?php echo ($current_page == 'Income.php' || $current_page == 'AddIncome.php') ? 'active' : ''; ?>" id="Nav_Button">
+    <div class="navbar-div <?php echo ($current_page == 'income.php' || $current_page == 'Income.php' || $current_page == 'AddIncome.php') ? 'active' : ''; ?>" id="Nav_Button">
         <img class="navbar-icon-custom" src="../Assets/Icons/income.svg" alt="Icon">
         <p><a class="navbar-items-custom" href="Income.php">Income</a></p>
     </div>
@@ -54,3 +48,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('hamburger').addEventListener('click', function() {
+        const navbarItems = document.getElementById('navbar-items');
+        navbarItems.classList.toggle('show'); // Toggle the "show" class
+    });
+</script>
