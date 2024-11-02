@@ -187,32 +187,29 @@ if ($stmt3) {
                         <h1 class="header">Bank</h1>
                         <button class="New-Saving" id="BankButton">New Bank</button>
                     </div>
-                    <div class="Bank">
-                    <div id="Bank-Content">
-                        <table id="goalsTable" class="table-approval">
-                            <thead>
-                                <tr>
-                                    <th class="th-interact" onclick="sortTable('subject')">
-                                        NUMBER
-                                    </th>
-                                    <th>
-                                        BANK
-                                    </th>
-                                    <th class="th-interact" onclick="sortTable('accomplishment_date')">
-                                        BALANCE
-                                    </th>
-                                    <th>
-                                        MANAGE
-                                    </th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php
-                                if (isset($result) && $result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        // Use the correct variables from the current row
-                                        echo "<tr>
+                    <table class="table-approval" id="Bank-Content">
+                        <thead>
+                            <tr>
+                                <th class="th-interact" onclick="sortTable('subject')">
+                                    Number
+                                </th>
+                                <th>
+                                    Bank
+                                </th>
+                                <th class="th-interact" onclick="sortTable('accomplishment_date')">
+                                    Balance
+                                </th>
+                                <th>
+                                    Manage
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if (isset($result) && $result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                                    // Use the correct variables from the current row
+                                    echo "<tr>
                                                 <td>" . htmlspecialchars($row['user_bank_id']) . "</td>
                                                 <td>" . htmlspecialchars($row['bank']) . "</td>
                                                 <td>" . htmlspecialchars($row['balance']) . "</td>
@@ -220,103 +217,21 @@ if ($stmt3) {
                                                     <button onclick=\"BankForm('" . htmlspecialchars($row['bank']) . "', '" . htmlspecialchars($row['balance']) . "')\">Allocate</button>
                                                 </td>
                                             </tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='4'>No results found</td></tr>"; // Ensure column span matches the number of columns
                                 }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div id="BankSavingForm" class="new-expense-form" style="display:none;">
-                        <h3>New Saving</h3>
-                        <hr class="bottom-line">
-                        <form id="SavingForm" method="post" action="">
-                            <input type="hidden" name="action" value="insert_bank">
-
-                            <div class="Saving-Form-Format" id="Date-Row">
-                                <label for="SavingsDate" class="Savings-Label">Date</label>
-                                <input type="date" id="SavingsDate" name="date" required>
-                                <!-- Ensure the name matches in PHP -->
-                            </div>
-                            <div class="Saving-Form-Format" id="Bank-Row">
-                                <label for="Bank" class="Savings-Label">Bank</label>
-                                <input type="text" id="Bank" name="bank" required>
-                                <!-- Ensure the name matches in PHP -->
-                            </div>
-                            <div class="Saving-Form-Format" id="Savings-Button-Row">
-                                <div class="Savings-button-div-row">
-                                    <button type="submit" class="button-savings">Save</button>
-                                    <button type="button" class="button-savings"
-                                        onclick="closeExpenseForm()">Cancel</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    </div> <!--Form End-->
+                            } else {
+                                echo "<tr><td colspan='4'>No results found</td></tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
 
                     <?php if (isset($error_message)): ?>
                         <div class="alert alert-danger"><?= htmlspecialchars($error_message); ?></div>
                     <?php endif; ?>
-
-                    <div id="popup" class="popup" style="display:none;">
-                        <div class="popup-content">
-                            <h2 id="popup-title"></h2>
-                            <p id="popup-description"></p>
-                            <div class="popup-buttons">
-                                <button id="cancel-btn" onclick="closePopup()">Close</button>
-                            </div>
-                        </div>
-                    </div> <!-- Popup End -->
-                    <div id="popup-Bank" class="popup" style="display: none;">
-                        <div class="popup-content">
-                            <h2 id="popup-title-Bank"></h2>
-                            <p id="popup-description-Bank"></p>
-                            <div class="popup-buttons">
-                                <button id="cancel-btn" onclick="closePopupBank()">Close</button>
-                            </div>
-                        </div>
-                    </div>
-
-                </div><!--Content End-->
-            </div> <!--Main-Container End-->
+                </div>
+            </div>
         </section> <!--Section End-->
     </div>
-
-    <script>
-        document.getElementById('BankButton').addEventListener('click', function () {
-            const rightContainer = document.getElementById('Bank-Content');
-            const form = document.getElementById('BankSavingForm');
-
-            rightContainer.style.display = 'none'; // Hide the right container
-            form.style.display = 'block'; // Show the new saving form
-        });
-
-        function closeExpenseForm() {
-            const rightContainer = document.getElementById('Bank-Content'); // Corrected ID
-            const form = document.getElementById('BankSavingForm');
-
-            form.style.display = 'none'; // Hide the new expense form
-            rightContainer.style.display = 'block'; // Show the right container again
-            clearForm(); // Clear the form fields
-        }
-
-        function clearForm() {
-            document.getElementById('SavingForm').reset(); // Clear all form fields
-        }
-
-        function toggleMenu() {
-            const menu = document.getElementById('burger-nav-bar');
-            menu.classList.toggle('active');
-
-            if (menu.classList.contains('active')) {
-                menu.style.display = 'none';
-            } else {
-                menu.style.display = 'block';
-            }
-        }
-    </script>
 
     <script>
         function showPopup(subject, balance, bank, category, date) {
@@ -466,6 +381,8 @@ if ($stmt3) {
             return subjects.map(subject => `<option value="${subject}">${subject}</option>`).join('');
         }
     </script>
+    <?php include("modal-savings.php"); ?>
+    <script src="../js/modal.js"></script>
 </body>
 
 </html>
