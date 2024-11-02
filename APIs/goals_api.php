@@ -187,4 +187,25 @@ function filterCategory($conn, $userId, $filterCategory) {
     }
 }
 
+function sortGoalsBySubject($conn, $userId, $order) {
+    $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+    $query = "SELECT * FROM goals WHERE user_id = ? ORDER BY subject $order";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+}
+
+function sortGoalsByDate($conn, $userId, $order) {
+    $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
+    $query = "SELECT * FROM goals WHERE user_id = ? ORDER BY date $order";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+}
 
