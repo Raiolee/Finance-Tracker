@@ -123,6 +123,7 @@ if (isset($_GET['sortIncomeDate'])) {
     <title>Income List</title>
     <link rel="stylesheet" href="../Styles/styles.css">
     <link rel="stylesheet" href="../Styles/custom-style.css">
+    <link rel="stylesheet" href="../Styles/ViewIncome.css">
     <link href='https://fonts.googleapis.com/css?family=Cabin Condensed' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
@@ -221,59 +222,43 @@ if (isset($_GET['sortIncomeDate'])) {
                             ?>
                         </tbody>
                     </table>
+                    <div id="editDeleteModal" class="modal">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Show Income Record</h3>
+                                <span class="close">&times;</span>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editDeleteForm" method="POST" action="Income.php">
+                                    <input type="hidden" id="incomeId" name="incomeId">
+                                    <div class="form-group">
+                                        <label for="incomeSource">Source of Income</label>
+                                        <input type="text" class="form-control" id="incomeSource" name="incomeSource" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="incomeTotal">Amount</label>
+                                        <input type="text" class="form-control" id="incomeTotal" name="incomeTotal" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="incomeCategory">Category</label>
+                                        <select class="form-control" id="incomeCategory" name="incomeCategory" readonly>
+                                            <option value="Monthly">Monthly</option>
+                                            <option value="Weekly">Weekly</option>
+                                            <option value="Yearly">Yearly</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="incomeBank">Bank</label>
+                                        <input type="text" class="form-control" id="incomeBank" name="incomeBank" readonly>
+                                    </div>
+                                    <button type="submit" class="btn btn-danger" id="deleteBtn">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-    </div>
-    </div>
-    </div>
-    <div id="sortModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Search Income Records</h2>
-            <form method="POST" action="">
-                <input type="text" name="searchKeyword" class="form-control" placeholder="Enter keyword (e.g., Work)" required>
-                <br>
-                <button type="submit" class="btn-search">Search</button>
-            </form>
         </div>
-    </div>
-
-    <!-- Edit/Delete Modal -->
-    <div id="editDeleteModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Show Income Record</h3>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <form id="editDeleteForm" method="POST" action="Income.php">
-                    <input type="hidden" id="incomeId" name="incomeId">
-                    <div class="form-group">
-                        <label for="incomeSource">Source of Income</label>
-                        <input type="text" class="form-control" id="incomeSource" name="incomeSource" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="incomeTotal">Amount</label>
-                        <input type="text" class="form-control" id="incomeTotal" name="incomeTotal" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="incomeCategory">Category</label>
-                        <select class="form-control" id="incomeCategory" name="incomeCategory" readonly>
-                            <option value="Monthly">Monthly</option>
-                            <option value="Weekly">Weekly</option>
-                            <option value="Yearly">Yearly</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="incomeBank">Bank</label>
-                        <input type="text" class="form-control" id="incomeBank" name="incomeBank" readonly>
-                    </div>
-                    <button type="submit" class="btn btn-danger" id="deleteBtn">Delete</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
     </section>
 
     <script>
