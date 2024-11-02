@@ -54,7 +54,15 @@ function getCategoryOptions() {
 }
 ?>
 
-<link rel="stylesheet" href="../Styles/modal-styles.scss">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../Styles/modal-styles.scss">
+    <title>Allocate to Goals</title>
+</head>
+<body>
 <!-- Modal Structure -->
 <div id="bankModalAllocate" class="modal">
     <div class="modal-content">
@@ -62,20 +70,21 @@ function getCategoryOptions() {
         <h3 class="header">Allocate to Goals</h3>
         <hr class="bottom-line">
         <form class="form-container" id="SavingForm" method="post" action="">
+            <input type="hidden" name="action" value="another_action">
             <div class="big-divider full">
                 <label class="form-labels" for="bank">Bank</label>
-                <input class="var-input" type="text" name="bank" value="CHANGE ME" readonly>
+                <input class="var-input" type="text" name="bank" readonly>
                 
                 <label class="form-labels" for="bank-balance">Remaining Balance</label>
-                <input class="var-input" type="number" name="bank-balance" value="CHANGE ME" readonly>
+                <input class="var-input" type="number" name="bank-balance" readonly>
                 
-                <label class="form-labels" for="bank-allocate">Goal</label>
+                <label class="form-labels" for="bank-category">Goal</label>
                 <select class="var-input" name="bank-category" id="bank-category" required>
                     <?php echo getCategoryOptions(); ?> <!-- Function call correctly placed -->
                 </select>
                 
                 <label class="form-labels" for="allocate-amount">Amount</label>
-                <input class="var-input" type="number" id="bank-amount" name="allocate-amount" placeholder="0.00" required>
+                <input class="var-input" type="number" id="allocate-amount" name="allocate-amount" placeholder="0.00" required>
                 
                 <label class="form-labels" for="allocate-date">Date</label>
                 <input class="var-input" type="date" id="allocate-date" name="allocate-date" required>
@@ -89,9 +98,11 @@ function getCategoryOptions() {
 
                 <div class="btn-options">
                     <button type="button" class="link-btn cancel" onclick="closeModalAllocate()">Cancel</button>
-                    <button type="submit" class="save">Save</button>
+                    <button type="submit" class="save" >Save</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+</body>
+</html>

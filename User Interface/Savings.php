@@ -73,43 +73,66 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         } elseif ($action === 'another_action') {
             // Collect form data
-            $goal = $_POST['subject'] ?? '';
-            $amount = $_POST['amount'] ?? 0;
-            $category = $_POST['category'] ?? '';
-            $date = $_POST['date'] ?? '';
+            $goal = $_POST['bank-category'] ?? '';
+            $amount = $_POST['allocate-amount'] ?? 0;
+            $category = $_POST['frequency'] ?? '';
+            $date = $_POST['allocate-date'] ?? '';
             $bank = $_POST['bank'] ?? '';
-
-            // Prepare the SQL statement for the other action
-            $stmt = $conn->prepare("INSERT INTO user_db.savings (user_id, date, bank, subject, savings_amount, category) VALUES (?, ?, ?, ?, ?, ?)");
 
             // Ensure $uid is defined; this should be set earlier in your code
             if (isset($uid)) {
-                // Bind parameters for the insert statement
-                $stmt->bind_param("isssis", $uid, $date, $bank, $goal, $amount, $category);
+                // Prepare the SQL statement to check the balance
+                $stmtBalance = $conn->prepare("SELECT balance FROM user_db.bank WHERE user_id = ? AND bank = ?");
+                $stmtBalance->bind_param("is", $uid, $bank);
+                $stmtBalance->execute();
+                $stmtBalance->bind_result($balance);
+                $stmtBalance->fetch();
+                $stmtBalance->close();
 
-                // Execute the insert statement
-                if ($stmt->execute()) {
-                    // Prepare the SQL statement to update the balance
-                    $stmt2 = $conn->prepare("UPDATE user_db.bank SET balance = balance - ? WHERE user_id = ? AND bank = ?");
-                    $stmt2->bind_param("dis", $amount, $uid, $bank); // Bind parameters for the update
+                // Check if the user has sufficient balance
+                if ($balance >= $amount) {
+                    // Prepare the SQL statement for the other action
+                    $stmt = $conn->prepare("INSERT INTO user_db.savings (user_id, date, bank, subject, savings_amount, category) VALUES (?, ?, ?, ?, ?, ?)");
+                    $stmt->bind_param("isssis", $uid, $date, $bank, $goal, $amount, $category);
 
-                    // Execute the update statement
-                    if ($stmt2->execute()) {
-                        // Redirect or provide success message
-                        header("Location: Savings.php?success=1");
-                        exit();
+                    // Execute the insert statement
+                    if ($stmt->execute()) {
+                        // Prepare the SQL statement to update the balance
+                        $stmt2 = $conn->prepare("UPDATE user_db.bank SET balance = balance - ? WHERE user_id = ? AND bank = ?");
+                        $stmt2->bind_param("dis", $amount, $uid, $bank); // Bind parameters for the update
+
+                        // Execute the update statement
+                        if ($stmt2->execute()) {
+                            // Redirect or provide success message
+                            header("Location: Savings.php?success=1");
+                            exit();
+                        } else {
+                            echo "Error updating balance: " . $stmt2->error; // Debugging message for update
+                        }
+
+                        // Close the update statement
+                        $stmt2->close();
                     } else {
-                        echo "Error updating balance: " . $stmt2->error; // Debugging message for update
+                        echo "Error inserting data: " . $stmt->error; // Debugging message for insert
                     }
 
-                    // Close the update statement
-                    $stmt2->close();
+                    // Close the insert statement
+                    $stmt->close();
                 } else {
-                    echo "Error inserting data: " . $stmt->error; // Debugging message for insert
+                    // Inform the user about insufficient balance
+                    $shortfall = $amount - $balance;
+                    $errorMessage = "Transaction cannot proceed. Your balance is short by $" . number_format($shortfall, 2) . ".";
+                    echo "<div id='error-message' style='color: red;'>$errorMessage</div>";
+                    echo "<script>
+                            setTimeout(function() {
+                                var errorMsg = document.getElementById('error-message');
+                                if (errorMsg) {
+                                    errorMsg.style.display = 'none';
+                                }
+                            }, 5000); // Hide message after 5 seconds
+                          </script>";
+                          
                 }
-
-                // Close the insert statement
-                $stmt->close();
             } else {
                 echo "User ID is not set."; // Ensure $uid is set correctly
             }
@@ -250,7 +273,7 @@ if ($stmt3) {
         <p>Bank: ${bank}</p>
         <p>Balance: ${balance}</p>
         <form id="bank-form" method="post" action="">
-            <input type="hidden" name="action" value="another_action">
+            
 
             <label for="goal">Subject:</label>
             <select class="var-input large" name="goal" id="goal">
@@ -380,7 +403,7 @@ if ($stmt3) {
             return subjects.map(subject => `<option value="${subject}">${subject}</option>`).join('');
         }
     </script>
-    
+
     <?php include("modals/modal-allocate.php"); ?>
     <?php include("modals/modal-savings.php"); ?>
     <script src="../js/modal.js"></script>
