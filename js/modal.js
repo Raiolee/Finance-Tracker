@@ -10,6 +10,14 @@ const allocateButtons = document.querySelectorAll('button[onclick^="BankForm"]')
 const goalButton = document.getElementById('newGoalBtn');
 const goalModal = document.getElementById('goalModal');
 
+// Get elements for Income Modal
+const incomeButton = document.getElementById('newIncomeBtn');
+const incomeModal = document.getElementById('incomeModal');
+
+// Get elements for Expense Modal
+const expenseButton = document.getElementById('newExpenseBtn');
+const expenseModal = document.getElementById('expenseModal');
+
 // Show the New Goal modal when "New Goal" button is clicked
 if (goalButton && goalModal) {
     goalButton.addEventListener('click', function () {
@@ -32,6 +40,10 @@ window.onclick = function (event) {
         closeModal();
     } else if (event.target == bankModalAllocate) {
         closeModalAllocate();
+    } else if (event.target == incomeModal) {
+        closeModalIncome();
+    } else if (event.target == expenseModal) {
+        closeModalExpense();
     }
 }
 
@@ -66,5 +78,34 @@ function BankForm(bank, balance) {
 function closeModalAllocate() {
     if (bankModalAllocate) {
         bankModalAllocate.style.display = 'none'; // Hide Allocate modal
+    }
+}
+
+
+// Show the New Income modal when "New Income" button is clicked
+if (incomeButton && incomeModal) {
+    incomeButton.addEventListener('click', function () {
+        incomeModal.style.display = 'flex'; // Show modal as a flex container
+    });
+}
+
+// Close the New Income modal
+function closeModalIncome() {
+    if (incomeModal) {
+        incomeModal.style.display = 'none'; // Hide modal
+    }
+}
+
+// Show the New Expense modal when "New Expense" button is clicked
+if (expenseButton && expenseModal) {
+    expenseButton.addEventListener('click', function () {
+        expenseModal.style.display = 'flex'; // Show modal as a flex container
+    });
+}
+
+// Close the New Expense modal
+function closeModalExpense() {
+    if (expenseModal) {
+        expenseModal.style.display = 'none'; // Hide modal
     }
 }
