@@ -101,11 +101,11 @@ if ($user && $user['user_dp']) {
                     <div class="quick-access-section">
                         <h2>Quick Access</h2>
                         <div class="quick-access-items">
-                            <button class="quick-access-item" onclick="handleNewExpense()">
+                            <button class="quick-access-item" onclick="openModalExpense()">
                                 <i class="icon-credit-card"></i>
                                 <span>+ New Expense</span>
                             </button>
-                            <button class="quick-access-item" onclick="handleNewReceipt()">
+                            <button class="quick-access-item" onclick="openModalIncome()">
                                 <i class="icon-receipt"></i>
                                 <span>+ Add Income</span>
                             </button>
@@ -165,23 +165,46 @@ if ($user && $user['user_dp']) {
                         </table>
                     </div>
                     <script src="../js/quickreport.js"></script>
-                    <script>
-                        function handleNewReceipt() {
-                            window.location.href = 'AddIncome.php';
-                        }
 
-                        function handleNewExpense() {
-                            window.location.href = 'add_expense.php';
-                        }
+                     <script>
+                     // Function to open the modal
+                    function openModalExpense() {
+                         document.getElementById("expenseModal").style.display = "flex";
+                    }
 
-                        function handleNewGoal() {
-                            window.location.href = 'add_goal.php';
-                        }
+                    // Function to close the modal
+                    function closeModalExpense() {
+                                document.getElementById("expenseModal").style.display = "none";
+                    }
 
-                        function handleNewSaving() {
-                            window.location.href = 'AddSavings.php';
+                    // Close the modal when clicking outside of it
+                    window.onclick = function(event) {
+                            const modal = document.getElementById("expenseModal");
+                            if (event.target == modal) {
+                            modal.style.display = "none";
+                            }
                         }
-                    </script>
+                    function openModalIncome() {
+                         document.getElementById("incomeModal").style.display = "flex";
+                    }
+
+                    // Function to close the modal
+                    function closeModalIncome() {
+                                document.getElementById("incomeModal").style.display = "none";
+                    }
+
+                    // Close the modal when clicking outside of it
+                    window.onclick = function(event) {
+                            const modal = document.getElementById("expenseModal");
+                            if (event.target == modal) {
+                            modal.style.display = "none";
+                            }
+                        }       
+                     </script>
+                    <?php include('modals/modal-expense.php'); ?>
+                    <?php include('modals/modal-income.php'); ?>
+                    <script src="../js/modal.js"></script>
+                    <script src="../js/expense.js"></script>
 </body>
 
 </html>
