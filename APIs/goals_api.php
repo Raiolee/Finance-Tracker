@@ -222,6 +222,8 @@ function predictSavingDate($conn, $userId) {
 
         // Initialize savings based on frequency
         $savingsByCategory = [
+            'Once' => 0,
+            'Daily' => 0,
             'Weekly' => 0,
             'Monthly' => 0,
         ];
@@ -240,6 +242,12 @@ function predictSavingDate($conn, $userId) {
         foreach ($savingsByCategory as $category => $amount) {
             if ($amount > 0) {
                 switch ($category) {
+                    case 'Once':
+                        $daysNeeded = min($daysNeeded, ceil($remainingAmount / $amount));
+                        break;
+                    case 'Daily':
+                        $daysNeeded = min($daysNeeded, ceil($remainingAmount / $amount) + 1);
+                        break;
                     case 'Weekly':
                         $daysNeeded = min($daysNeeded, ceil($remainingAmount / $amount) * 7);
                         break;
