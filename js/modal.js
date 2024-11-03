@@ -35,7 +35,7 @@ function closeModalGoal() {
 // Close modal if the user clicks outside the New Goal modal content
 window.onclick = function (event) {
     if (event.target == goalModal) {
-        closeGoalModal();
+        closeModalGoal();
     } else if (event.target == bankModal) {
         closeModal();
     } else if (event.target == bankModalAllocate) {
@@ -44,6 +44,8 @@ window.onclick = function (event) {
         closeModalIncome();
     } else if (event.target == expenseModal) {
         closeModalExpense();
+    } else if (event.target == expenseRowModal) {
+        closeExpenseRowModal();
     }
 }
 
@@ -81,6 +83,13 @@ function closeModalAllocate() {
     }
 }
 
+// Close the Expense modal
+function closeModalExpense() {
+    if (expenseModal) {
+        expenseModal.style.display = 'none'; // Hide modal
+    }
+}
+
 
 // Show the New Income modal when "New Income" button is clicked
 if (incomeButton && incomeModal) {
@@ -103,9 +112,12 @@ if (expenseButton && expenseModal) {
     });
 }
 
-// Close the New Expense modal
-function closeModalExpense() {
-    if (expenseModal) {
-        expenseModal.style.display = 'none'; // Hide modal
+// Close the Expense Row modal
+function closeExpenseRowModal() {
+    const expenseRowModal = document.getElementById("expenseRowModal");
+    if (expenseRowModal) {
+        expenseRowModal.style.display = 'none'; // Hide modal
     }
 }
+
+

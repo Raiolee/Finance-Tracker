@@ -3,6 +3,7 @@ DROP DATABASE IF EXISTS user_db;
 CREATE DATABASE user_db;
 USE user_db;
 
+--  Create user table
 CREATE TABLE `user`
 (
     `user_id` INT PRIMARY KEY AUTO_INCREMENT,
@@ -15,6 +16,7 @@ CREATE TABLE `user`
     `is_verified` tinyint(1) default 0
 );
 
+-- Create otp table
 CREATE TABLE `otp` (
     `otp_id` INT PRIMARY KEY AUTO_INCREMENT,
     `user_id` INT NOT NULL,
@@ -24,11 +26,11 @@ CREATE TABLE `otp` (
     FOREIGN KEY (`user_id`) REFERENCES `user`(`user_id`) ON DELETE CASCADE
 );
 
+--  Create income table
 CREATE TABLE `income` (
     `income_id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` int not null,
     `date` DATE NOT NULL,
-    `investment` VARCHAR(255) NOT NULL,
     `source` VARCHAR(255) NOT NULL,
     `total` DECIMAL(10, 2) NOT NULL,
     `bank` VARCHAR(255) NOT NULL,
@@ -37,6 +39,7 @@ CREATE TABLE `income` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Create expenses table 
 CREATE TABLE `expenses` (
 	`expense_id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
@@ -54,6 +57,7 @@ CREATE TABLE `expenses` (
     `receipt` BLOB
 );
 
+--  create goals table
 create table `goals` (
 	`goal_id` int primary key auto_increment,
     `user_id` int not null,
@@ -65,6 +69,7 @@ create table `goals` (
     `description` text not null
 );
 
+--  Create savings table
 CREATE TABLE `savings` (
     `savings_id` INT PRIMARY KEY AUTO_INCREMENT,
     `user_id` INT NOT NULL,
@@ -75,12 +80,12 @@ CREATE TABLE `savings` (
     `bank` VARCHAR(255) NOT NULL
 );
 
-
-
+-- Create bank table
 CREATE TABLE `bank` (
     `bank_id` INT PRIMARY KEY AUTO_INCREMENT,
     `user_id` INT NOT NULL,
     `user_bank_id` INT NOT NULL,
+    `purpose` varchar(255) not null,
     `bank` VARCHAR(255) NOT NULL,
     `balance`  DECIMAL(10, 2) Default 0.00,
     `date` DATE NOT NULL

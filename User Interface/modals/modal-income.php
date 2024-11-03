@@ -14,16 +14,16 @@
                 <label class="form-labels" for="income-amount">Amount</label>
                 <input class="var-input" type="number" id="income-amount" name="income-amount" placeholder="0.00" required>
 
-                <label class="form-labels" for="goal-category">Category*</label>
-                <select class="var-input" name="income_category" id="goal-category" required>
+                <label class="form-labels" for="income-category">Category*</label>
+                <select class="var-input" name="income_category" id="income-category" required>
                     <option value="Once">Once</option> 
                     <option value="Daily">Daily</option>
                     <option value="Weekly">Weekly</option>
                     <option value="Monthly">Monthly</option>
                 </select>  
 
-                <label class="form-labels" for="goal-description">Bank Name*</label>
-                <select class="var-input" name="bank_name" id="goal-category" required>
+                <label class="form-labels" for="income-bank">Bank Name*</label>
+                <select class="var-input" name="bank_name" id="income-bank" required>
                     <option value="CHANGE ME">Option 1</option>
                     <?php
                         session_start();
