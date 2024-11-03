@@ -58,7 +58,7 @@ if (isset($_POST["Login"])) {
             <input class="form-control var-input text-light" type="password" placeholder="Password" name="password" id="password" required></input>
             <button type="submit" value="Login" name="Login" class="btn btn-custom w-100 mb-3">Log in</button>
             <p>Don't have an account? <a href="register.php">Register</a></p>
-            <a class="font" href="forgot-password.php">Forgot Password</a>
+            <a class="font" href="forgot_password.php">Forgot Password</a>
         </form>
     </div>
     <!-- Bootstrap JS CDN -->
