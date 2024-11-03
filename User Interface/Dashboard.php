@@ -112,7 +112,7 @@ if ($user && $user['user_dp']) {
                                 <span>+ New Goal</span>
                             </button>
                             <button class="quick-access-item" onclick="openModalBank()">
-                                <i class="icon-plane"></i>
+                                <i class="fas fa-university"></i>
                                 <span>+ Add Banks</span>
                             </button>
                         </div>
