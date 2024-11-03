@@ -1,3 +1,33 @@
+<?php
+// Include database connection
+include '../connection/config.php';
+
+// Fetch existing goals for the user
+$sql4 = "SELECT bank FROM user_db.bank WHERE user_id = ?";
+$stmt4 = $conn->prepare($sql4);
+
+if ($stmt4) {
+    $stmt4->bind_param("i", $uid);
+    $stmt4->execute();
+    $result4 = $stmt4->get_result();
+} else {
+    $error_message = "Error preparing statement: {$conn->error}";
+}
+function getBankOptions() {
+    global $result4; // Use global to access $result3 inside the function
+    $options = '';
+
+    if (isset($result4) && $result4->num_rows > 0) {
+        while ($row4 = $result4->fetch_assoc()) {
+            $options .= '<option value="' . htmlspecialchars($row4['bank']) . '">' . htmlspecialchars($row4['bank']) . '</option>';
+        }
+    } else {
+        $options .= '<option value="">No Bank found</option>'; // Default option
+    }
+
+    return $options; // Return the generated options
+}
+?>
 <link rel="stylesheet" href="../Styles/modal-styles.scss">
 <!-- Modal Structure -->
 <div id="expenseModal" class="modal">
@@ -5,7 +35,7 @@
         <span class="close-button" onclick="closeModalExpense()">&times;</span>
         <h3 class="header">Add an Expense</h3>
         <hr class="bottom-line">
-        <form class="form-container" id="SavingForm" method="post" action="">
+        <form class="form-container" id="SavingForm" method="POST" action="">
             <div class="big-divider full">
                 <label for="subject" class="form-labels row">Subject</label>
                 <input type="text" class="var-input medium" id="subject" name="subject">
@@ -36,7 +66,7 @@
                 <!-- Bank -->
                 <label for="bank" class="form-labels row">Bank</label>
                 <select class="var-input large pointer" name="bank" id="bank">
-                    <option value="CHANGE ME">Bank 1</option> <!-- Change the code to get the bank based on user_id -->
+                <?php echo getBankOptions(); ?> <!-- Change the code to get the bank based on user_id -->
                 </select>
 
                 <label for="amount" class="form-labels">Amount*</label>
