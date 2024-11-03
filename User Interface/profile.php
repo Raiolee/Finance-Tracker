@@ -77,21 +77,6 @@ $current_page = 'profile.php';
                             </div>
                             <!-- Change Profile Picture -->
                             <input type="file" name="new_pfp" accept="image/*" id="file-input" onchange="validateImage(this)">
-                            <script>
-                                function validateImage(input) {
-                                    const file = input.files[0];
-                                    if (file) {
-                                        const img = new Image();
-                                        img.onload = function() {
-                                            if (this.width !== this.height) {
-                                                alert('Please upload a square image.');
-                                                input.value = ''; // Clear the input if not square
-                                            }
-                                        };
-                                        img.src = URL.createObjectURL(file);
-                                    }
-                                }
-                            </script>
                             <label for="file-input" class="file-label">Change Profile Picture</label>
 
                             <div class="btn-options">
