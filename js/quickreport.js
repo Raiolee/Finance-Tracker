@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Fetch data from the server
-        fetch('../User Interface/get_expenses.php')
+        fetch('../APIs/get_expenses.php')
             .then(response => response.json())
             .then(data => {
                 // Prepare data for the chart
