@@ -1,118 +1,7 @@
 <?php
 include '../connection/config.php';
-session_start();
-$user_id = $_SESSION['user_id'];
-$username = $_SESSION["name"];
-$current_page = basename($_SERVER['PHP_SELF']);
-
-// Fetch only the user_dp (profile picture) from the database
-$user_id = $_SESSION['user_id'];
-$query = "SELECT user_dp FROM user WHERE user_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-$stmt->close();
-
-if ($user && $user['user_dp']) {
-    $profile_pic = 'data:image/jpeg;base64,' . base64_encode($user['user_dp']);
-} else {
-    $profile_pic = '../Assets/blank-profile.webp';
-}
-
-function searchIncome($conn, $userId, $IncomesearchQuery)
-{
-    $sql = "SELECT * FROM income WHERE user_id = ? AND (source LIKE ? OR date LIKE ?)";
-    $stmt = $conn->prepare($sql);
-    if ($stmt) {
-        $likeQuery = "%{$IncomesearchQuery}%";
-        $stmt->bind_param("iss", $userId, $likeQuery, $likeQuery);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result;
-    } else {
-        throw new Exception("Error preparing statement: {$conn->error}");
-    }
-}
-
-$userId = $_SESSION['user_id'] ?? null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['incomeId'])) {
-    $incomeId = $_POST['incomeId'];
-
-    $sql = "DELETE FROM income WHERE income_id = ?";
-    $stmt = $conn->prepare($sql);
-    if ($stmt) {
-        // Bind parameters to the prepared statement
-        $stmt->bind_param("i", $incomeId);
-
-        // Start the transaction
-        $conn->begin_transaction();
-
-        // Execute the first statement
-        if ($stmt->execute()) {
-            $total = $_POST['incomeTotal']; // Assuming the total amount is passed in the POST request
-            $uid = $_SESSION['user_id'];
-            $bank = $_POST['incomeBank']; // Assuming the bank name is passed in the POST request
-
-            echo "Total: $total, User ID: $uid, Bank: $bank";
-
-            // Prepare the update statement
-            $updateStmt = $conn->prepare("UPDATE bank SET balance = balance - ? WHERE user_id = ? AND bank = ?");
-            if ($updateStmt === false) {
-                $conn->rollback();
-                throw new Exception("Prepare failed: {$conn->error}");
-            }
-
-            // Bind parameters to the update statement
-            $updateStmt->bind_param("dis", $total, $uid, $bank);
-
-            // Execute the update statement
-            if (!$updateStmt->execute()) {
-                $conn->rollback();
-                throw new Exception("Execute failed: {$updateStmt->error}");
-            }
-
-            // Commit transaction
-            $conn->commit();
-        } else {
-            $conn->rollback();
-            throw new Exception("Execute failed for the first statement: {$stmt->error}");
-        }
-    } else {
-        echo "Error preparing statement: {$conn->error}";
-    }
-}
-
-function sortIncomeByDate($conn, $userId, $sortOrder)
-{
-    $sql = "SELECT * FROM income WHERE user_id = ? ORDER BY date " . ($sortOrder === 'asc' ? 'ASC' : 'DESC');
-    $stmt = $conn->prepare($sql);
-    if ($stmt) {
-        $stmt->bind_param("i", $userId);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return $result;
-    } else {
-        throw new Exception("Error preparing statement: {$conn->error}");
-    }
-}
-
-if (isset($_GET['sortIncomeDate'])) {
-    $sortOrder = $_GET['sortIncomeDate'];
-    $nextSortOrderDate = $sortOrder === 'asc' ? 'desc' : 'asc';
-    try {
-        $result = sortIncomeByDate($conn, $user_id, $sortOrder);
-    } catch (Exception $e) {
-        $error_message = $e->getMessage();
-    }
-} else {
-    $nextSortOrderDate = 'asc';
-}
+include '../APIs/income_api.php';
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -249,41 +138,9 @@ if (isset($_GET['sortIncomeDate'])) {
         </div>
     </section>
 
-    <script>
-        var editDeleteModal = document.getElementById("editDeleteModal");
-        var editDeleteClose = editDeleteModal.getElementsByClassName("close")[0];
-
-        document.querySelectorAll('.btn-outline-light[data-id]').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var id = this.getAttribute('data-id');
-                var source = this.getAttribute('data-source');
-                var total = this.getAttribute('data-total');
-                var category = this.getAttribute('data-category');
-                var bank = this.getAttribute('data-bank');
-
-                document.getElementById('incomeId').value = id;
-                document.getElementById('incomeSource').value = source;
-                document.getElementById('incomeTotal').value = total;
-                document.getElementById('incomeCategory').value = category;
-                document.getElementById('incomeBank').value = bank;
-
-                editDeleteModal.style.display = "block";
-            });
-        });
-
-        editDeleteClose.onclick = function() {
-            editDeleteModal.style.display = "none";
-        };
-
-        window.onclick = function(event) {
-            if (event.target == editDeleteModal) {
-                editDeleteModal.style.display = "none";
-            }
-        };
-    </script>
-
     <?php include("modals/modal-income.php"); ?>
     <script src="../js/modal.js"></script>
+    <script src="../js/income.js"></script>
 </body>
 
 </html>
