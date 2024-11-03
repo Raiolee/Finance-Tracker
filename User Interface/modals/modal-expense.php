@@ -33,6 +33,12 @@
                 <label for="Merchant" class="form-labels">Merchant</label>
                 <input type="text" class="var-input" id="Merchant" name="merchant">
 
+                <!-- Bank -->
+                <label for="bank" class="form-labels row">Bank</label>
+                <select class="var-input large pointer" name="bank" id="bank">
+                    <option value="CHANGE ME">Bank 1</option> <!-- Change the code to get the bank based on user_id -->
+                </select>
+
                 <label for="amount" class="form-labels">Amount*</label>
                 <input type="number" class="var-input" id="amount" name="amount" required>
                 <!-- Description -->
