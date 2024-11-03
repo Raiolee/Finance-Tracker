@@ -153,6 +153,9 @@ if (isset($_POST['save'])) {
     }
 
     if ($stmt->execute()) {
+        // Update the session username
+        $_SESSION["name"] = $first_name . ' ' . $last_name;
+        
         echo "Profile updated successfully.";
         echo "<meta http-equiv='refresh' content='0'>";
     } else {
