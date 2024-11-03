@@ -221,7 +221,7 @@
 	<!-- Position -->
 	<cite>BSCS221A</cite>
 	<!-- Description -->
-	<p>National University - Laguna Student.</p>
+	<p>National University - Laguna Student</p>
 </div>
 			</div>
 
