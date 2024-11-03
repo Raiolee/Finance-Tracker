@@ -179,11 +179,6 @@ if ($stmt3) {
 } else {
     $error_message = "Error preparing statement: {$conn->error}";
 }
-
-
-
-
-
 ?>
 
 <!DOCTYPE html>
