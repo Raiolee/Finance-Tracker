@@ -4,6 +4,7 @@ body {
   height: 98vh;
   width: 98vw;
   font-family: "Atkinson Hyperlegible", sans-serif;
+  overflow-y: hidden;
   .login {
     display: flex;
     .left-section {
@@ -166,7 +167,7 @@ body {
     margin-left: 15%;
     .navbar-custom {
       width: 30%;
-      height: 100vh;
+      height: 100%;
       margin-right: 50px;
       .navbar-div {
         display: flex;
