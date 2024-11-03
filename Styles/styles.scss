@@ -321,6 +321,7 @@ body {
 
         .table-approval tbody tr:nth-child(even) {
           background-color: #1b1b1b;
+          cursor: pointer;
         }
 
         .table-approval tbody tr:nth-child(odd) {

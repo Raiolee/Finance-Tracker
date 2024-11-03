@@ -189,6 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- APIs (Put APIs below this comment)-->
     <?php include('modals/modal-expense.php'); ?>
     <?php include('modals/modal-expense-row.php'); ?>
+    <?php include('../APIs/get_expense.php'); ?>
     <script src="../js/modal.js"></script>
     <script src="../js/expense.js"></script>
 </body>

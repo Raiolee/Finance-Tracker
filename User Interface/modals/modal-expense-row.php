@@ -5,11 +5,14 @@
         <span class="close-button" onclick="closeExpenseRowModal()">&times;</span>
         <h3 class="header">Edit</h3>
         <hr class="bottom-line">
-        <form class="form-container" id="SavingForm" method="post" action="">
+        <form class="form-container" id="expenseForm" method="post" action="">
             <div class="big-divider full">
+
+                <!-- label and input for subject -->
                 <label for="subject" class="form-labels row">Subject</label>
                 <input type="text" class="var-input medium" id="subject" name="subject" value="">
 
+                <!-- label and input for category -->
                 <label for="category" class="form-labels row medium">Category</label>
                 <select class="var-input" id="category" name="category" value="">
                     <option value="food">Food</option>
@@ -19,9 +22,11 @@
                     <option value="other">Other</option>
                 </select>
 
+                <!-- label and input for date -->
                 <label for="expense-date" class="form-labels row">Date</label>
                 <input type="date" class="var-input" id="expense-date" name="expense-date" value="">
 
+                <!-- label and input for recurrence type -->
                 <label for="recurrence_type" class="form-labels row">Frequency</label>
                 <select class="var-input large pointer" name="recurrence_type" id="recurrence_type" value="">
                     <option value="weekly">Once</option>
@@ -30,6 +35,7 @@
                     <option value="custom">Custom</option>
                 </select>
 
+                <!-- Merchant -->
                 <label for="Merchant" class="form-labels">Merchant</label>
                 <input type="text" class="var-input" id="Merchant" name="merchant" value="">
 
