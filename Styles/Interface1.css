@@ -21,9 +21,13 @@
         .navbar-icon-custom {
             height: 2.2rem;
             width: 18%;
-            margin: 4.5% 0;
+            margin-bottom: 1rem;
             filter: brightness(0.2);
             transition: filter 0.3s ease;
+        }
+
+        .navbar-div p {
+            margin-bottom: none !important;
         }
 
         .navbar-items-custom {
@@ -45,6 +49,7 @@
                 color: #00dac6;
             }
         }
+
     }
 
     .Penny_Logo {

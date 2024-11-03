@@ -139,18 +139,6 @@ if (isset($_GET['sortIncomeDate'])) {
                         <h1 class="header">Income</h1>
                         <div class="custom-header">
                             <button class="New-Saving" id="newIncomeBtn">+ Add Income</button>
-                            <!-- Filter form -->
-                            <form class="filter-form" id="filterForm" action="" method="GET">
-                                <select class="var-input medium pointer" id="FilterGoalsCategory" name="FilterGoalsCategory">
-                                    <option value="" disabled selected>Category</option>
-                                    <option value="Travels">Travels</option>
-                                    <option value="Miscellaneous">Miscellaneous</option>
-                                    <option value="Others">Others</option>
-                                </select>
-                                <button type="submit">
-                                    <i class="fa"><img src="../Assets/Icons/filter.svg" alt=""></i>
-                                </button>
-                            </form>
                             <!-- Search Form -->
                             <form class="search-form" action="" method="GET">
                                 <input type="search" name="Incomequery" placeholder="Search here ..." style="text-transform: capitalize;">

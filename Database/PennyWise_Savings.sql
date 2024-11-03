@@ -31,7 +31,7 @@ CREATE TABLE `income` (
     `investment` VARCHAR(255) NOT NULL,
     `source` VARCHAR(255) NOT NULL,
     `total` DECIMAL(10, 2) NOT NULL,
-    `currency` VARCHAR(10) NOT NULL,
+    `bank` VARCHAR(255) NOT NULL,
     `category` ENUM('Monthly', 'Weekly', 'Yearly') NOT NULL,
     `description` TEXT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -43,6 +43,7 @@ CREATE TABLE `expenses` (
     `subject` VARCHAR(255) NOT NULL,
     `date` DATE NOT NULL,
     `next_occurrence` DATE,
+    `bank` varchar(255) not null,
     `frequency`  VARCHAR(255) NOT NULL,
     `recurrence_type` ENUM('weekly', 'monthly', 'custom') NOT NULL,
     `category` VARCHAR(255) NOT NULL,

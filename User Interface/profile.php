@@ -72,12 +72,12 @@ $current_page = 'profile.php';
                             </div>
                         </div>
                         <div class="small-divider">
-                            <div class="Profile_img">
-                                <img src="<?php echo $profile_pic; ?>" alt="Profile Picture" width="110">
+                            <div class="Profile_img" style="width: 110px; height: 110px; overflow: hidden; border-radius: 50%;">
+                                <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                             <!-- Change Profile Picture -->
-                            <input type="file" name="new_pfp" accept="image/*" id="file-input" required>
-                            <label for="file" class="file-label">Change Profile Picture</label>
+                            <input type="file" name="new_pfp" accept="image/*" id="file-input" onchange="validateImage(this)">
+                            <label for="file-input" class="file-label">Change Profile Picture</label>
 
                             <div class="btn-options">
                                 <a href="Settings.php" class="link-btn"><button type="button" class="cancel">Cancel</button></a>
@@ -120,30 +120,31 @@ if (isset($_POST['save'])) {
     $confirm_password = $_POST['confirm_password'];
 
     // Handle profile picture upload
-    if ($_FILES['new_pfp']['name']) {
+    $profile_picture = $user['user_dp']; // Default to current profile picture
+
+    if (!empty($_FILES['new_pfp']['name'])) {
         // Get the binary content of the uploaded image
         $profile_picture = file_get_contents($_FILES['new_pfp']['tmp_name']);
-    } else {
-        // Keep the current profile picture if no new one is uploaded
-        $profile_picture = $user['user_dp'];
     }
 
-    // Validate and update password if provided
     if (!empty($new_password) && $new_password === $confirm_password) {
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-        $query = "UPDATE user SET first_name = ?, last_name = ?, email = ?, user_dp = ?, password = ? WHERE user_id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssssbi", $first_name, $last_name, $email, $profile_picture, $hashed_password, $user_id);
+        $stmt = $conn->prepare("UPDATE user SET first_name = ?, last_name = ?, email = ?, user_dp = ?, password = ? WHERE user_id = ?");
+        $stmt->bind_param("sssssi", $first_name, $last_name, $email, $profile_picture, $hashed_password, $user_id);
     } else {
         $query = "UPDATE user SET first_name = ?, last_name = ?, email = ?, user_dp = ? WHERE user_id = ?";
-        $stmt = $conn->prepare($query);
+        $stmt = $conn->prepare ($query);
         $stmt->bind_param("ssssi", $first_name, $last_name, $email, $profile_picture, $user_id);
     }
 
     if ($stmt->execute()) {
+        // Update the session username
+        $_SESSION["name"] = $first_name . ' ' . $last_name;
+        
         echo "Profile updated successfully.";
+        echo "<meta http-equiv='refresh' content='0'>";
     } else {
-        echo "Error updating profile: " . $conn->error;
+        echo "Error updating profile: {$conn->error}";
     }
 }
 ?>

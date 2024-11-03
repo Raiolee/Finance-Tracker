@@ -9,3 +9,17 @@ if (fileInput && fileNameDisplay) {
         fileNameDisplay.textContent = fileName;
     });
 }
+
+function validateImage(input) {
+    const file = input.files[0];
+    if (file) {
+        const img = new Image();
+        img.onload = function() {
+            if (this.width !== this.height) {
+                alert('Please upload a square image.');
+                input.value = ''; // Clear the input if not square
+            }
+        };
+        img.src = URL.createObjectURL(file);
+    }
+}

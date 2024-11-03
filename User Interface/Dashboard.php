@@ -26,9 +26,7 @@ if ($result->num_rows > 0) {
         ];
     }
 }
-
 $stmt->close();
-
 // Fetch only the user_dp (profile picture) from the database
 $user_id = $_SESSION['user_id'];
 $query = "SELECT user_dp FROM user WHERE user_id = ?";
@@ -101,21 +99,21 @@ if ($user && $user['user_dp']) {
                     <div class="quick-access-section">
                         <h2>Quick Access</h2>
                         <div class="quick-access-items">
-                            <button class="quick-access-item" onclick="handleNewExpense()">
+                            <button class="quick-access-item" onclick="openModalExpense()">
                                 <i class="icon-credit-card"></i>
                                 <span>+ New Expense</span>
                             </button>
-                            <button class="quick-access-item" onclick="handleNewReceipt()">
+                            <button class="quick-access-item" onclick="openModalIncome()">
                                 <i class="icon-receipt"></i>
                                 <span>+ Add Income</span>
                             </button>
-                            <button class="quick-access-item" onclick="handleNewGoal()">
+                            <button class="quick-access-item" onclick="openGoalIncome()">
                                 <i class="icon-report"></i>
                                 <span>+ New Goal</span>
                             </button>
-                            <button class="quick-access-item" onclick="handleNewSaving()">
-                                <i class="icon-plane"></i>
-                                <span>+ Add Saving</span>
+                            <button class="quick-access-item" onclick="openModalBank()">
+                                <i class="fas fa-university"></i>
+                                <span>+ Add Banks</span>
                             </button>
                         </div>
                     </div>
@@ -165,23 +163,14 @@ if ($user && $user['user_dp']) {
                         </table>
                     </div>
                     <script src="../js/quickreport.js"></script>
-                    <script>
-                        function handleNewReceipt() {
-                            window.location.href = 'AddIncome.php';
-                        }
-
-                        function handleNewExpense() {
-                            window.location.href = 'add_expense.php';
-                        }
-
-                        function handleNewGoal() {
-                            window.location.href = 'add_goal.php';
-                        }
-
-                        function handleNewSaving() {
-                            window.location.href = 'AddSavings.php';
-                        }
-                    </script>
+                    <script src="../js/modaldash.js"></script>           
+                    <?php include('modals/modal-expense.php'); ?>
+                    <?php include('modals/modal-income.php'); ?>
+                    <?php include('modals/modal-goals.php'); ?>
+                    <?php include('modals/modal-savings.php'); ?>
+                    <?php include('modals/modal-allocate.php'); ?>
+                    <script src="../js/modal.js"></script>
+                    <script src="../js/expense.js"></script>
 </body>
 
 </html>
