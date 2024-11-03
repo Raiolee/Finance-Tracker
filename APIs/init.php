@@ -5,6 +5,7 @@ if (!isset($_SESSION["user"])) {
     exit();
 }
 
+$uid = $_SESSION["user_id"];
 $username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);
 

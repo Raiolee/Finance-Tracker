@@ -1,6 +1,51 @@
 <?php
 include('../APIs/init.php');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect form data
+    $subject = $_POST['subject'];
+    $category = $_POST['category'];
+    $expense_date = $_POST['expense-date'];
+    $recurrence_type = $_POST['recurrence_type'];
+    $merchant = $_POST['merchant'];
+    $bank = $_POST['bank'];
+    $amount = $_POST['amount'];
+    $description = $_POST['description'];
+    $reimbursable = $_POST['reimbursable'];
+
+    // Handle file upload if needed
+    $attachment = null;
+    if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
+        $target_dir = "uploads/"; // Directory to save uploaded files
+        $attachment = $target_dir . basename($_FILES["attachment"]["name"]);
+        move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachment);
+    }
+
+    // Prepare and bind the SQL statement
+    $sql = "INSERT INTO expenses (user_id, subject, category, date, recurrence_type, merchant, bank, amount, description, reimbursable, receipt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+
+    if ($stmt) {
+        // Assuming $uid is defined earlier in your code
+        $stmt->bind_param("issssssdsss", $uid, $subject, $category, $expense_date, $recurrence_type, $merchant, $bank, $amount, $description, $reimbursable, $attachment);
+
+        // Execute the statement
+        if ($stmt->execute()) {
+            // Redirect or display success message
+            header("Location: Savings.php?success=1");
+            exit();
+        } else {
+            echo "Error executing statement: " . $stmt->error;
+        }
+    } else {
+        echo "Error preparing statement: " . $conn->error;
+    }
+
+    // Close the statement
+    $stmt->close();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
