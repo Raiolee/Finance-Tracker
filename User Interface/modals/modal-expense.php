@@ -17,7 +17,7 @@ function getBankOptions($conn, $uid)
 {
     $options = '';
 
-    $sql4 = "SELECT bank_id, bank FROM user_db.bank WHERE user_id = ?";
+    $sql4 = "SELECT bank_id, bank, purpose FROM user_db.bank WHERE user_id = ?";
     $stmt4 = $conn->prepare($sql4);
 
     if ($stmt4) {
@@ -27,8 +27,8 @@ function getBankOptions($conn, $uid)
 
         if ($result4 && $result4->num_rows > 0) {
             while ($row4 = $result4->fetch_assoc()) {
-                // Set the value to bank_id and display bank name
-                $options .= '<option value="' . htmlspecialchars($row4['bank_id']) . '">' . htmlspecialchars($row4['bank']) . '</option>';
+                // Corrected line
+                $options .= '<option value="' . htmlspecialchars($row4['bank_id']) . '">' . htmlspecialchars($row4['bank']) . ' (' . htmlspecialchars($row4['purpose']) . ')</option>';
             }
         } else {
             $options .= '<option value="">No Bank found</option>';
@@ -39,9 +39,9 @@ function getBankOptions($conn, $uid)
         $options .= '<option value="">Error fetching banks</option>';
     }
 
-    
     return $options;
 }
+
 
 
 ?>
