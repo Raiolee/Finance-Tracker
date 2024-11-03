@@ -8,69 +8,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $expense_date = $_POST['expense-date'];
     $recurrence_type = $_POST['recurrence_type'];
     $merchant = $_POST['merchant'];
-    $bank = $_POST['bank'];
+    $bank_id = $_POST['bank']; // Get the bank_id from the form submission
     $amount = $_POST['amount'];
     $description = $_POST['description'];
     $reimbursable = $_POST['reimbursable'];
+    $bank_name = $_POST['bank_name'];
 
-    // Handle file upload if needed
-    $attachment = null;
-    if (isset($_FILES['attachment']) && $_FILES['attachment']['error'] === UPLOAD_ERR_OK) {
-        $target_dir = "uploads/"; // Directory to save uploaded files
-        $attachment = $target_dir . basename($_FILES["attachment"]["name"]);
-        move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachment);
-    }
+    $stmtBankName = $conn->prepare("SELECT bank FROM user_db.bank WHERE bank_id = ? AND user_id = ?");
+    $stmtBankName->bind_param("si", $bank_id, $uid);
+    $stmtBankName->execute();
+    $stmtBankName->bind_result($bank_name);
+    $stmtBankName->fetch();
+    $stmtBankName->close();
+
 
     // Ensure $uid is defined; this should be set earlier in your code
     if (isset($uid)) {
         // Prepare the SQL statement to check the balance
-        $stmtBalance = $conn->prepare("SELECT balance FROM user_db.bank WHERE user_id = ? AND bank = ?");
-        $stmtBalance->bind_param("is", $uid, $bank);
+        $stmtBalance = $conn->prepare("SELECT balance FROM user_db.bank WHERE user_id = ? AND bank_id = ?");
+        $stmtBalance->bind_param("is", $uid, $bank_id);
         $stmtBalance->execute();
         $stmtBalance->bind_result($balance);
         $stmtBalance->fetch();
         $stmtBalance->close();
 
         // Check if the user has sufficient balance
-        if ($balance >= $amount) {
-            // Prepare and bind the SQL statement to insert the expense
-            $sql = "INSERT INTO expenses (user_id, subject, category, date, recurrence_type, merchant, bank, amount, description, reimbursable, receipt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if (isset($balance) && $balance >= $amount) {
+            // Insert the expense record
+            $sql = "INSERT INTO expenses (user_id, subject, category, date, recurrence_type, merchant, bank, amount, description, reimbursable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
 
             if ($stmt) {
                 // Bind parameters
-                $stmt->bind_param("issssssdsss", $uid, $subject, $category, $expense_date, $recurrence_type, $merchant, $bank, $amount, $description, $reimbursable, $attachment);
+                $stmt->bind_param("issssssdss", $uid, $subject, $category, $expense_date, $recurrence_type, $merchant, $bank_name, $amount, $description, $reimbursable);
 
-                // Execute the insert statement
                 if ($stmt->execute()) {
-                    // Prepare the SQL statement to update the balance
-                    $stmt2 = $conn->prepare("UPDATE user_db.bank SET balance = balance - ? WHERE user_id = ? AND bank = ?");
-                    $stmt2->bind_param("dis", $amount, $uid, $bank);
+                    // Update the balance using bank_id
+                    $stmt2 = $conn->prepare("UPDATE user_db.bank SET balance = balance - ? WHERE user_id = ? AND bank_id = ?");
+                    $stmt2->bind_param("dis", $amount, $uid, $bank_id);
 
-                    // Execute the update statement
                     if ($stmt2->execute()) {
                         // Redirect or provide success message
                         header("Location: Expense.php?success=1");
                         exit();
                     } else {
-                        echo "Error updating balance: " . $stmt2->error; // Debugging message for update
+                        echo "Error updating balance: " . $stmt2->error;
                     }
-
-                    // Close the update statement
                     $stmt2->close();
                 } else {
-                    echo "Error inserting data: " . $stmt->error; // Debugging message for insert
+                    echo "Error inserting data: " . $stmt->error;
                 }
-
-                // Close the insert statement
                 $stmt->close();
             } else {
                 echo "Error preparing statement: " . $conn->error;
             }
         } else {
             // Inform the user about insufficient balance
-            $shortfall = $amount - $balance;
-            $errorMessage = "Transaction cannot proceed. Your balance is short by $" . number_format($shortfall, 2) . ".";
+            if (isset($balance)) {
+                $shortfall = $amount - $balance;
+                $errorMessage = "Transaction cannot proceed. Your balance is short by $" . number_format($shortfall, 2) . ".";
+            } else {
+                $errorMessage = "Could not retrieve balance information.";
+            }
             echo "<div id='error-message' style='color: red;'>$errorMessage</div>";
             echo "<script>
                     setTimeout(function() {
@@ -85,6 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "User ID is not set."; // Ensure $uid is set correctly
     }
 }
+
 ?>
 
 
@@ -118,7 +118,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <button class="New-Saving" id="newExpenseBtn">+ Add an Expense</button>
                             <!-- Filter form -->
                             <form class="filter-form" id="filterForm" action="" method="GET">
-                                <select class="var-input medium pointer" id="FilterGoalsCategory" name="FilterGoalsCategory">
+                                <select class="var-input medium pointer" id="FilterGoalsCategory"
+                                    name="FilterGoalsCategory">
                                     <option value="" disabled selected>Category</option>
                                     <option value="Travels">Travels</option>
                                     <option value="Miscellaneous">Miscellaneous</option>
@@ -130,9 +131,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </form>
                             <!-- Search Form -->
                             <form class="search-form" action="" method="GET">
-                                <input type="search" name="Incomequery" placeholder="Search here ..." style="text-transform: capitalize;">
+                                <input type="search" name="Incomequery" placeholder="Search here ..."
+                                    style="text-transform: capitalize;">
                                 <button type="submit">
-                                    <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt="" width="20px"></i>
+                                    <i class="fa"><img src="../Assets/Icons/magnifying-glass.svg" alt=""
+                                            width="20px"></i>
                                 </button>
                             </form>
                         </div>

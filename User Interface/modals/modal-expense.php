@@ -13,20 +13,37 @@ if ($stmt4) {
 } else {
     $error_message = "Error preparing statement: {$conn->error}";
 }
-function getBankOptions() {
-    global $result4; // Use global to access $result3 inside the function
+function getBankOptions($conn, $uid)
+{
     $options = '';
 
-    if (isset($result4) && $result4->num_rows > 0) {
-        while ($row4 = $result4->fetch_assoc()) {
-            $options .= '<option value="' . htmlspecialchars($row4['bank']) . '">' . htmlspecialchars($row4['bank']) . '</option>';
+    $sql4 = "SELECT bank_id, bank FROM user_db.bank WHERE user_id = ?";
+    $stmt4 = $conn->prepare($sql4);
+
+    if ($stmt4) {
+        $stmt4->bind_param("i", $uid);
+        $stmt4->execute();
+        $result4 = $stmt4->get_result();
+
+        if ($result4 && $result4->num_rows > 0) {
+            while ($row4 = $result4->fetch_assoc()) {
+                // Set the value to bank_id and display bank name
+                $options .= '<option value="' . htmlspecialchars($row4['bank_id']) . '">' . htmlspecialchars($row4['bank']) . '</option>';
+            }
+        } else {
+            $options .= '<option value="">No Bank found</option>';
         }
+
+        $stmt4->close();
     } else {
-        $options .= '<option value="">No Bank found</option>'; // Default option
+        $options .= '<option value="">Error fetching banks</option>';
     }
 
-    return $options; // Return the generated options
+    
+    return $options;
 }
+
+
 ?>
 <link rel="stylesheet" href="../Styles/modal-styles.scss">
 <!-- Modal Structure -->
@@ -65,8 +82,8 @@ function getBankOptions() {
 
                 <!-- Bank -->
                 <label for="bank" class="form-labels row">Bank</label>
-                <select class="var-input large pointer" name="bank" id="bank">
-                <?php echo getBankOptions(); ?> <!-- Change the code to get the bank based on user_id -->
+                <select class="var-input large pointer" name="bank" id="bank" required>
+                    <?php echo getBankOptions($conn, $uid); ?>
                 </select>
 
                 <label for="amount" class="form-labels">Amount*</label>
