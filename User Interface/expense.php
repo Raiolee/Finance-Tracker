@@ -21,28 +21,69 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachment);
     }
 
-    // Prepare and bind the SQL statement
-    $sql = "INSERT INTO expenses (user_id, subject, category, date, recurrence_type, merchant, bank, amount, description, reimbursable, receipt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
+    // Ensure $uid is defined; this should be set earlier in your code
+    if (isset($uid)) {
+        // Prepare the SQL statement to check the balance
+        $stmtBalance = $conn->prepare("SELECT balance FROM user_db.bank WHERE user_id = ? AND bank = ?");
+        $stmtBalance->bind_param("is", $uid, $bank);
+        $stmtBalance->execute();
+        $stmtBalance->bind_result($balance);
+        $stmtBalance->fetch();
+        $stmtBalance->close();
 
-    if ($stmt) {
-        // Assuming $uid is defined earlier in your code
-        $stmt->bind_param("issssssdsss", $uid, $subject, $category, $expense_date, $recurrence_type, $merchant, $bank, $amount, $description, $reimbursable, $attachment);
+        // Check if the user has sufficient balance
+        if ($balance >= $amount) {
+            // Prepare and bind the SQL statement to insert the expense
+            $sql = "INSERT INTO expenses (user_id, subject, category, date, recurrence_type, merchant, bank, amount, description, reimbursable, receipt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
 
-        // Execute the statement
-        if ($stmt->execute()) {
-            // Redirect or display success message
-            header("Location: Savings.php?success=1");
-            exit();
+            if ($stmt) {
+                // Bind parameters
+                $stmt->bind_param("issssssdsss", $uid, $subject, $category, $expense_date, $recurrence_type, $merchant, $bank, $amount, $description, $reimbursable, $attachment);
+
+                // Execute the insert statement
+                if ($stmt->execute()) {
+                    // Prepare the SQL statement to update the balance
+                    $stmt2 = $conn->prepare("UPDATE user_db.bank SET balance = balance - ? WHERE user_id = ? AND bank = ?");
+                    $stmt2->bind_param("dis", $amount, $uid, $bank);
+
+                    // Execute the update statement
+                    if ($stmt2->execute()) {
+                        // Redirect or provide success message
+                        header("Location: Expense.php?success=1");
+                        exit();
+                    } else {
+                        echo "Error updating balance: " . $stmt2->error; // Debugging message for update
+                    }
+
+                    // Close the update statement
+                    $stmt2->close();
+                } else {
+                    echo "Error inserting data: " . $stmt->error; // Debugging message for insert
+                }
+
+                // Close the insert statement
+                $stmt->close();
+            } else {
+                echo "Error preparing statement: " . $conn->error;
+            }
         } else {
-            echo "Error executing statement: " . $stmt->error;
+            // Inform the user about insufficient balance
+            $shortfall = $amount - $balance;
+            $errorMessage = "Transaction cannot proceed. Your balance is short by $" . number_format($shortfall, 2) . ".";
+            echo "<div id='error-message' style='color: red;'>$errorMessage</div>";
+            echo "<script>
+                    setTimeout(function() {
+                        var errorMsg = document.getElementById('error-message');
+                        if (errorMsg) {
+                            errorMsg.style.display = 'none';
+                        }
+                    }, 5000); // Hide message after 5 seconds
+                  </script>";
         }
     } else {
-        echo "Error preparing statement: " . $conn->error;
+        echo "User ID is not set."; // Ensure $uid is set correctly
     }
-
-    // Close the statement
-    $stmt->close();
 }
 ?>
 
