@@ -26,9 +26,7 @@ if ($result->num_rows > 0) {
         ];
     }
 }
-
 $stmt->close();
-
 // Fetch only the user_dp (profile picture) from the database
 $user_id = $_SESSION['user_id'];
 $query = "SELECT user_dp FROM user WHERE user_id = ?";
@@ -109,13 +107,13 @@ if ($user && $user['user_dp']) {
                                 <i class="icon-receipt"></i>
                                 <span>+ Add Income</span>
                             </button>
-                            <button class="quick-access-item" onclick="handleNewGoal()">
+                            <button class="quick-access-item" onclick="openGoalIncome()">
                                 <i class="icon-report"></i>
                                 <span>+ New Goal</span>
                             </button>
-                            <button class="quick-access-item" onclick="handleNewSaving()">
+                            <button class="quick-access-item" onclick="openModalBank()">
                                 <i class="icon-plane"></i>
-                                <span>+ Add Saving</span>
+                                <span>+ Add Banks</span>
                             </button>
                         </div>
                     </div>
@@ -165,44 +163,12 @@ if ($user && $user['user_dp']) {
                         </table>
                     </div>
                     <script src="../js/quickreport.js"></script>
-
-                     <script>
-                     // Function to open the modal
-                    function openModalExpense() {
-                         document.getElementById("expenseModal").style.display = "flex";
-                    }
-
-                    // Function to close the modal
-                    function closeModalExpense() {
-                                document.getElementById("expenseModal").style.display = "none";
-                    }
-
-                    // Close the modal when clicking outside of it
-                    window.onclick = function(event) {
-                            const modal = document.getElementById("expenseModal");
-                            if (event.target == modal) {
-                            modal.style.display = "none";
-                            }
-                        }
-                    function openModalIncome() {
-                         document.getElementById("incomeModal").style.display = "flex";
-                    }
-
-                    // Function to close the modal
-                    function closeModalIncome() {
-                                document.getElementById("incomeModal").style.display = "none";
-                    }
-
-                    // Close the modal when clicking outside of it
-                    window.onclick = function(event) {
-                            const modal = document.getElementById("expenseModal");
-                            if (event.target == modal) {
-                            modal.style.display = "none";
-                            }
-                        }       
-                     </script>
+                    <script src="../js/modaldash.js"></script>           
                     <?php include('modals/modal-expense.php'); ?>
                     <?php include('modals/modal-income.php'); ?>
+                    <?php include('modals/modal-goals.php'); ?>
+                    <?php include('modals/modal-savings.php'); ?>
+                    <?php include('modals/modal-allocate.php'); ?>
                     <script src="../js/modal.js"></script>
                     <script src="../js/expense.js"></script>
 </body>
