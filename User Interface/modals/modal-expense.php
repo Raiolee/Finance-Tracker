@@ -43,8 +43,21 @@ function getBankOptions($conn, $uid)
     return $options;
 }
 
+function sanitizeInput($data) {
+    return htmlspecialchars(stripslashes(trim($data)));
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $merchant = sanitizeInput($_POST["merchant"]);
+    $bank = sanitizeInput($_POST["bank"]);
+    $amount = sanitizeInput($_POST["amount"]);
+    $description = sanitizeInput($_POST["description"]);
+    $reimbursable = sanitizeInput($_POST["reimbursable"]);
+    // Process the sanitized input values
+}
 
 ?>
+
 <link rel="stylesheet" href="../Styles/modal-styles.scss">
 <!-- Modal Structure -->
 <div id="expenseModal" class="modal">

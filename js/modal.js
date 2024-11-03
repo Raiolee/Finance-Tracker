@@ -44,8 +44,6 @@ window.onclick = function (event) {
         closeModalIncome();
     } else if (event.target == expenseModal) {
         closeModalExpense();
-    } else if (event.target == expenseRowModal) {
-        closeExpenseRowModal();
     }
 }
 
@@ -112,12 +110,6 @@ if (expenseButton && expenseModal) {
     });
 }
 
-// Close the Expense Row modal
-function closeExpenseRowModal() {
-    const expenseRowModal = document.getElementById("expenseRowModal");
-    if (expenseRowModal) {
-        expenseRowModal.style.display = 'none'; // Hide modal
-    }
-}
+
 
 
