@@ -68,7 +68,7 @@ include('../APIs/init.php');
                             require_once "../connection/config.php";
 
                             // Query to fetch the required details from the expenses table
-                            $query = "SELECT subject AS details, merchant, bank, amount, reimbursable FROM expenses WHERE user_id = ?";
+                            $query = "SELECT expense_id, subject AS details, merchant, bank, amount, reimbursable FROM expenses WHERE user_id = ?";
                             $stmt = $conn->prepare($query);
                             $stmt->bind_param("i", $user_id);
                             $stmt->execute();
@@ -77,7 +77,7 @@ include('../APIs/init.php');
                             if ($result->num_rows > 0) {
                                 // Output data of each row
                                 while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
+                                    echo "<tr class='row-interact' onclick='expenseRowClick(" . $row['expense_id'] . ")'>";
                                     echo "<td>" . htmlspecialchars($row['details']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['merchant']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
@@ -99,6 +99,7 @@ include('../APIs/init.php');
     </div>
     <!-- APIs (Put APIs below this comment)-->
     <?php include('modals/modal-expense.php'); ?>
+    <?php include('modals/modal-expense-row.php'); ?>
     <script src="../js/modal.js"></script>
     <script src="../js/expense.js"></script>
 </body>
