@@ -1,30 +1,6 @@
 <?php
-// Enable error reporting for development
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-session_start();
-if (!isset($_SESSION["user"])) {
-    header("Location: ../Login.php");
-    exit();
-}
-
-$uid = $_SESSION["user_id"];
-$username = $_SESSION["name"];
-$current_page = basename($_SERVER['PHP_SELF']);
-
 // Include database connection
 include '../connection/config.php';
-
-// Fetch only the user_dp (profile picture) from the database
-$user_id = $_SESSION['user_id'];
-$query = "SELECT user_dp FROM user WHERE user_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-$stmt->close();
 
 // Fetch existing goals for the user
 $sql3 = "SELECT subject, category FROM user_db.goals WHERE user_id = ?";
@@ -37,7 +13,6 @@ if ($stmt3) {
 } else {
     $error_message = "Error preparing statement: {$conn->error}";
 }
-
 function getCategoryOptions() {
     global $result3; // Use global to access $result3 inside the function
     $options = '';
@@ -47,7 +22,7 @@ function getCategoryOptions() {
             $options .= '<option value="' . htmlspecialchars($row3['subject']) . '">' . htmlspecialchars($row3['subject']) . '</option>';
         }
     } else {
-        $options .= '<option value="">No categories found</option>'; // Default option
+        $options .= '<option value="">No Goals found</option>'; // Default option
     }
 
     return $options; // Return the generated options
