@@ -1,6 +1,7 @@
 <?php
 include '../connection/config.php';
 include '../APIs/income_api.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -30,10 +31,22 @@ include '../APIs/income_api.php';
                             <button class="New-Saving" id="newIncomeBtn">+ Add Income</button>
                             <!-- Filter form -->
                             <form class="filter-form" id="filterForm" action="" method="GET">
-                                <select class="var-input medium pointer" id="FilterGoalsCategory"
-                                    name="FilterGoalsCategory">
-                                    <option value="" disabled selected>Category</option>
-                                    <option value="Travels">Option 1</option>
+                                <select class="var-input medium pointer" id="FilterGoalsCategory" name="FilterIncomeBank">
+                                    <option value="" disabled selected>Bank</option>
+                                    <?php
+                                        session_start();
+                                        $uid = $_SESSION["user_id"];
+                                        // Fetch bank names from the database
+                                        $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";
+                                        $bankStmt = $conn->prepare($bankQuery);
+                                        $bankStmt->bind_param("i", $uid);
+                                        $bankStmt->execute();
+                                        $bankResult = $bankStmt->get_result();
+                                        while ($row = $bankResult->fetch_assoc()) {
+                                            echo '<option value="' . htmlspecialchars($row['bank']) . '">' . htmlspecialchars($row['bank']) . '</option>';
+                                        }
+                                        $bankStmt->close();
+                                    ?>
                                 </select>
                                 <button type="submit">
                                     <i class="fa"><img src="../Assets/Icons/filter.svg" alt=""></i>
@@ -66,33 +79,6 @@ include '../APIs/income_api.php';
                             </tr>
                         <tbody>
                             <?php
-                            $userId = $_SESSION["user_id"];
-
-                            // Check if a search query is provided
-                            if (isset($_GET['Incomequery'])) {
-                                $IncomesearchQuery = $_GET['Incomequery'];
-                                try {
-                                    $result = searchIncome($conn, $userId, $IncomesearchQuery);
-                                } catch (Exception $e) {
-                                    $error_message = $e->getMessage();
-                                }
-                            } elseif (isset($_GET['sortIncomeDate'])) {
-                                $sortOrder = $_GET['sortIncomeDate'];
-                                $nextSortOrderDate = $sortOrder === 'asc' ? 'desc' : 'asc';
-                                try {
-                                    $result = sortIncomeByDate($conn, $userId, $sortOrder);
-                                } catch (Exception $e) {
-                                    $error_message = $e->getMessage();
-                                }
-                            } else {
-                                $nextSortOrderDate = 'asc';
-                                $sql = "SELECT * FROM income WHERE user_id = ?";
-                                $stmt = $conn->prepare($sql);
-                                $stmt->bind_param("i", $userId);
-                                $stmt->execute();
-                                $result = $stmt->get_result();
-                            }
-
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>";

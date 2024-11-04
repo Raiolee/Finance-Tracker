@@ -150,3 +150,48 @@ if (isset($_POST['submitIncome'])) {
     }
     if (isset($updateStmt)) $updateStmt->close();
 }
+
+function filterBank($conn, $userId, $filterBank) {
+    $sql = "SELECT * FROM income WHERE user_id = ? AND bank = ?";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new Exception("Error preparing statement: {$conn->error}");
+    }
+    $stmt->bind_param("is", $userId, $filterBank);
+    if (!$stmt->execute()) {
+        throw new Exception("Error executing statement: {$stmt->error}");
+    }
+    return $stmt->get_result();
+}
+
+if (isset($_GET['Incomequery'])) {
+    $IncomesearchQuery = $_GET['Incomequery'];
+    try {
+        $result = searchIncome($conn, $userId, $IncomesearchQuery);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
+} elseif (isset($_GET['sortIncomeDate'])) {
+    $sortOrder = $_GET['sortIncomeDate'];
+    $nextSortOrderDate = $sortOrder === 'asc' ? 'desc' : 'asc';
+    try {
+        $result = sortIncomeByDate($conn, $userId, $sortOrder);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
+} elseif (isset($_GET['FilterIncomeBank'])) {
+    $filterBank = $_GET['FilterIncomeBank'];
+    try {
+        $result = filterBank($conn, $user_id, $filterBank);
+    } catch (Exception $e) {
+        $error_message = $e->getMessage();
+    }
+} else {
+    $nextSortOrderDate = 'asc';
+    $sql = "SELECT * FROM income WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+}
+
