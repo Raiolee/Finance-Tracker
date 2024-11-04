@@ -120,7 +120,7 @@ include '../connection/config.php';
 // Fetch goals and savings
 function fetchGoals($conn, $userId)
 {
-    $sql = "SELECT subject, category FROM goals WHERE user_id = ?";
+    $sql = "SELECT goal_id, subject, category FROM goals WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bind_param("i", $userId);
@@ -132,6 +132,7 @@ function fetchGoals($conn, $userId)
         throw new Exception("Error preparing statement: {$conn->error}");
     }
 }
+
 function getGoalsAndSavings($conn, $userId)
 {
     // Fetch goals

@@ -66,26 +66,37 @@ include '../APIs/goals_api.php'; // Include the new API file
 
                         <tbody>
                             <?php
-                            if (isset($result) && $result->num_rows > 0) {
-                                foreach ($result as $row) {
-                                    $percentage = 0;
-                                    foreach ($goalsAndSavings as $goal) {
-                                        if ($goal['subject'] === $row['subject']) {
-                                            $percentage = $goal['percentage'];
-                                            break;
+                                if (isset($result) && $result->num_rows > 0) {
+                                    foreach ($result as $row) {
+                                        $percentage = 0;
+                                        foreach ($goalsAndSavings as $goal) {
+                                            if ($goal['subject'] === $row['subject']) {
+                                                $percentage = $goal['percentage'];
+                                                break;
+                                            }
                                         }
-                                    }
 
-                                    echo "<tr>
-                                    <td><div class='sub'>" . htmlspecialchars($row['subject']) . "</div></td>
-                                    <td>" . htmlspecialchars($row['category']) . "</td>
-                                    <td>" . htmlspecialchars($predictions[$row['subject']] ?? 'N/A') . "</td>
-                                    <td><span>" . $percentage . "%</span></td>
-                                    </tr>";
+                                        echo "<tr>
+                                            <td>
+                                                <div class='sub'>" . htmlspecialchars($row['subject']) . "</div>
+                                            </td>
+
+                                            <td>
+                                                " . htmlspecialchars($row['category']) . "
+                                            </td>
+
+                                            <td>
+                                                " . htmlspecialchars($predictions[$row['subject']] ?? 'N/A') . "
+                                            </td>
+                                            
+                                            <td>
+                                                <span>" . $percentage . "%</span>
+                                            </td>
+                                        </tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='4'>No results found</td></tr>";
                                 }
-                            } else {
-                                echo "<tr><td colspan='4'>No results found</td></tr>";
-                            }
                             ?>
                         </tbody>
                     </table>
