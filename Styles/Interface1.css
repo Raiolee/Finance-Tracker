@@ -19,6 +19,24 @@
    margin-top: -25.6%;
   }
 
+  .navbar-top {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+  }
+
+.navbar-top.logo img {
+     width: 70px;
+}
+  
+.navbar-top .icon {
+    font-size: 24px;
+    color: #00dac6;
+    cursor: pointer;
+}
   
 .navbar-div {
     display: flex;
@@ -90,7 +108,37 @@
         transform: translateX(0);
         /* Slide-in effect on toggle */
     }
+
+    .navbar-items {
+        display: none; /* Hide nav items by default on smaller screens */
+        flex-direction: column;
+    }
+  
+    .navbar-items.show {
+        display: flex; /* Show when hamburger is clicked */
+    }
+  
+    .navbar-top {
+      display: flex;
+  }
 }
+
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .navbar-items {
+        display: none; /* Hide nav items by default on smaller screens */
+        flex-direction: column;
+    }
+  
+    .navbar-items.show {
+        display: flex; /* Show when hamburger is clicked */
+    }
+  
+    .navbar-top {
+      display: flex;
+  }
+  
+  }
 
 .user-name {
     height: 3vh;

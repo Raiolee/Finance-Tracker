@@ -799,16 +799,28 @@ body {
   }
 }
 
-/* Hide navbar items and show hamburger icon on smaller screens */
-.hamburger-menu {
-  display: none; /* Hidden by default */
-  font-size: 24px;
-  cursor: pointer;
-}
-
 .navbar-items {
   display: flex;
   flex-direction: column;
+}
+
+.navbar-top {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  background-color: #333;
+
+  .logo img {
+      width: 70px;
+  }
+
+  .icon {
+      font-size: 24px;
+      color: #00dac6;
+      cursor: pointer;
+  }
 }
 
 /* Media query for smaller screens */
@@ -822,10 +834,10 @@ body {
       display: flex; /* Show when hamburger is clicked */
   }
 
-  .hamburger-menu {
-      display: block; /* Show hamburger icon */
-  }
-
+  .navbar-top {
+    display: flex;
+}
+ 
   .New-Saving {
     font-size: 8px !important;
     height: 40px!important;
@@ -861,7 +873,8 @@ body {
       display: flex; /* Show when hamburger is clicked */
   }
 
-  .hamburger-menu {
-      display: block; /* Show hamburger icon */
-  }
+  .navbar-top {
+    display: flex;
+}
+
 }

@@ -1,11 +1,21 @@
 <head>
     <link rel="stylesheet" href="../Styles/styles.scss">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
+
+<body>
 <div class="navbar-custom">
-    <!-- Hamburger Icon -->
-    <div class="hamburger-menu" onclick="toggleMenu()">
-        &#9776; <!-- Unicode character for hamburger icon -->
+    <!-- Top Section for Smaller Screens -->
+    <div class="navbar-top">
+        <a href="Dashboard.php" class="logo">
+            <img src="../Assets/PENNY_WISE_Logo.png" alt="Penny Wise Logo" width="80">
+        </a>
+        <!-- Hamburger Icon -->
+        <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+            <i class="fa fa-bars"></i>
+        </a>
     </div>
+    
 <div class="navbar-items">
     <div class="Profile">
         <div class="Profile_img">
@@ -65,3 +75,4 @@
         document.querySelector('.navbar-items').classList.toggle('show');
     }
 </script>
+</body>
