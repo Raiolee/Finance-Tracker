@@ -99,19 +99,19 @@ if ($user && $user['user_dp']) {
                     <div class="quick-access-section">
                         <h2>Quick Access</h2>
                         <div class="quick-access-items">
-                            <button class="quick-access-item" onclick="openModalExpense()">
+                            <button class="quick-access-item" id="newExpenseBtn">
                                 <i class="icon-credit-card"></i>
                                 <span>+ New Expense</span>
                             </button>
-                            <button class="quick-access-item" onclick="openModalIncome()">
+                            <button class="quick-access-item" id="newIncomeBtn">
                                 <i class="icon-receipt"></i>
                                 <span>+ Add Income</span>
                             </button>
-                            <button class="quick-access-item" onclick="openGoalIncome()">
+                            <button class="quick-access-item" id="newGoalBtn">
                                 <i class="icon-report"></i>
                                 <span>+ New Goal</span>
                             </button>
-                            <button class="quick-access-item" onclick="openModalBank()">
+                            <button class="quick-access-item" id="BankButton">
                                 <i class="fas fa-university"></i>
                                 <span>+ Add Banks</span>
                             </button>
@@ -163,14 +163,12 @@ if ($user && $user['user_dp']) {
                         </table>
                     </div>
                     <script src="../js/quickreport.js"></script>
-                    <script src="../js/modaldash.js"></script>           
                     <?php include('modals/modal-expense.php'); ?>
                     <?php include('modals/modal-income.php'); ?>
                     <?php include('modals/modal-goals.php'); ?>
                     <?php include('modals/modal-savings.php'); ?>
                     <?php include('modals/modal-allocate.php'); ?>
                     <script src="../js/modal.js"></script>
-                    <script src="../js/expense.js"></script>
 </body>
 
 </html>
