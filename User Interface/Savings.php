@@ -1,6 +1,7 @@
 <?php include("../APIS/savings_api.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <style>
     </style>
 </head>
+
 <body>
     <div class="container">
         <?php include("navbar.php") ?>
@@ -44,7 +46,7 @@
                             if (isset($result) && $result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
                                     // Use the correct variables from the current row
-                                    echo "<tr>
+                                    echo "<tr class='row-interact' onclick='savingsRowClick(" . $row['bank_id'] . ")'>
                                                 <td>" . htmlspecialchars($row['user_bank_id']) . "</td>
                                                 <td>" . htmlspecialchars($row['bank']) . "</td>
                                                 <td>" . htmlspecialchars($row['balance']) . "</td>
@@ -90,6 +92,8 @@
 
     <?php include("modals/modal-allocate.php"); ?>
     <?php include("modals/modal-savings.php"); ?>
+    <?php include("modals/modal-savings-row.php") ?>
+    <script src="../js/savings.js"></script>
     <script src="../js/modal.js"></script>
 </body>
 
