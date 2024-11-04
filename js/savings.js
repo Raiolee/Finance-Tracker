@@ -4,8 +4,11 @@ function savingsRowClick(bankId) {
     
     // Open the modal
     const savingsRowModal = document.getElementById("savingsRowModal");
-    if (savingsRowModal) {
+    const bankModal = document.getElementById("bankModalAllocate");
+    
+    if (bankModal.style.display === "none" || !bankModal.style.display) {
         savingsRowModal.style.display = "flex";
+        // Fetch and populate the modal as before
     }
 
     fetch(`../APIs/get_savings.php?id=${bankId}`)
@@ -16,10 +19,10 @@ function savingsRowClick(bankId) {
                 console.error('Error fetching savings data:', data.error);
                 return;
             }
-            // Populate modal fields with savings data
-            document.getElementById("bankName").value = data.purpose;
-            document.getElementById("bank").value = data.bank;
-            document.getElementById("bankAmount").value = data.balance;
+            // Populate modal fields with bank data
+            document.getElementById("bankRow").value = data.bank;
+            document.getElementById("bankNameRow").value = data.purpose;
+            document.getElementById("bankAmountRow").value = data.balance;
         })
         .catch(error => console.error('Error fetching savings data:', error));
 }

@@ -34,9 +34,6 @@
                                     Bank
                                 </th>
                                 <th class="th-interact" onclick="sortTable('accomplishment_date')">
-                                    Balance
-                                </th>
-                                <th>
                                     Manage
                                 </th>
                             </tr>
@@ -47,7 +44,6 @@
                                 while ($row = $result->fetch_assoc()) {
                                     // Use the correct variables from the current row
                                     echo "<tr class='row-interact' onclick='savingsRowClick(" . $row['bank_id'] . ")'>
-                                                <td>" . htmlspecialchars($row['user_bank_id']) . "</td>
                                                 <td>" . htmlspecialchars($row['bank']) . "</td>
                                                 <td>" . htmlspecialchars($row['balance']) . "</td>
                                                 <td>
@@ -56,7 +52,7 @@
                                             </tr>";
                                 }
                             } else {
-                                echo "<tr><td colspan='4'>No results found</td></tr>";
+                                echo "<tr><td colspan='3'>No results found</td></tr>";
                             }
                             ?>
                         </tbody>
@@ -71,23 +67,24 @@
     </div>
 
     <script>
-        function getCategoryOptions() {
-            // Fetch categories dynamically from PHP
-            const categories = [
-                <?php
-                if (isset($result3) && $result3->num_rows > 0) {
-                    while ($row3 = $result3->fetch_assoc()) {
-                        echo "'" . addslashes($row3['subject']) . "',"; // Corrected to fetch category
-                    }
-                    echo rtrim(',', ' '); // Remove the trailing comma
-                } else {
-                    echo "'No categories found'"; // Provide a default value
-                }
-                ?>
-            ];
+        // PAHIWALAY NA LANG PO NG SCRIPT, YOU CAN EITHER PUT IT IN savings.js :))
+        // function getCategoryOptions() {
+        //     // Fetch categories dynamically from PHP
+        //     const categories = [
+        //         <?php
+        //         if (isset($result3) && $result3->num_rows > 0) {
+        //             while ($row3 = $result3->fetch_assoc()) {
+        //                 echo "'" . addslashes($row3['subject']) . "',"; // Corrected to fetch category
+        //             }
+        //             echo rtrim(',', ' '); // Remove the trailing comma
+        //         } else {
+        //             echo "'No categories found'"; // Provide a default value
+        //         }
+        //         ?>
+        //     ];
 
-            return categories.map(subject => `<option value="${subject}">${subject}</option>`).join('');
-        }
+        //     return categories.map(subject => `<option value="${subject}">${subject}</option>`).join('');
+        // }
     </script>
 
     <?php include("modals/modal-allocate.php"); ?>

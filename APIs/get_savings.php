@@ -12,7 +12,7 @@ if (!isset($_SESSION["user_id"])) {
 }
 
 if ($bank_id) {
-    $query = "SELECT bank_name, account_number, balance, interest_rate, date_opened FROM savings WHERE bank_id = ? AND user_id = ?";
+    $query = "SELECT purpose, bank, balance FROM bank WHERE bank_id = ? AND user_id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ii", $bank_id, $_SESSION["user_id"]);
     $stmt->execute();
