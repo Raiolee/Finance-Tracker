@@ -34,7 +34,6 @@ include '../APIs/income_api.php';
                                 <select class="var-input medium pointer" id="FilterGoalsCategory" name="FilterIncomeBank">
                                     <option value="" disabled selected>Bank</option>
                                     <?php
-                                        session_start();
                                         $uid = $_SESSION["user_id"];
                                         // Fetch bank names from the database
                                         $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";

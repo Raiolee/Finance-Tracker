@@ -44,7 +44,6 @@
                 <select class="var-input large pointer" name="bank" id="bank-row">
                     <option value="CHANGE ME">Bank 1</option> <!-- Change the code to get the bank based on user_id -->
                     <?php
-                        session_start();
                         $uid = $_SESSION["user_id"];
                         // Fetch bank names from the database
                         $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";

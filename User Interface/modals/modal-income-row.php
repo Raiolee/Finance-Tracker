@@ -35,7 +35,6 @@
 
                     <option value="CHANGE ME">Option 1</option>
                     <?php
-                    session_start();
                     $uid = $_SESSION["user_id"];
                     // Fetch bank names from the database
                     $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";
