@@ -98,7 +98,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <select class="var-input large pointer" name="bank" id="bank" required>
                     <?php echo getBankOptions($conn, $uid); ?>
                 </select>
-
                 <label for="amount" class="form-labels">Amount*</label>
                 <input type="number" class="var-input" id="amount" name="amount" required>
                 <!-- Description -->
