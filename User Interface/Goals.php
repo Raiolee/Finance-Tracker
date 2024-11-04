@@ -70,13 +70,13 @@ include '../APIs/goals_api.php'; // Include the new API file
                                     foreach ($result as $row) {
                                         $percentage = 0;
                                         foreach ($goalsAndSavings as $goal) {
-                                            if ($goal['subject'] === $row['subject']) {
+                                            if ($goal['goal_id'] === $row['goal_id']) {
                                                 $percentage = $goal['percentage'];
                                                 break;
                                             }
                                         }
 
-                                        echo "<tr>
+                                        echo "<tr class='row-interact' onclick='goalRowClick(" . $row['goal_id'] . ")'>
                                             <td>
                                                 <div class='sub'>" . htmlspecialchars($row['subject']) . "</div>
                                             </td>
@@ -104,7 +104,10 @@ include '../APIs/goals_api.php'; // Include the new API file
             </div>
     </div>
     </div>
+    <?php include('../APIs/get_goal.php') ?>
+    <?php include('modals/modal-goals-row.php'); ?>
     <?php include('modals/modal-goals.php'); ?>
+    <script src="../js//goals.js"></script>
     <script src="../js/modal.js"></script>
 </body>
 </html>

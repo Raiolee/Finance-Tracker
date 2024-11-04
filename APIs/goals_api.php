@@ -136,7 +136,7 @@ function fetchGoals($conn, $userId)
 function getGoalsAndSavings($conn, $userId)
 {
     // Fetch goals
-    $goalsSql = "SELECT subject, budget_limit FROM goals WHERE user_id = ?";
+    $goalsSql = "SELECT goal_id, subject, budget_limit FROM goals WHERE user_id = ?";
     $stmt = $conn->prepare($goalsSql);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
@@ -149,6 +149,7 @@ function getGoalsAndSavings($conn, $userId)
     $stmt->execute();
     $savingsResult = $stmt->get_result();
     $savings = $savingsResult->fetch_all(MYSQLI_ASSOC);
+
     // Calculate total balance for each subject
     $totalBalances = [];
     foreach ($savings as $saving) {
@@ -161,6 +162,7 @@ function getGoalsAndSavings($conn, $userId)
         $percentage = $goal['budget_limit'] ? min(($totalBalance / $goal['budget_limit']) * 100, 100) : 0; // Ensure percentage does not exceed 100%
         $percentage = number_format($percentage, 2); // Limit percentage to 2 decimal places
         $results[] = [
+            'goal_id' => $goal['goal_id'],
             'subject' => $goal['subject'],
             'totalBalance' => $totalBalance,
             'budgetLimit' => $goal['budget_limit'],
