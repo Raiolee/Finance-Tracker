@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
 
                 <label for="expense-date" class="form-labels row">Date</label>
-                <input type="date" class="var-input" id="expense-date" name="expense-date">
+                <input type="date" class="var-input" id="expense-date" name="expense-date" value="<?php echo date('Y-m-d'); ?>">
 
                 <label for="recurrence_type" class="form-labels row">Frequency</label>
                 <select class="var-input large pointer" name="recurrence_type" id="recurrence_type">

@@ -7,14 +7,16 @@
         <hr class="bottom-line">
         <form class="form-container" id="SavingForm" method="post" action="">
             <div class="big-divider full">
-                <label class="form-labels" name="date" for="date"> Date*</label>
-                <input class="var-input" type="date" name="date" required>
                 <label class="form-labels" for="source">Source of Income*</label>
                 <input class="var-input" type="text" name="source" placeholder="Source of Income" required>
+
+                <label class="form-labels" name="date" for="date"> Date*</label>
+                <input class="var-input" type="date" name="date" value="<?php echo date('Y-m-d'); ?>" required>
+
                 <label class="form-labels" for="income-amount">Amount</label>
                 <input class="var-input" type="number" id="income-amount" name="income-amount" placeholder="0.00" required>
 
-                <label class="form-labels" for="income-category">Category*</label>
+                <label class="form-labels" for="income-category">Frequency*</label>
                 <select class="var-input" name="income_category" id="income-category" required>
                     <option value="Once">Once</option> 
                     <option value="Daily">Daily</option>

@@ -11,10 +11,11 @@
                 <input class="var-input" type="text" name="name" placeholder="Name" required> <!-- Palagay na lang sa value yung backend code to get the specific bank -->
                 
                 <label class="form-labels" name="bank-balance" for="start-date">Start Date*</label>
-                <input class="var-input" type="date" name="start-date" required>
+                <input class="var-input" type="date" name="start-date" value="<?php echo date('Y-m-d'); ?>" required>
                 
                 <label class="form-labels" for="goal-category">Category*</label>
                 <select class="var-input" name="goal-category" id="goal-category" required>
+                    <option value="None" selected disabled></option>
                     <option value="Travels">Travels</option>
                     <option value="Miscellaneous">Miscellaneous</option>
                     <option value="Others">Others</option>

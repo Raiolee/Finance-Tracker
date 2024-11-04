@@ -47,24 +47,24 @@ function getCategoryOptions() {
         <form class="form-container" id="SavingForm" method="post" action="">
             <input type="hidden" name="action" value="another_action">
             <div class="big-divider full">
-                <label class="form-labels" for="bank">Bank</label>
+                <label class="form-labels" for="bank">Bank*</label>
                 <input class="var-input" type="text" name="bank" readonly>
                 
-                <label class="form-labels" for="bank-balance">Remaining Balance</label>
+                <label class="form-labels" for="bank-balance">Remaining Balance*</label>
                 <input class="var-input" type="number" name="bank-balance" readonly>
                 
-                <label class="form-labels" for="bank-category">Goal</label>
+                <label class="form-labels" for="bank-category">Goal*</label>
                 <select class="var-input" name="bank-category" id="bank-category" required>
                     <?php echo getCategoryOptions(); ?> <!-- Function call correctly placed -->
                 </select>
                 
-                <label class="form-labels" for="allocate-amount">Amount</label>
+                <label class="form-labels" for="allocate-amount">Amount*</label>
                 <input class="var-input" type="number" id="allocate-amount" name="allocate-amount" placeholder="0.00" required>
                 
-                <label class="form-labels" for="allocate-date">Date</label>
-                <input class="var-input" type="date" id="allocate-date" name="allocate-date" required>
+                <label class="form-labels" for="allocate-date">Date*</label>
+                <input class="var-input" type="date" id="allocate-date" name="allocate-date" value="<?php echo date('Y-m-d'); ?>" required>
                 
-                <label class="form-labels" for="frequency">Frequency</label>
+                <label class="form-labels" for="frequency">Frequency*</label>
                 <select class="var-input" name="frequency" id="frequency">
                     <option value="Once">Once</option>
                     <option value="Weekly">Weekly</option>
