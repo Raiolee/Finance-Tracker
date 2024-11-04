@@ -98,7 +98,7 @@
   
 
 /* Apply Collapse Transition Only on Smaller Screens */
-@media (max-width: 768px) {
+@media only screen and (min-width: 425px) and (max-width: 767px)  {
     .collapse:not(.show) {
         transform: translateX(-100%);
         /* Hide sidebar on smaller screens */
