@@ -68,7 +68,7 @@
 
                 <div class="btn-options">
                     <button type="button" class="link-btn cancel" onclick="closeModalExpense()">Delete</button> <!-- Paedit na lang din ng delete button to work with the delete expense-->
-                    <button type="Edit" class="save">Edit</button> <!-- Paedit na lang din ng save button to work with the edit expense-->
+                    <button type="Edit" class="save">Save</button> <!-- Paedit na lang din ng save button to work with the edit expense-->
                 </div>
             </div>
         </form>
