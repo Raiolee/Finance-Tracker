@@ -43,6 +43,20 @@
                 <label for="bank" class="form-labels row">Bank</label>
                 <select class="var-input large pointer" name="bank" id="bank-row">
                     <option value="CHANGE ME">Bank 1</option> <!-- Change the code to get the bank based on user_id -->
+                    <?php
+                        session_start();
+                        $uid = $_SESSION["user_id"];
+                        // Fetch bank names from the database
+                        $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";
+                        $bankStmt = $conn->prepare($bankQuery);
+                        $bankStmt->bind_param("i", $uid);
+                        $bankStmt->execute();
+                        $bankResult = $bankStmt->get_result();
+                        while ($row = $bankResult->fetch_assoc()) {
+                            echo '<option value="' . htmlspecialchars($row['bank']) . '">' . htmlspecialchars($row['bank']) . '</option>';
+                        }
+                        $bankStmt->close();
+                    ?>
                 </select>
 
                 <label for="amount" class="form-labels">Amount*</label>

@@ -67,7 +67,6 @@ include '../APIs/goals_api.php'; // Include the new API file
                         <tbody>
                             <?php
                             if (isset($result) && $result->num_rows > 0) {
-                                $rowCounter = 0;
                                 foreach ($result as $row) {
                                     $percentage = 0;
                                     foreach ($goalsAndSavings as $goal) {
@@ -76,23 +75,13 @@ include '../APIs/goals_api.php'; // Include the new API file
                                             break;
                                         }
                                     }
-                                    $rowClass = ($rowCounter % 2 == 0) ? 'row-color-1' : 'row-color-2';
 
-                                    echo "<tr class='" . htmlspecialchars($rowClass) . "'>
+                                    echo "<tr>
                                     <td><div class='sub'>" . htmlspecialchars($row['subject']) . "</div></td>
                                     <td>" . htmlspecialchars($row['category']) . "</td>
                                     <td>" . htmlspecialchars($predictions[$row['subject']] ?? 'N/A') . "</td>
-                                    <td class='progress-row'>
-                                        <div class='progress-container'>
-                                            <div class='progress-bar1' style='width: " . htmlspecialchars($percentage) . "%;'></div>
-                                        </div>
-                                        <div class='progress-text'>
-                                            <span>" . htmlspecialchars($percentage) . "%</span>
-                                        </div>
-                                    </td>
-                                </tr>";
-
-                                    $rowCounter++;
+                                    <td><span>" . $percentage . "%</span></td>
+                                    </tr>";
                                 }
                             } else {
                                 echo "<tr><td colspan='4'>No results found</td></tr>";
