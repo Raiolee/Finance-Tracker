@@ -53,7 +53,7 @@ CREATE TABLE `expenses` (
     `reimbursable` ENUM('yes','no') NOT NULL DEFAULT 'no',
     `merchant` VARCHAR(255) NOT NULL,
     `amount` DECIMAL(10, 2) NOT NULL,
-    `description` TEXT NOT NULL,
+    `description` TEXT,
     `receipt` BLOB
 );
 
@@ -66,7 +66,7 @@ create table `goals` (
     `date`date not null,
     `category` varchar(255) not null,
     `budget_limit` decimal(10,2) not null,
-    `description` text not null
+    `description` text
 );
 
 --  Create savings table
