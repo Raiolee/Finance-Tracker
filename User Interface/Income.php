@@ -54,15 +54,15 @@ include '../APIs/income_api.php';
                         <thead>
                             <tr class="header-row">
                                 <th class="table-header">Source of Income</th>
+                                <th class="table-header">Bank</th>
                                 <th class="table-header">Amount</th>
-                                <th class="table-header">Category</th>
                                 <th class="th-interact" onclick="document.querySelector('.SortIncomeDate').submit();">
-                                    Date
+                                    Reccurence
                                     <form class="SortIncomeDate" action="" method="GET" style="display: inline;">
                                         <input type="hidden" name="sortIncomeDate" value="<?php echo htmlspecialchars($nextSortOrderDate); ?>">
                                     </form>
                                 </th>
-                                <th class="table-header">Bank</th>
+                                <th class="table-header">Date</th>
                             </tr>
                         <tbody>
                             <?php
@@ -95,61 +95,28 @@ include '../APIs/income_api.php';
 
                             if ($result->num_rows > 0) {
                                 while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
+                                    echo "<tr class='row-interact' onclick='incomeRowClick(" . $row['income_id'] . ")'>";
                                     echo "<td>" . htmlspecialchars($row['source']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['total']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['category']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['date']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
-                                    echo "<td><button class='btn btn-outline-light' data-id='" . htmlspecialchars($row['income_id']) . "' data-source='" . htmlspecialchars($row['source']) . "' data-total='" . htmlspecialchars($row['total']) . "' data-category='" . htmlspecialchars($row['category']) . "' data-bank='" . htmlspecialchars($row['bank']) . "'><i class='fas fa-ellipsis-v'></i></button></td>";
-                                    echo "</tr>";
                                 }
                             } else {
-                                echo "<tr><td colspan='6'>No income records found</td></tr>";
+                                echo "<tr><td colspan='5'>No income records found</td></tr>";
                             }
                             ?>
                         </tbody>
                     </table>
-                    <div id="editDeleteModal" class="modal">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h3 class="modal-title">Show Income Record</h3>
-                                <span class="close">&times;</span>
-                            </div>
-                            <div class="modal-body">
-                                <form id="editDeleteForm" method="POST" action="Income.php">
-                                    <input type="hidden" id="incomeId" name="incomeId">
-                                    <div class="form-group">
-                                        <label for="incomeSource">Source of Income</label>
-                                        <input type="text" class="form-control" id="incomeSource" name="incomeSource" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="incomeTotal">Amount</label>
-                                        <input type="text" class="form-control" id="incomeTotal" name="incomeTotal" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="incomeCategory">Category</label>
-                                        <select class="form-control" id="incomeCategory" name="incomeCategory" readonly>
-                                            <option value="Monthly">Monthly</option>
-                                            <option value="Weekly">Weekly</option>
-                                            <option value="Yearly">Yearly</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="incomeBank">Bank</label>
-                                        <input type="text" class="form-control" id="incomeBank" name="incomeBank" readonly>
-                                    </div>
-                                    <button type="submit" class="btn btn-danger" id="deleteBtn">Delete</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
+
 
     <?php include("modals/modal-income.php"); ?>
+    <?php include("../APIs/get_income.php") ?>
+    <?php include("modals/modal-income-row.php") ?>
     <script src="../js/modal.js"></script>
     <script src="../js/income.js"></script>
 </body>
