@@ -143,6 +143,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "No action specified.";
     }
 }
+
+
 // Form Handling End
 // Fetch existing savings for the user
 $sql = "SELECT user_bank_id, bank, balance FROM user_db.bank WHERE user_id = ?";
@@ -169,7 +171,7 @@ if ($stmt2) {
 }
 
 // Fetch existing goals for the user
-$sql3 = "SELECT subject, category FROM user_db.goals WHERE user_id = ?";
+$sql3 = "SELECT purpose, bank, balance FROM user_db.bank WHERE user_id = ?";
 $stmt3 = $conn->prepare($sql3);
 
 if ($stmt3) {
