@@ -117,8 +117,22 @@
 }
 
 .th-interact {
+    font-size: 16px;
     &:hover {
         cursor: pointer;
     }
 
 }
+
+@media only screen and (min-width: 425px) and (max-width: 767px) {
+#FilterGoalsCategory {
+        width: 50px !important;
+    }    
+
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    #FilterGoalsCategory {
+        width: 60px !important;
+    } 
+  }

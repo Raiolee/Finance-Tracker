@@ -96,50 +96,6 @@
     border-radius: 50%;
   }
   
-
-/* Apply Collapse Transition Only on Smaller Screens */
-@media only screen and (min-width: 425px) and (max-width: 767px)  {
-    .collapse:not(.show) {
-        transform: translateX(-100%);
-        /* Hide sidebar on smaller screens */
-    }
-
-    .collapse.show {
-        transform: translateX(0);
-        /* Slide-in effect on toggle */
-    }
-
-    .navbar-items {
-        display: none; /* Hide nav items by default on smaller screens */
-        flex-direction: column;
-    }
-  
-    .navbar-items.show {
-        display: flex; /* Show when hamburger is clicked */
-    }
-  
-    .navbar-top {
-      display: flex;
-  }
-}
-
-
-@media only screen and (min-width: 768px) and (max-width: 1023px) {
-    .navbar-items {
-        display: none; /* Hide nav items by default on smaller screens */
-        flex-direction: column;
-    }
-  
-    .navbar-items.show {
-        display: flex; /* Show when hamburger is clicked */
-    }
-  
-    .navbar-top {
-      display: flex;
-  }
-  
-  }
-
 .user-name {
     height: 3vh;
     display: flex;
@@ -992,3 +948,54 @@ button {
 
 
 /*Saving Design End*/
+/* Apply Collapse Transition Only on Smaller Screens */
+@media only screen and (min-width: 425px) and (max-width: 767px)  {
+    /* Right Container - Prevents unnecessary expansion */
+    .right-container {
+        margin-top: 70px;
+    }
+
+        .collapse:not(.show) {
+            transform: translateX(-100%);
+            /* Hide sidebar on smaller screens */
+        }
+    
+        .collapse.show {
+            transform: translateX(0);
+            /* Slide-in effect on toggle */
+        }
+    
+        .navbar-items {
+            display: none; /* Hide nav items by default on smaller screens */
+            flex-direction: column;
+        }
+      
+        .navbar-items.show {
+            display: flex; /* Show when hamburger is clicked */
+        }
+      
+        .navbar-top {
+          display: flex;
+      }
+    }
+    
+    @media only screen and (min-width: 768px) and (max-width: 1023px) {
+
+        .right-container {
+            margin-top: 70px;
+        }
+        .navbar-items {
+            display: none; /* Hide nav items by default on smaller screens */
+            flex-direction: column;
+        }
+      
+        .navbar-items.show {
+            display: flex; /* Show when hamburger is clicked */
+        }
+      
+        .navbar-top {
+          display: flex;
+      }
+      
+      }
+    

@@ -838,6 +838,15 @@ body {
     display: flex;
 }
  
+.main-section {
+  margin-top: 30% !important;
+}
+
+.table-approval thead .th-interact {
+  font-size: 9px !important;
+  text-align: center !important;
+}
+
   .New-Saving {
     font-size: 8px !important;
     height: 40px!important;
@@ -845,7 +854,7 @@ body {
   }
 
   h1.header {
-    margin: 10px 10px 15px 20px!important;
+    margin: 10px 10px 15px 7px!important;
     font: 20px "Atkinson Hyperlegible", sans-serif !important;
   }
 
@@ -854,14 +863,15 @@ body {
   }
 
   .table-approval thead th {
-    padding: 10px !important;
-    font-size: 13px!important;
+    padding: 5px  !important;
+    font-size: 12px!important;
   }
 
   .table-approval td {
     font-size: 14px!important;
     text-align: center;
   }
+
 }
 @media only screen and (min-width: 768px) and (max-width: 1023px) {
   .navbar-items {
@@ -877,4 +887,12 @@ body {
     display: flex;
 }
 
+.main-section {
+  margin-top: 20% !important;
+}
+
+h1.header {
+  margin: 10px 10px 15px 9px!important;
+  font: 20px "Atkinson Hyperlegible", sans-serif !important;
+}
 }
