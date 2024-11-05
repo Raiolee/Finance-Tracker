@@ -120,7 +120,7 @@ include '../connection/config.php';
 // Fetch goals and savings
 function fetchGoals($conn, $userId)
 {
-    $sql = "SELECT goal_id, subject, category FROM goals WHERE user_id = ?";
+    $sql = "SELECT goal_id, subject, category, budget_limit FROM goals WHERE user_id = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bind_param("i", $userId);
@@ -285,7 +285,7 @@ function predictSavingDate($conn, $userId) {
 }
 
 function searchGoals($conn, $userId, $searchQuery) {
-    $sql = "SELECT subject, category FROM goals WHERE user_id = ? AND (subject LIKE ? OR category LIKE ?)";
+    $sql = "SELECT subject, category, budget_limit FROM goals WHERE user_id = ? AND (subject LIKE ? OR category LIKE ?)";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $likeQuery = "%{$searchQuery}%";
@@ -335,3 +335,84 @@ function sortGoalsByDate($conn, $userId, $order) {
     return $result;
 }
 
+if (isset($_POST['submitgoalform'])) {
+    $goalName = $_POST['goalNameRow'];
+    $goalDate = $_POST['goalDateRow'];
+    $goalCategory = $_POST['goalCategoryRow'];
+    $goalBank = $_POST['goalBankRow'];
+    $goalAmount = $_POST['goalAmountRow'];
+
+    // Validate required fields
+    if (empty($goalName) || empty($goalDate) || empty($goalCategory) || empty($goalBank) || empty($goalAmount)) {
+        $error_message = "Please fill in all fields.";
+    } else {
+        try {
+            // Start transaction
+            $conn->begin_transaction();
+
+            // Prepare and execute the insert statement
+            $sql = "INSERT INTO savings (user_id, subject, date, category, bank, savings_amount) VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("issssd", $userId, $goalName, $goalDate, $goalCategory, $goalBank, $goalAmount);
+            if ($stmt->execute()) {
+                // Update the bank table by subtracting the savings amount from the balance
+                $updateStmt = $conn->prepare("UPDATE bank SET balance = balance - ? WHERE user_id = ? AND bank = ?");
+                if ($updateStmt === false) {
+                    $conn->rollback();
+                    throw new Exception("Prepare failed: {$conn->error}");
+                }
+
+                // Bind parameters to the update statement
+                $updateStmt->bind_param("dis", $goalAmount, $userId, $goalBank);
+
+                // Execute the update statement
+                if (!$updateStmt->execute()) {
+                    $conn->rollback();
+                    throw new Exception("Execute failed: {$updateStmt->error}");
+                }
+
+                // Commit transaction
+                $conn->commit();
+                header("Location: Goals.php");
+                exit();
+            } else {
+                $conn->rollback();
+                $error_message = "Error executing statement: {$stmt->error}";
+            }
+        } catch (Exception $e) {
+            $conn->rollback();
+            $error_message = "An error occurred: " . $e->getMessage();
+        }
+    }
+}
+
+if (isset($_POST['goalsdeleteBTN'])) {
+    $goalSubject = $_POST['goalNameRow'] ?? null;
+    if (empty($goalSubject) || empty($userId)) {
+        $error_message = "Goal subject and user ID are required.";
+    } else {
+        try {
+            // Prepare and execute the delete statement
+            $sql = "DELETE FROM goals WHERE subject = ? AND user_id = ?";
+            $stmt = $conn->prepare($sql);
+            if ($stmt === false) {
+                throw new Exception("Error preparing statement: {$conn->error}");
+            }
+            $stmt->bind_param("si", $goalSubject, $userId);
+            if ($stmt->execute()) {
+                // Optionally, you might want to check the number of affected rows
+                if ($stmt->affected_rows > 0) {
+                    header("Location: Goals.php");
+                    exit();
+                } else {
+                    $error_message = "No records deleted. Please check the goal subject.";
+                }
+            } else {
+                $error_message = "Error executing statement: {$stmt->error}";
+            }
+            $stmt->close(); // Close the statement
+        } catch (Exception $e) {
+            $error_message = "An error occurred: " . $e->getMessage();
+        }
+    }
+}

@@ -12,7 +12,7 @@ if (!isset($_SESSION["user_id"])) {
 }
 
 if ($goal_id) {
-    $query = "SELECT subject, category, start_date, budget_limit as target_amount, description FROM goals WHERE goal_id = ? AND user_id = ?";
+    $query = "SELECT * FROM goals WHERE goal_id = ? AND user_id = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ii", $goal_id, $_SESSION["user_id"]);
     $stmt->execute();

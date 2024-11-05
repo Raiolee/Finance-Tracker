@@ -61,6 +61,9 @@ include '../APIs/goals_api.php'; // Include the new API file
                                 <th>
                                     PROGRESS
                                 </th>
+                                <th>
+                                    AMOUNT
+                                </th>
                             </tr>
                         </thead>
 
@@ -91,6 +94,10 @@ include '../APIs/goals_api.php'; // Include the new API file
                                             
                                             <td>
                                                 <span>" . $percentage . "%</span>
+                                            </td>
+
+                                            <td>
+                                                " . htmlspecialchars($row['budget_limit']) . "
                                             </td>
                                         </tr>";
                                     }
