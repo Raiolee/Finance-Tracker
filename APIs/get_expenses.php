@@ -27,7 +27,5 @@ while ($row = $result->fetch_assoc()) {
 // Close the connection and return data as JSON
 $stmt->close();
 $conn->close();
-
-header('Content-Type: application/json');
 echo json_encode($data);
 ?>
