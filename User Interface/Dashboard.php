@@ -59,12 +59,14 @@ if ($user && $user['user_dp']) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body class="container">
-    <?php include ('navbar.php'); ?>
+<body>
+    <?php include('navbar-mobile.php'); ?>
+    <div class="container">
+        <?php include ('navbar.php'); ?>
 
-    <div class="content">
-        <div class="right-container">
-            <div class="main-content">
+        <div class="content">
+            <div class="right-container">
+                <div class="main-content">
                 <!-- Grouped Sections in Row (Pending Tasks and Quick Report) -->
                 <div class="horizontal-sections">
                     <!-- Pending Tasks Section -->

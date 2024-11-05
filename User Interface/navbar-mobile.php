@@ -3,7 +3,7 @@
 <!-- Top Navigation Menu -->
 <div class="navbar-mobile">
     <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
-    <a href="Dashboard.php" class="active">Logo</a>
+    <a href="Dashboard.php" class="active"></a>
 
 
     <!-- Navigation links (hidden by default) -->
