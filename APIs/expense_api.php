@@ -1,5 +1,8 @@
 <?php
 include('../APIs/init.php');
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the action type from the form
     if (isset($_POST['action'])) {

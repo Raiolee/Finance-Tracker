@@ -1,10 +1,10 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require '../connection/config.php';
 
 $bank_id = $_GET['id'] ?? null;
-
-header('Content-Type: application/json');
 
 if (!isset($_SESSION["user_id"])) {
     echo json_encode(["error" => "User not logged in."]);
