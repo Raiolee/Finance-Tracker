@@ -43,7 +43,8 @@ function getBankOptions($conn, $uid)
     return $options;
 }
 
-function sanitizeInput($data) {
+function sanitizeInput($data)
+{
     return htmlspecialchars(stripslashes(trim($data)));
 }
 
@@ -67,12 +68,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h3 class="header">Add an Expense</h3>
         <hr class="bottom-line">
         <form class="form-container" id="SavingForm" method="POST" action="">
+            <input type="hidden" name="action" value="insert_expense">
+            <input type="hidden" name="expense_id" id="expense_id">
             <div class="big-divider full">
+                <!-- Subject Field -->
                 <label for="subject" class="form-labels row">Subject</label>
-                <input type="text" class="var-input medium" id="subject" name="subject">
+                <input type="text" class="var-input medium" id="subject" name="subject" required>
 
+                <!-- Category Field -->
                 <label for="category" class="form-labels row medium">Category</label>
-                <select class="var-input" id="category" name="category">
+                <select class="var-input" id="category" name="category" required>
                     <option value="food">Food</option>
                     <option value="transport">Transport</option>
                     <option value="entertainment">Entertainment</option>
@@ -80,32 +85,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <option value="other">Other</option>
                 </select>
 
+                <!-- Date Field -->
                 <label for="expense-date" class="form-labels row">Date</label>
-                <input type="date" class="var-input" id="expense-date" name="expense-date" value="<?php echo date('Y-m-d'); ?>">
+                <input type="date" class="var-input" id="expense-date" name="expense-date"
+                    value="<?php echo date('Y-m-d'); ?>" required>
 
+                <!-- Frequency Field -->
                 <label for="recurrence_type" class="form-labels row">Frequency</label>
-                <select class="var-input large pointer" name="recurrence_type" id="recurrence_type">
-                    <option value="weekly">Once</option>
+                <select class="var-input large pointer" name="recurrence_type" id="recurrence_type" required>
+                    <option value="once">Once</option>
                     <option value="weekly">Weekly</option>
                     <option value="monthly">Monthly</option>
                     <option value="custom">Custom</option>
                 </select>
 
-                <label for="Merchant" class="form-labels">Merchant</label>
-                <input type="text" class="var-input" id="Merchant" name="merchant">
+                <!-- Merchant Field -->
+                <label for="merchant" class="form-labels">Merchant</label>
+                <input type="text" class="var-input" id="merchant" name="merchant" required>
 
-                <!-- Bank -->
+                <!-- Bank Selection -->
                 <label for="bank" class="form-labels row">Bank</label>
                 <select class="var-input large pointer" name="bank" id="bank" required>
                     <?php echo getBankOptions($conn, $uid); ?>
                 </select>
+
+                <!-- Amount Field -->
                 <label for="amount" class="form-labels">Amount*</label>
                 <input type="number" class="var-input" id="amount" name="amount" required>
-                <!-- Description -->
+
+                <!-- Description Field -->
                 <label for="description" class="form-labels">Description</label>
                 <textarea class="var-input" name="description" id="description"></textarea>
 
-                <!-- Reimbursable -->
+                <!-- Reimbursable Option -->
                 <label for="reimbursable" class="form-labels">Reimbursable</label>
                 <div class="column-form start">
                     <input class="radio" type="radio" name="reimbursable" id="reimbursable-yes" value="yes">
@@ -114,18 +126,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input class="radio" type="radio" name="reimbursable" id="reimbursable-no" value="no" checked>
                     <label class="form-labels center no-margin" for="reimbursable-no">No</label>
                 </div>
-                <div class="column-form start">
-                    <!-- file input/ photo input -->
-                    <label for="attachment" class="file-label" id="file-label">Attach Receipt</label>
-                    <input class="file-input" type="file" name="attachment" accept="image/*" id="file-input">
-                </div>
 
+                <!-- Attachment Field -->
+                <label for="attachment" class="file-label" id="file-label">Attach Receipt</label>
+                <input class="file-input" type="file" name="attachment" accept="image/*" id="file-input">
 
+                <!-- Action Buttons -->
                 <div class="btn-options">
                     <button type="button" class="link-btn cancel" onclick="closeModalExpense()">Cancel</button>
                     <button type="submit" class="save">Save</button>
                 </div>
             </div>
         </form>
+
     </div>
 </div>

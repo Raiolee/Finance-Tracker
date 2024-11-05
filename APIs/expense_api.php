@@ -1,88 +1,189 @@
 <?php
 include('../APIs/init.php');
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect form data
-    $subject = $_POST['subject'];
-    $category = $_POST['category'];
-    $expense_date = $_POST['expense-date'];
-    $recurrence_type = $_POST['recurrence_type'];
-    $merchant = $_POST['merchant'];
-    $bank_id = $_POST['bank']; // Get the bank_id from the form submission
-    $amount = $_POST['amount'];
-    $description = $_POST['description'];
-    $reimbursable = $_POST['reimbursable'];
-    $bank_name = $_POST['bank_name'];
+    // Get the action type from the form
+    if (isset($_POST['action'])) {
+        $action = $_POST['action'];
 
-    $stmtBankName = $conn->prepare("SELECT bank FROM user_db.bank WHERE bank_id = ? AND user_id = ?");
-    $stmtBankName->bind_param("si", $bank_id, $uid);
-    $stmtBankName->execute();
-    $stmtBankName->bind_result($bank_name);
-    $stmtBankName->fetch();
-    $stmtBankName->close();
+        if ($action === 'insert_expense') {
+            // Collect form data
+            $subject = $_POST['subject'];
+            $category = $_POST['category'];
+            $expense_date = $_POST['expense-date'];
+            $recurrence_type = $_POST['recurrence_type'];
+            $merchant = $_POST['merchant'];
+            $bank_id = $_POST['bank']; // Get the bank_id from the form submission
+            $amount = $_POST['amount'];
+            $description = $_POST['description'];
+            $reimbursable = $_POST['reimbursable'];
+
+            // Fetch the bank name based on bank_id and user_id
+            $stmtBankName = $conn->prepare("SELECT bank FROM user_db.bank WHERE bank_id = ? AND user_id = ?");
+            $stmtBankName->bind_param("si", $bank_id, $uid);
+            $stmtBankName->execute();
+            $stmtBankName->bind_result($bank_name);
+            $stmtBankName->fetch();
+            $stmtBankName->close();
+
+            // Ensure $uid is defined
+            if (isset($uid)) {
+                // Check the balance
+                $stmtBalance = $conn->prepare("SELECT balance FROM user_db.bank WHERE user_id = ? AND bank_id = ?");
+                $stmtBalance->bind_param("is", $uid, $bank_id);
+                $stmtBalance->execute();
+                $stmtBalance->bind_result($balance);
+                $stmtBalance->fetch();
+                $stmtBalance->close();
+
+                // Check if the user has sufficient balance
+                if (isset($balance) && $balance >= $amount) {
+                    // Insert the expense record
+                    $sql = "INSERT INTO expenses (user_id, subject, category, date, recurrence_type, merchant, bank, amount, description, reimbursable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    $stmt = $conn->prepare($sql);
+
+                    if ($stmt) {
+                        // Bind parameters
+                        $stmt->bind_param("issssssdss", $uid, $subject, $category, $expense_date, $recurrence_type, $merchant, $bank_name, $amount, $description, $reimbursable);
+
+                        if ($stmt->execute()) {
+                            // Update the balance
+                            $stmt2 = $conn->prepare("UPDATE user_db.bank SET balance = balance - ? WHERE user_id = ? AND bank_id = ?");
+                            $stmt2->bind_param("dis", $amount, $uid, $bank_id);
+
+                            if ($stmt2->execute()) {
+                                // Redirect or provide success message
+                                header("Location: Expense.php?success=1");
+                                exit();
+                            } else {
+                                echo "Error updating balance: " . $stmt2->error;
+                            }
+                            $stmt2->close();
+                        } else {
+                            echo "Error inserting data: " . $stmt->error;
+                        }
+                        $stmt->close();
+                    } else {
+                        echo "Error preparing statement: " . $conn->error;
+                    }
+                } else {
+                    // Insufficient balance
+                    if (isset($balance)) {
+                        $shortfall = $amount - $balance;
+                        $errorMessage = "Transaction cannot proceed. Your balance is short by $" . number_format($shortfall, 2) . ".";
+                    } else {
+                        $errorMessage = "Could not retrieve balance information.";
+                    }
+                    echo "<div id='error-message' style='color: red;'>$errorMessage</div>";
+                    echo "<script>
+                            setTimeout(function() {
+                                var errorMsg = document.getElementById('error-message');
+                                if (errorMsg) {
+                                    errorMsg.style.display = 'none';
+                                }
+                            }, 5000);
+                          </script>";
+                }
+            } else {
+                echo "User ID is not set.";
+            }
+        } // <-- End of insert_expense action block
+        elseif ($action === 'edit-action') {
+            // Collect form data for editing the expense
+            $expense_id = $_POST['expense-id']; // Ensure you pass the expense_id from the form
+            $subject = $_POST['subject'];
+            $category = $_POST['category'];
+            $expense_date = $_POST['expense-date'];
+            $recurrence_type = $_POST['recurrence_type'];
+            $merchant = $_POST['merchant'];
+            $bank_id = $_POST['bank']; // Get the bank_id from the form submission
+            $amount = $_POST['amount'];
+            $description = $_POST['description'];
+            $reimbursable = $_POST['reimbursable'];
 
 
-    // Ensure $uid is defined; this should be set earlier in your code
-    if (isset($uid)) {
-        // Prepare the SQL statement to check the balance
-        $stmtBalance = $conn->prepare("SELECT balance FROM user_db.bank WHERE user_id = ? AND bank_id = ?");
-        $stmtBalance->bind_param("is", $uid, $bank_id);
-        $stmtBalance->execute();
-        $stmtBalance->bind_result($balance);
-        $stmtBalance->fetch();
-        $stmtBalance->close();
+            // Ensure $uid is defined, and that you have a valid expense ID
+            if (empty($expense_id)) {
+                echo "Error: Missing required fields.";
+                exit();
+            }
 
-        // Check if the user has sufficient balance
-        if (isset($balance) && $balance >= $amount) {
-            // Insert the expense record
-            $sql = "INSERT INTO expenses (user_id, subject, category, date, recurrence_type, merchant, bank, amount, description, reimbursable) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
+            // Prepare the SQL statement to update the expense record
+            $stmt = $conn->prepare("UPDATE user_db.expenses SET subject = ?, category = ?, date = ?, recurrence_type = ?, merchant = ?, bank = ?, amount = ?, description = ?, reimbursable = ? WHERE expense_id = ?");
 
-            if ($stmt) {
-                // Bind parameters
-                $stmt->bind_param("issssssdss", $uid, $subject, $category, $expense_date, $recurrence_type, $merchant, $bank_name, $amount, $description, $reimbursable);
+            // Bind the parameters (s = string, d = decimal, i = integer)
+            $stmt->bind_param(
+                "ssssssdsdi",
+                $subject,
+                $category,
+                $expense_date,
+                $recurrence_type,
+                $merchant,
+                $bank_id,
+                $amount,
+                $description,
+                $reimbursable,
+                $expense_id
+            );
 
-                if ($stmt->execute()) {
-                    // Update the balance using bank_id
-                    $stmt2 = $conn->prepare("UPDATE user_db.bank SET balance = balance - ? WHERE user_id = ? AND bank_id = ?");
-                    $stmt2->bind_param("dis", $amount, $uid, $bank_id);
+            // Execute the prepared statement
+            if ($stmt->execute()) {
+                // Check if the amount has been updated
+                if ($current_amount != $amount) {
+                    // Step 4: If the amount has been updated, update the bank balance accordingly
+                    $stmt_balance = $conn->prepare("UPDATE user_db.bank SET balance = balance + ? - ? WHERE bank_id = ? AND user_id = ?");
+                    // We need to adjust the balance by subtracting the old amount and adding the new one
+                    $stmt_balance->bind_param("disi", $current_amount, $amount, $current_bank_id, $uid);
 
-                    if ($stmt2->execute()) {
-                        // Redirect or provide success message
-                        header("Location: Expense.php?success=1");
+                    if ($stmt_balance->execute()) {
+                        // If both updates are successful, redirect or show a success message
+                        header("Location: Expense.php?edit_success=1");
                         exit();
                     } else {
-                        echo "Error updating balance: " . $stmt2->error;
+                        echo "Error updating bank balance: " . $stmt_balance->error;
                     }
-                    $stmt2->close();
+                    $stmt_balance->close();
                 } else {
-                    echo "Error inserting data: " . $stmt->error;
+                    // If the amount is not updated, just redirect
+                    header("Location: Expense.php?edit_success=1");
+                    exit();
                 }
-                $stmt->close();
             } else {
-                echo "Error preparing statement: " . $conn->error;
+                // If there is an error with the first update, show the error message
+                echo "Error updating expense record: " . $stmt->error;
             }
+            $stmt->close();
+        } // <-- End of edit-expense action block
+        elseif ($action === 'delete-action') {
+            // Get the expense ID from the form submission
+            $expense_id = $_POST['expense-id'];
+
+            // Ensure the expense ID is not empty
+            if (empty($expense_id)) {
+                echo "Error: Missing expense ID.";
+                exit();
+            }
+
+            // Prepare the SQL statement to delete the expense record
+            $stmt = $conn->prepare("DELETE FROM user_db.expenses WHERE expense_id = ?");
+            $stmt->bind_param("i", $expense_id);  // 'i' for integer (expense_id is assumed to be an integer)
+
+            // Execute the statement
+            if ($stmt->execute()) {
+                // If the deletion is successful, redirect to the Expense page with a success message
+                header("Location: Expense.php?delete_success=1");
+                exit();
+            } else {
+                // If there is an error, show the error message
+                echo "Error deleting expense record: " . $stmt->error;
+            }
+
+            // Close the statement
+            $stmt->close();
         } else {
-            // Inform the user about insufficient balance
-            if (isset($balance)) {
-                $shortfall = $amount - $balance;
-                $errorMessage = "Transaction cannot proceed. Your balance is short by $" . number_format($shortfall, 2) . ".";
-            } else {
-                $errorMessage = "Could not retrieve balance information.";
-            }
-            echo "<div id='error-message' style='color: red;'>$errorMessage</div>";
-            echo "<script>
-                    setTimeout(function() {
-                        var errorMsg = document.getElementById('error-message');
-                        if (errorMsg) {
-                            errorMsg.style.display = 'none';
-                        }
-                    }, 5000); // Hide message after 5 seconds
-                  </script>";
+            echo "Invalid action.";
         }
-    } else {
-        echo "User ID is not set."; // Ensure $uid is set correctly
-    }
+    } // <-- End of isset($_POST['action']) block
 }
+
 
 ?>

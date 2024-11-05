@@ -15,6 +15,7 @@ document.getElementById('expenseForm').addEventListener('submit', function(event
     document.getElementById('reimbursable-yes').checked = false;
     document.getElementById('reimbursable-no').checked = true;
     document.getElementById('file-input').value = '';
+    
 
     // Optionally, close the modal
     closeModalExpense();
@@ -49,6 +50,8 @@ function expenseRowClick(expenseId) {
             document.getElementById("description-row").value = data.description;
             document.getElementById("reimbursable-yes-row").checked = data.reimbursable === "yes";
             document.getElementById("reimbursable-no-row").checked = data.reimbursable === "no";
+            document.getElementById("expense-id").value = expenseId;
+            ocument.getElementById("delete-expense-id").value = expenseId;
         })
         .catch(error => console.error('Error fetching expense data:', error));
 }

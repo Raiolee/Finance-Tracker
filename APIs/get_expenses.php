@@ -9,6 +9,7 @@ if (!isset($_SESSION["user_id"])) {
     exit();
 }
 
+
 $uid = $_SESSION["user_id"];
 
 // Prepare SQL to fetch expenses grouped by category
