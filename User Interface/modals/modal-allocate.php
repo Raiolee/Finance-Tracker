@@ -46,7 +46,9 @@ function getCategoryOptions() {
         <hr class="bottom-line">
         <form class="form-container" id="SavingForm" method="post" action="">
             <input type="hidden" name="action" value="another_action">
+            
             <div class="big-divider full">
+                <input type="hidden" name="bank_id" readonly>
                 <label class="form-labels" for="bank">Bank*</label>
                 <input class="var-input" type="text" name="bank" readonly>
                 
