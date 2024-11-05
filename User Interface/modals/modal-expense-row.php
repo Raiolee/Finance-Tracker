@@ -83,11 +83,7 @@
 
                 <div class="btn-options"><!-- Paedit na lang din ng delete button to work with the delete expense-->
                     <button type="submit2" class="save">Save</button>
-
-                    <form action="" id="SavingForm" method="post">
-                        <input type="hidden" name="action" value='delete-action'>
-                        <button type="sumbit" class="link-btn cancel" onclick="closeModalExpense()">Delete</button>
-                    </form> <!-- Paedit na lang din ng save button to work with the edit expense-->
+                    <button type="sumbit" class="link-btn cancel" onclick="closeModalExpense()" name="action" value="delete-action">Delete</button>
                 </div>
             </div>
         </form>
