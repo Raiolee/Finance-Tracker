@@ -164,11 +164,19 @@ if ($user && $user['user_dp']) {
                     </div>
                     <script src="../js/quickreport.js"></script>
                     <?php include('modals/modal-expense.php'); ?>
+                    <?php include("modals/modal-expense-row.php") ?>
                     <?php include('modals/modal-income.php'); ?>
+                    <?php include("modals/modal-income-row.php") ?>
                     <?php include('modals/modal-goals.php'); ?>
-                    <?php include('modals/modal-savings.php'); ?>
-                    <?php include('modals/modal-allocate.php'); ?>
+                    <?php include("modals/modal-goals-row.php") ?>
+                    <?php include("modals/modal-allocate.php"); ?>
+                    <?php include("modals/modal-savings.php"); ?>
+                    <?php include("modals/modal-savings-row.php") ?>
                     <script src="../js/modal.js"></script>
+                    <script src="../js/expense.js"></script>
+                    <script src="../js/goals.js"></script>
+                    <script src="../js/income.js"></script>
+                    <script src="../js/savings.js"></script>
 </body>
 
 </html>
