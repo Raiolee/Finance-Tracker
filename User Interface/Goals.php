@@ -111,9 +111,12 @@ include '../APIs/goals_api.php'; // Include the new API file
             </div>
     </div>
     </div>
-    <?php include('../APIs/get_goal.php') ?>
-    <?php include('modals/modal-goals-row.php'); ?>
-    <?php include('modals/modal-goals.php'); ?>
+    <?php 
+    include('../APIs/get_goal.php');
+    include('modals/modal-goals-row.php'); 
+    include('modals/modal-goals.php'); 
+    ?>
+    <script src="../js/button-change.js"></script>
     <script src="../js//goals.js"></script>
     <script src="../js/modal.js"></script>
 </body>
