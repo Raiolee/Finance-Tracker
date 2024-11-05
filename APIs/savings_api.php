@@ -158,8 +158,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 exit();
             }
 
-            
-
             // Prepare the SQL statement to update purpose, bank, and balance
             $stmt = $conn->prepare("UPDATE user_db.bank SET purpose = ?, bank = ?, balance = ? WHERE bank_id = ? ");
 

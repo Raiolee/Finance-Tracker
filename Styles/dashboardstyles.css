@@ -151,32 +151,14 @@
     max-width: 300px;  /* Prevent buttons from getting too wide */
 }
 
-/* Media query for smaller screens */
-@media only screen and (min-width: 425px) and (max-width: 767px) {
-    .quick-access-items {
-        gap: 10px;
-    }
-
-    .quick-access-item {
-        font-size: 12px; /* Smaller font size */
-        padding: 8px 10px; /* Smaller padding */
-        gap: 3px; /* Reduce space between icon and text */
-    }
-
-    .quick-access-item i {
-        font-size: 14px; /* Reduce icon size */
-    }
-
-  }
-
 .quick-access-item i {
-    font-size: 2rem;
+    font-size: 1.8rem;
     margin-bottom: 10px;
     color: #00DAC6; /* Adjust icon color */
 }
 
 .quick-access-item span {
-    font-size: 1.1rem;
+    font-size: 1rem;
 }
 
 .quick-access-item:hover {
@@ -217,7 +199,6 @@
 /* Recent Expenses Section */
 .recent-expenses-section {
     width: 100%;  /* Set the width to 100% to match the container width */
-    max-width: 100%;  /* Remove any restriction on max-width */
     background-color: #222;
     border-radius: 10px;
     padding: 20px;
@@ -256,22 +237,139 @@
     color: #ddd;
 }
 
+
+
+
+/* Media query for smaller screens */
 @media only screen and (min-width: 425px) and (max-width: 767px) {
+
     .expense-table {
-        width: 50%;
-        font-size: 0.9rem; /* Slightly smaller font size */
+        width: 100%;
+        font-size: 0.60rem; /* Slightly smaller font size */
     }
     
     .expense-table th, .expense-table td {
-        padding: 10px; /* Smaller padding for cells */
+        padding: 5px; /* Smaller padding for cells */
     }
-  }
+
+    .quick-access-items {
+        gap: 10px;
+    }
+
+    .quick-access-item {
+        font-size: 12px; /* Smaller font size */
+        padding: 0px 0px; /* Smaller padding */
+    }
+
+    .quick-access-item i {
+        font-size: 10px; /* Reduce icon size */
+    }
+
+
+    .task-section {
+        width: 48%;     /* Adjusted to fit better inside the container */
+    }
+    
+    .task-section h2 {
+        font-size: 1.3rem; /* Increased font size for better readability */
+        margin-bottom: 10px; /* Added more space between title and content */
+        padding: 12px
+    }
+    
+    .task-section ul {
+        list-style: none;
+        padding: 10px;
+    }
+    
+    .task-section li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 25px 0; /* Increased padding for better spacing */
+        font-size: 0.6rem;
+        border-bottom: 3px solid #333;
+        font-family: "Roboto", sans-serif; /* Added consistency with other text */
+    }
+    
+    .task-section li i {
+        margin-right: 10px;
+        font-size: 1.5rem;
+        color: #00DAC6; 
+    }
+
+    .quick-access-item span {
+    font-size: 0.97rem;
+}
+    
+
+    .quick-access-section {
+        background-color: #222;
+        border-radius: 10px;
+        padding: 20px;
+        color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        width: 106%;
+    }
+    
+
+    .quick-access-section h2 {
+        font-size: 1rem;
+        margin-bottom: 15px;
+        color: #00DAC6; /* Title color */
+        
+    }
+
+    .recent-expenses-section {
+        width: 106%;  
+    }
+
+    .recent-expenses-section h2 {
+        font-size: 1rem;
+    }
+
+}
 
 
 
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+
+    expense-table th, .expense-table td {
+        padding: 7px;
+    }
 
 
+    .expense-table {
+        font-size: 0.68rem;
+        width: 100%;
+    }
 
+    .task-section {
+        width: 44%;     /* Adjusted to fit better inside the container */
+    }
 
+    .quick-access-section {
+        background-color: #222;
+        border-radius: 10px;
+        padding: 20px;
+        color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        width: 101%;
+    }
 
+    .quick-access-item span {
+        font-size:0.58rem;
+    }
+    
+    .quick-access-items {
+        gap: 5px;
+    }
 
+    .report-section {
+        width: 55%;
+    }
+
+    .recent-expenses-section {
+        width: 101%;  
+   
+    }
+}
