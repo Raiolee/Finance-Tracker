@@ -31,7 +31,7 @@ include("../APIS/expense_api.php");
                     <div class="top-bar space-between" id="expense">
                         <h1 class="header">Expenses</h1>
                         <div class="custom-header">
-                            <button class="New-Saving" id="newExpenseBtn">+ Add an Expense</button>
+                            <button class="New-Saving" id="newExpenseBtn"></button>
                             <!-- Filter form -->
                             <form class="filter-form" id="filterForm" action="" method="GET">
                                 <select class="var-input medium pointer" id="FilterGoalsCategory"
@@ -108,6 +108,7 @@ include("../APIS/expense_api.php");
     include('modals/modal-expense-row.php');
     include('../APIs/get_expense.php');
     ?>
+    <script src="../js/button-change.js"></script>
     <script src="../js/modal.js"></script>
     <script src="../js/expense.js"></script>
 </body>

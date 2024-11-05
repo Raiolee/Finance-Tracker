@@ -69,13 +69,13 @@ include '../APIs/income_api.php';
                                 <th class="table-header">Source of Income</th>
                                 <th class="table-header">Bank</th>
                                 <th class="table-header">Amount</th>
+                                <th class="table-header">Reccurence</th>
                                 <th class="th-interact" onclick="document.querySelector('.SortIncomeDate').submit();">
-                                    Reccurence
-                                    <form class="SortIncomeDate" action="" method="GET" style="display: inline;">
+                                    Date
+                                <form class="SortIncomeDate" action="" method="GET" style="display: inline;">
                                         <input type="hidden" name="sortIncomeDate" value="<?php echo htmlspecialchars($nextSortOrderDate); ?>">
                                     </form>
                                 </th>
-                                <th class="table-header">Date</th>
                             </tr>
                         <tbody>
                             <?php
@@ -100,9 +100,12 @@ include '../APIs/income_api.php';
     </div>
 
 
-    <?php include("modals/modal-income.php"); ?>
-    <?php include("../APIs/get_income.php") ?>
-    <?php include("modals/modal-income-row.php") ?>
+    <?php 
+    include("modals/modal-income.php"); 
+    include("../APIs/get_income.php");
+    include("modals/modal-income-row.php");
+    ?>
+    <script src="../js/button-change.js"></script>
     <script src="../js/modal.js"></script>
     <script src="../js/income.js"></script>
 </body>

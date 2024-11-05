@@ -25,7 +25,7 @@
                         <h1 class="header">Bank</h1>
                         <button class="New-Saving" id="BankButton">+ New Bank</button>
                     </div>
-                    <table class="table-approval" id="Bank-Content">
+                    <table class="table-custom" id="Bank-Content">
                         <thead>
                             <tr>
                                 <th class="th-interact" onclick="sortTable('subject')">
@@ -73,24 +73,28 @@
         //     // Fetch categories dynamically from PHP
         //     const categories = [
         //         <?php
-        //         if (isset($result3) && $result3->num_rows > 0) {
-        //             while ($row3 = $result3->fetch_assoc()) {
-        //                 echo "'" . addslashes($row3['subject']) . "',"; // Corrected to fetch category
-        //             }
-        //             echo rtrim(',', ' '); // Remove the trailing comma
-        //         } else {
-        //             echo "'No categories found'"; // Provide a default value
-        //         }
-        //         ?>
+                    //         if (isset($result3) && $result3->num_rows > 0) {
+                    //             while ($row3 = $result3->fetch_assoc()) {
+                    //                 echo "'" . addslashes($row3['subject']) . "',"; // Corrected to fetch category
+                    //             }
+                    //             echo rtrim(',', ' '); // Remove the trailing comma
+                    //         } else {
+                    //             echo "'No categories found'"; // Provide a default value
+                    //         }
+                    //         
+                    ?>
         //     ];
 
         //     return categories.map(subject => `<option value="${subject}">${subject}</option>`).join('');
         // }
     </script>
 
-    <?php include("modals/modal-allocate.php"); ?>
-    <?php include("modals/modal-savings.php"); ?>
-    <?php include("modals/modal-savings-row.php") ?>
+    <?php
+    include("modals/modal-allocate.php");
+    include("modals/modal-savings.php");
+    include("modals/modal-savings-row.php");
+    ?>
+    <script src="../js/button-change.js"></script>
     <script src="../js/savings.js"></script>
     <script src="../js/modal.js"></script>
 </body>

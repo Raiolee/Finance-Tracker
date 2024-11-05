@@ -60,9 +60,4 @@
             </div>
         </div>
     </div>
-    <script>
-        function toggleMenu() {
-            document.querySelector('.navbar-items').classList.toggle('show');
-        }
-    </script>
 </body>

@@ -353,7 +353,7 @@
         padding: 20px;
         color: #fff;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        width: 104%;
+        width: 101%;
     }
 
     .quick-access-item span {
@@ -369,7 +369,7 @@
     }
 
     .recent-expenses-section {
-        width: 103%;  
+        width: 101%;  
    
     }
 }
