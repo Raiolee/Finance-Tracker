@@ -3,7 +3,8 @@ include("../APIS/init.php");
 include("../APIS/savings_api.php"); 
 include("../APIS/expense_api.php"); 
 include("../APIS/goals_api.php"); 
-include("../APIS/income_api.php"); 
+include("../APIS/income_api.php");
+include("../APIS/pending_goals_api.php");
 ?>
 
 <!DOCTYPE html>

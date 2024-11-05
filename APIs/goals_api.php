@@ -176,7 +176,7 @@ function getGoalsAndSavings($conn, $userId)
 
 function predictSavingDate($conn, $userId) {
     // Fetch goals
-    $goalsPredict = "SELECT user_id, subject, start_date, budget_limit, date FROM goals WHERE user_id = ?";
+    $goalsPredict = "SELECT * FROM goals WHERE user_id = ?";
     $stmtGoals = $conn->prepare($goalsPredict);
     $stmtGoals->bind_param("i", $userId);
     $stmtGoals->execute();
@@ -185,7 +185,7 @@ function predictSavingDate($conn, $userId) {
     $stmtGoals->close(); // Close the statement after fetching goals
 
     // Fetch savings
-    $savingsPredict = "SELECT subject, category, savings_amount, date FROM savings WHERE user_id = ?";
+    $savingsPredict = "SELECT * FROM savings WHERE user_id = ?";
     $stmtSavings = $conn->prepare($savingsPredict);
     $stmtSavings->bind_param("i", $userId);
     $stmtSavings->execute();
@@ -287,7 +287,7 @@ function predictSavingDate($conn, $userId) {
 }
 
 function searchGoals($conn, $userId, $searchQuery) {
-    $sql = "SELECT subject, category, budget_limit FROM goals WHERE user_id = ? AND (subject LIKE ? OR category LIKE ?)";
+    $sql = "SELECT * FROM goals WHERE user_id = ? AND (subject LIKE ? OR category LIKE ?)";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $likeQuery = "%{$searchQuery}%";
@@ -303,7 +303,7 @@ function searchGoals($conn, $userId, $searchQuery) {
 }
 
 function filterCategory($conn, $userId, $filterCategory) {
-    $sql = "SELECT subject, category FROM goals WHERE user_id = ? AND category = ?";
+    $sql = "SELECT * FROM goals WHERE user_id = ? AND category = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bind_param("is", $userId, $filterCategory);
