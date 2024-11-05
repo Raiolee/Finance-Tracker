@@ -1,10 +1,10 @@
 <?php
-session_start();
-require '../connection/config.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require_once '../connection/config.php';
 
 $income_id = $_GET['id'] ?? null;
-
-header('Content-Type: application/json');
 
 if (!isset($_SESSION["user_id"])) {
     echo json_encode(["error" => "User not logged in."]);
@@ -26,7 +26,5 @@ if ($income_id) {
     } else {
         echo json_encode(["error" => "Income record not found."]);
     }
-} else {
-    echo json_encode(["error" => "Invalid income ID"]);
 }
 ?>

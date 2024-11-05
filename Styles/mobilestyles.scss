@@ -14,7 +14,7 @@
       margin: 0%;
       padding: 0%;
       height: 3rem;
-      transition: height 0.3s ease; 
+      transition: height 0.3s ease;
       .active {
         color: white;
       }
@@ -44,12 +44,68 @@
         right: 0;
         top: 0;
         .fa-bars {
-            font-size: 1.5rem;
+          font-size: 1.5rem;
         }
       }
     }
     .navbar-custom {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  body {
+    background-color: #1b1b1b;
+    height: 100vh;
+    width: 100vw;
+    font-family: "Atkinson Hyperlegible", sans-serif;
+    overflow-y: auto;
+    margin: 0px;
+    .navbar-mobile {
+      display: block;
+      overflow: hidden;
+      background-color: #00bfa5;
+      position: relative;
+      margin: 0%;
+      padding: 0%;
+      height: 3rem;
+      transition: height 0.3s ease;
+      .active {
+        color: white;
+      }
+      .navbarLinks {
+        margin: 0;
         display: none;
+        .navbarItems {
+          color: white;
+          padding: 14px 16px;
+          text-decoration: none;
+          font-size: 17px;
+          display: block;
+          &:hover {
+            background-color: #ddd;
+            color: black;
+          }
+        }
+      }
+      .icon {
+        text-decoration: none;
+        color: white;
+        background: #00bfa5;
+        display: block;
+        position: absolute;
+        height: 2rem;
+        margin: 0.5rem 1rem 0 0;
+        right: 0;
+        top: 0;
+        .fa-bars {
+          font-size: 1.5rem;
+        }
+      }
+    }
+    .navbar-custom {
+      display: none;
     }
   }
 }
