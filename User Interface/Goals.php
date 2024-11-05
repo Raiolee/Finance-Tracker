@@ -58,12 +58,7 @@ include '../APIs/goals_api.php'; // Include the new API file
                                 <th>CATEGORY</th>
                                 <th>PROGRESS</th>
                                 <th class="th-interact" onclick="window.location.href='?sort=date&order=<?php echo ($_GET['order'] ?? 'asc') === 'asc' ? 'desc' : 'asc'; ?>'">ACCOMPLISHMENT DATE</th>
-                                <th>
-                                    PROGRESS
-                                </th>
-                                <th>
-                                    AMOUNT
-                                </th>
+                                <th>AMOUNT</th>
                             </tr>
                         </thead>
 
@@ -95,7 +90,7 @@ include '../APIs/goals_api.php'; // Include the new API file
                                             <td>
                                                 " . htmlspecialchars($predictions[$row['subject']] ?? 'N/A') . "
                                             </td>
-
+                                            
                                             <td>
                                                 " . htmlspecialchars($row['budget_limit']) . "
                                             </td>
