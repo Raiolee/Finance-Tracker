@@ -163,12 +163,29 @@ body {
               background-color: #28282a;
               cursor: pointer;
             }
+
             td {
               padding: 10px;
               color: white;
               font-size: 16px;
               font-family: "Atkinson Hyperlegible", sans-serif;
               width: 14.2857%;
+
+              button {
+                border: 1px solid rgba(0, 218, 198, 1);
+                border-radius: 20px;
+                background-color: rgba(0, 218, 198, 1);
+                color: black;
+                font-family: "Atkinson Hyperlegible", sans-serif;
+                font-size: small;
+                height: 30px;
+                margin: 3px 15px 0 0;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &:hover {
+                    background-color: rgba(0, 218, 198, 0.8); // Slightly transparent on hover
+                }
             }
           }
         }
