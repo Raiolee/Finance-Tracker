@@ -6,7 +6,8 @@
         <h3 class="header">Edit Bank</h3>
         <hr class="bottom-line">
         <form class="form-container" id="SavingForm" method="post" action="">
-            <input type="hidden" name="action" value="insert_bank">
+            <input type="hidden" name="action" value="update_action">
+            <input type="hidden" name="bank_id" id="bank_id">
             <div class="big-divider full">
                 <!-- Bank purpose -->
                 <label class="form-labels" for="bank-name">Name</label>
@@ -18,7 +19,7 @@
                 <label class="form-labels" for="bank-amount">Amount</label>
                 <input class="var-input" type="number" name="bank-amount" placeholder="0.00" id="bankAmountRow" required>
                 <div class="btn-options">
-                    <button type="button" class="link-btn cancel">Delete</button> <!-- PALAGYAN NA LANG NG BACKEND CODE -->
+                    <button type="button" class="link-btn cancel" id="Delete_Bank">Delete</button> <!-- PALAGYAN NA LANG NG BACKEND CODE -->
                     <button type="submit" class="save">Save</button>
                 </div>
             </div>
