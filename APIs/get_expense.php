@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once "../connection/config.php";
 
 $expense_id = $_GET['id'] ?? null;
@@ -23,7 +26,4 @@ if ($expense_id) {
     } else {
         echo json_encode(["error" => "Expense not found."]);
     }
-} else {
-    echo json_encode(["error" => "Invalid expense ID"]);
 }
-?>
