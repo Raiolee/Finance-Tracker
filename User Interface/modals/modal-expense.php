@@ -1,6 +1,7 @@
 <?php
 // Include database connection
 include '../connection/config.php';
+$uid = $_SESSION['user_id'];
 
 // Fetch existing goals for the user
 $sql4 = "SELECT bank FROM user_db.bank WHERE user_id = ?";

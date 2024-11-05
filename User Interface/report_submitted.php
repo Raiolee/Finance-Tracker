@@ -43,6 +43,7 @@ $current_page = 'profile.php';
 </head>
 
 <body>
+    <?php include('navbar-mobile.php'); ?>
     <!-- All content is stored in container -->
     <div class="container">
         <div class="navbar">

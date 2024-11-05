@@ -15,6 +15,7 @@ include '../APIs/goals_api.php'; // Include the new API file
 </head>
 
 <body>
+    <?php include('navbar-mobile.php'); ?>
     <div class="container">
         <?php include('navbar.php'); ?>
 
@@ -54,13 +55,9 @@ include '../APIs/goals_api.php'; // Include the new API file
                         <thead>
                             <tr>
                                 <th class="th-interact" onclick="window.location.href='?sortforsubject&order=<?php echo ($_GET['order'] ?? 'asc') === 'asc' ? 'desc' : 'asc'; ?>'">SUBJECT</th>
-                                <th>
-                                    CATEGORY
-                                </th>
+                                <th>CATEGORY</th>
+                                <th>PROGRESS</th>
                                 <th class="th-interact" onclick="window.location.href='?sort=date&order=<?php echo ($_GET['order'] ?? 'asc') === 'asc' ? 'desc' : 'asc'; ?>'">ACCOMPLISHMENT DATE</th>
-                                <th>
-                                    PROGRESS
-                                </th>
                             </tr>
                         </thead>
 
@@ -86,11 +83,11 @@ include '../APIs/goals_api.php'; // Include the new API file
                                             </td>
 
                                             <td>
-                                                " . htmlspecialchars($predictions[$row['subject']] ?? 'N/A') . "
+                                            <span>" . $percentage . "%</span>
                                             </td>
-                                            
+
                                             <td>
-                                                <span>" . $percentage . "%</span>
+                                                " . htmlspecialchars($predictions[$row['subject']] ?? 'N/A') . "
                                             </td>
                                         </tr>";
                                     }

@@ -1,4 +1,8 @@
-<?php include("../APIS/expense_api.php"); ?>
+<?php 
+include('../APIs/init.php');
+include("../APIS/expense_api.php"); 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,6 +17,7 @@
 </head>
 
 <body>
+    <?php include('navbar-mobile.php'); ?>
     <!-- All content is stored in container -->
     <div class="container">
         <!-- Include the Navbar -->
@@ -58,8 +63,8 @@
                             <tr>
                                 <th>Details</th>
                                 <th>Merchant</th>
-                                <th>Bank</th>
                                 <th>Amount</th>
+                                <th>Bank</th>
                                 <th>Reimbursable</th>
                             </tr>
                         </thead>
@@ -80,8 +85,8 @@
                                     echo "<tr class='row-interact' onclick='expenseRowClick(" . $row['expense_id'] . ")'>";
                                     echo "<td>" . htmlspecialchars($row['details']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['merchant']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['amount']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['reimbursable']) . "</td>";
                                     echo "</tr>";
                                 }
@@ -98,9 +103,11 @@
         </section>
     </div>
     <!-- APIs (Put APIs below this comment)-->
-    <?php include('modals/modal-expense.php'); ?>
-    <?php include('modals/modal-expense-row.php'); ?>
-    <?php include('../APIs/get_expense.php'); ?>
+    <?php 
+    include('modals/modal-expense.php');
+    include('modals/modal-expense-row.php');
+    include('../APIs/get_expense.php');
+    ?>
     <script src="../js/modal.js"></script>
     <script src="../js/expense.js"></script>
 </body>

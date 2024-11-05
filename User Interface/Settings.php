@@ -41,6 +41,7 @@ if ($user && $user['user_dp']) {
 </head>
 
 <body>
+    <?php include('navbar-mobile.php') ?>
     <div class="container">
         <!-- Include the Navbar -->
         <?php include('navbar.php'); ?>
