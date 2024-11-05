@@ -23,6 +23,7 @@ function savingsRowClick(bankId) {
             document.getElementById("bankRow").value = data.bank;
             document.getElementById("bankNameRow").value = data.purpose;
             document.getElementById("bankAmountRow").value = data.balance;
+            document.getElementById("bank_id").value = bankId;
         })
         .catch(error => console.error('Error fetching savings data:', error));
 }

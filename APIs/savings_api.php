@@ -3,11 +3,16 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 if (!isset($_SESSION["user"])) {
     header("Location: ../Login.php");
-    exit();
+    exit();   
 }
+
+
 
 $uid = $_SESSION["user_id"];
 $username = $_SESSION["name"];
@@ -15,6 +20,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 // Include database connection
 include '../connection/config.php';
+
+// Check the connection immediately after including config
+if ($conn->connect_error) {
+    die(sprintf("Connection failed: %s", $conn->connect_error));
+}
 
 // Fetch only the user_dp (profile picture) from the database
 $user_id = $_SESSION['user_id'];
@@ -33,10 +43,6 @@ if ($user && $user['user_dp']) {
 } else {
     // If no profile picture is found, use a placeholder image
     $profile_pic = 'https://picsum.photos/100/100';
-}
-// Check if the connection was successful
-if ($conn->connect_error) {
-    die(sprintf("Connection failed: %s", $conn->connect_error));
 }
 
 // Handle form submission
@@ -58,7 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($stmt) {
                 // Bind parameters
                 $stmt->bind_param("issi", $uid, $bankName, $bank, $amount);
-                // Updated parameter types
 
                 // Execute the statement
                 if ($stmt->execute()) {
@@ -137,11 +142,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 }
                             }, 5000); // Hide message after 5 seconds
                           </script>";
-
                 }
             } else {
                 echo "User ID is not set."; // Ensure $uid is set correctly
             }
+        } elseif ($action === 'update_action') {
+            $purpose = $_POST['bank-name'];
+            $bank = $_POST['bankRow'];
+            $balance = $_POST['bank-amount'];
+            $bank_id = $_POST['bank_id'];
+
+            // Ensure $bank_id and $uid are already defined earlier in your code
+            if (empty($purpose) || empty($bank) || empty($balance)) {
+                echo "Error: Missing required fields.";
+                exit();
+            }
+
+            
+
+            // Prepare the SQL statement to update purpose, bank, and balance
+            $stmt = $conn->prepare("UPDATE user_db.bank SET purpose = ?, bank = ?, balance = ? WHERE bank_id = ? ");
+
+            // Bind the parameters (s = string, d = decimal, i = integer)
+            $stmt->bind_param("ssdi", $purpose, $bank, $balance, $bank_id);
+
+            // Execute the prepared statement
+            if ($stmt->execute()) {
+                // If the update is successful, redirect or show a success message
+                header("Location: Savings.php?success=1");
+                exit();
+            } else {
+                // If there is an error, show the error message
+                echo "Error updating bank record: " . $stmt->error;
+            }
+
+            // Close the statement
+            $stmt->close();
         } else {
             echo "Unknown action.";
         }
@@ -149,7 +185,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "No action specified.";
     }
 }
-
 
 // Form Handling End
 // Fetch existing savings for the user
@@ -170,7 +205,6 @@ if ($stmt) {
 } else {
     $error_message = "Error preparing statement: {$conn->error}";
 }
-
 
 // Fetch existing savings for the income
 $sql2 = "SELECT total FROM user_db.income WHERE user_id = ?";
