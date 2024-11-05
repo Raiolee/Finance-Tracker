@@ -25,7 +25,7 @@
                         <h1 class="header">Bank</h1>
                         <button class="New-Saving" id="BankButton">+ New Bank</button>
                     </div>
-                    <table class="table-approval" id="Bank-Content">
+                    <table class="table-custom" id="Bank-Content">
                         <thead>
                             <tr>
                                 <th class="th-interact" onclick="sortTable('subject')">
