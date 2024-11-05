@@ -3,14 +3,14 @@
 <div id="incomeRowModal" class="modal">
     <div class="modal-content">
         <span class="close-button" onclick="closeIncomeRowModal()">&times;</span>
-        <h3 class="header">Edit Income</h3>
+        <h3 class="header">Delete Income</h3>
         <hr class="bottom-line">
         <form class="form-container" id="SavingForm" method="post" action="">
             <div class="big-divider full">
 
                 <!-- incomeSourceRow -->
                 <label class="form-labels" for="source">Source of Income*</label>
-                <input class="var-input" type="text" name="source" placeholder="Source of Income" id="incomeSourceRow" required>
+                <input class="var-input" type="text" name="source" placeholder="Source of Income" id="incomeSourceRow" readonly>
 
                 <!-- incomeDateRow -->
                 <label class="form-labels" name="date" for="date"> Date*</label>
@@ -18,7 +18,7 @@
 
                 <!-- incomeCategoryRow -->
                 <label class="form-labels" for="income-category">Frequency*</label>
-                <select class="var-input" name="income_category" id="incomeCategoryRow" required>
+                <select class="var-input" name="income_category" id="incomeCategoryRow" readonly>
                     <option value="Once">Once</option>
                     <option value="Daily">Daily</option>
                     <option value="Weekly">Weekly</option>
@@ -27,7 +27,7 @@
 
                 <!-- incomeBankRow -->
                 <label class="form-labels" for="income-bank">Bank Name*</label>
-                <select class="var-input" name="bank_name" id="incomeBankRow" required>
+                <select class="var-input" name="bank_name" id="incomeBankRow" readonly>
                     <option value="CHANGE ME">Option 1</option>
                     <?php
                     $uid = $_SESSION["user_id"];
@@ -46,7 +46,7 @@
 
                 <!-- incomeAmountRow -->
                 <label class="form-labels" for="income-amount">Amount*</label>
-                <input class="var-input" type="number" id="incomeAmountRow" name="income-amount" placeholder="0.00" required>
+                <input class="var-input" type="number" id="incomeAmountRow" name="income-amount" placeholder="0.00" readonly>
 
                 <!-- incomeDescriptionRow -->
                 <label class="form-labels" for="income-description">Description</label>
@@ -54,7 +54,6 @@
 
                 <div class="btn-options">
                     <button type="button" class="link-btn cancel">Delete</button> <!-- Palagyan backend code -->
-                    <button type="submit" class="save" id="editIncome">Save</button> <!-- Palagyan backend code -->
                 </div>
             </div>
         </form>
