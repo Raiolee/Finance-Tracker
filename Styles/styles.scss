@@ -5,159 +5,9 @@ body {
   width: 98vw;
   font-family: "Atkinson Hyperlegible", sans-serif;
   overflow-y: hidden;
-  .login {
-    display: flex;
-    .left-section {
-      width: 60%;
-
-      .logo {
-        margin: 60px 100px;
-      }
-    }
-
-    .right-section {
-      width: 40%;
-
-      .login-container {
-        background-color: black;
-        height: 480px;
-        margin: 135px 75px 0;
-        border-radius: 15px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .log-title {
-        color: white;
-        font-family: "Atkinson Hyperlegible", sans-serif;
-        font-weight: 300;
-        font-size: 35px;
-        text-align: center;
-        margin-top: 60px;
-      }
-
-      #email,
-      #password,
-      .login-btn {
-        font-size: 15px;
-        color: white;
-        padding: 7px 15px;
-        width: 250px;
-        margin-bottom: 20px;
-        background-color: #383838;
-        transition: 0.2s ease;
-        border-radius: 7px;
-        border: none;
-      }
-
-      #email::placeholder,
-      #password::placeholder {
-        color: white;
-        font-family: "Atkinson Hyperlegible", sans-serif;
-        text-align: left;
-      }
-
-      .dont-have {
-        color: white;
-        font-family: "Atkinson Hyperlegible", sans-serif;
-      }
-    }
+  .navbar-mobile {
+    display: none;
   }
-
-  .register {
-    display: flex;
-
-    .register-left-section {
-      width: 15%;
-    }
-
-    .register-right-section {
-      width: 70%;
-
-      .register-container {
-        background-color: black;
-        height: 600px;
-        border-radius: 15px;
-        display: flex;
-        margin: 60px 120px;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-
-        .reg-title {
-          color: white;
-          font-family: "Atkinson Hyperlegible", sans-serif;
-          font-weight: 300;
-          font-size: 35px;
-          text-align: center;
-          margin-top: 60px;
-        }
-
-        .alert-area {
-          width: 100%;
-          margin-bottom: 20px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .first {
-          display: flex;
-          flex-direction: row;
-          gap: 20px;
-
-          #fname,
-          #lname {
-            font-size: 17px;
-            color: white;
-            padding: 7px 20px;
-            width: 250px;
-            margin-bottom: 20px;
-            background-color: #383838;
-            transition: 0.2s ease;
-            border-radius: 7px;
-            border: none;
-          }
-        }
-
-        #reg-email,
-        #reg-password {
-          font-size: 17px;
-          color: white;
-          padding: 7px 20px;
-          width: 520px;
-          margin-bottom: 20px;
-          background-color: #383838;
-          transition: 0.2s ease;
-          border-radius: 7px;
-          border: none;
-        }
-
-        #register {
-          font-size: 22px;
-          color: white;
-          padding: 4px 0;
-          width: 522px;
-          margin-bottom: 20px;
-          background-color: #383838;
-          transition: 0.2s ease;
-          border-radius: 7px;
-          border: none;
-        }
-
-        .already-have {
-          color: white;
-          font-family: "Atkinson Hyperlegible", sans-serif;
-        }
-      }
-    }
-
-    .section {
-      width: 15%;
-    }
-  }
-
   .container {
     background-color: #1b1b1b;
     display: flex;
@@ -288,45 +138,39 @@ body {
           width: 100%;
           border-collapse: separate;
           border-spacing: 0 5px;
-        }
-
-        .table-approval thead {
-          background-color: transparent;
-        }
-
-        .table-approval thead th {
-          padding: 10px;
-          color: white;
-          font-size: 16px;
-          font-family: "Atkinson Hyperlegible", sans-serif;
-          width: 14.2857%;
-          text-align: left;
-        }
-
-        .table-approval thead :hover {
-          padding: 10px;
-          background-color: #00bfa5;
-          font-size: 16px;
-          font-family: "Atkinson Hyperlegible", sans-serif;
-          width: 14.2857%;
-        }
-
-        .table-approval td {
-          padding: 10px;
-          color: white;
-          font-size: 16px;
-          font-family: "Atkinson Hyperlegible", sans-serif;
-          width: 14.2857%;
-        }
-
-        .table-approval tbody tr:nth-child(even) {
-          background-color: #1b1b1b;
-          cursor: pointer;
-        }
-
-        .table-approval tbody tr:nth-child(odd) {
-          background-color: #28282a;
-          cursor: pointer;
+          thead {
+            background-color: transparent;
+            th {
+              padding: 10px;
+              color: white;
+              font-size: 16px;
+              font-family: "Atkinson Hyperlegible", sans-serif;
+              text-align: left;
+            }
+            &:hover {
+              padding: 10px;
+              background-color: #00bfa5;
+              font-size: 16px;
+              font-family: "Atkinson Hyperlegible", sans-serif;
+            }
+          }
+          tbody {
+            tr:nth-child(even) {
+              background-color: #1b1b1b;
+              cursor: pointer;
+            }
+            tr:nth-child(odd) {
+              background-color: #28282a;
+              cursor: pointer;
+            }
+            td {
+              padding: 10px;
+              color: white;
+              font-size: 16px;
+              font-family: "Atkinson Hyperlegible", sans-serif;
+              width: 14.2857%;
+            }
+          }
         }
       }
       .cabin-condensed-h2 {
@@ -361,7 +205,6 @@ body {
             cursor: pointer;
           }
         }
-
         .Saving-Form-Format {
           margin: 20px 0px;
         }
@@ -736,45 +579,6 @@ body {
       justify-content: end;
       margin-left: 21px;
     }
-
-    .Bank {
-      color: white;
-      width: 90%;
-      height: 70%;
-      align-self: center;
-      border-radius: 10px;
-      margin-bottom: 2.5%;
-      margin-top: 2.5%;
-      background-color: #000000;
-
-      .table-Bank {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 5px;
-
-        th {
-          padding: 10px;
-          color: white;
-          font-size: 16px;
-          font-family: "Atkinson Hyperlegible", sans-serif;
-          width: 25%;
-          text-align: center;
-        }
-
-        td {
-          text-align: center;
-        }
-      }
-    }
-
-    .Bank-Separate {
-      opacity: 0.15;
-    }
-
-    #popup-description-Bank {
-      display: flex;
-      flex-direction: column;
-    }
   }
 }
 .sign-out {
@@ -813,88 +617,12 @@ body {
   background-color: #333;
 
   .logo img {
-      width: 70px;
+    width: 70px;
   }
 
   .icon {
-      font-size: 24px;
-      color: #00dac6;
-      cursor: pointer;
+    font-size: 24px;
+    color: #00dac6;
+    cursor: pointer;
   }
-}
-
-/* Media query for smaller screens */
-@media only screen and (min-width: 425px) and (max-width: 767px) {
-  .navbar-items {
-      display: none; /* Hide nav items by default on smaller screens */
-      flex-direction: column;
-  }
-
-  .navbar-items.show {
-      display: flex; /* Show when hamburger is clicked */
-  }
-
-  .navbar-top {
-    display: flex;
-}
- 
-.main-section {
-  margin-top: 40% !important;
-  margin-left: -45%!important;
-}
-
-.table-approval thead .th-interact {
-  font-size: 9px !important;
-  text-align: center !important;
-}
-
-  .New-Saving {
-    font-size: 8px !important;
-    height: 40px!important;
-    margin: 3px 15px 0 0!important;
-  }
-
-  h1.header {
-    margin: 10px 10px 15px 7px!important;
-    font: 20px "Atkinson Hyperlegible", sans-serif !important;
-  }
-
-  .table-approval {
-    width: 80% !important;
-  }
-
-  .table-approval thead th {
-    padding: 5px  !important;
-    font-size: 12px!important;
-  }
-
-  .table-approval td {
-    font-size: 14px!important;
-    text-align: center;
-  }
-
-}
-@media only screen and (min-width: 768px) and (max-width: 1023px) {
-  .navbar-items {
-      display: none; /* Hide nav items by default on smaller screens */
-      flex-direction: column;
-  }
-
-  .navbar-items.show {
-      display: flex; /* Show when hamburger is clicked */
-  }
-
-  .navbar-top {
-    display: flex;
-}
-
-.main-section {
-  margin-top: 25% !important;
-  margin-left: -35% !important;
-}
-
-h1.header {
-  margin: 10px 10px 15px 9px!important;
-  font: 20px "Atkinson Hyperlegible", sans-serif !important;
-}
 }

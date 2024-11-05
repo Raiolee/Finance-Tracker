@@ -9,7 +9,7 @@ $user_id = $_SESSION["user_id"];
 $current_page = basename($_SERVER['PHP_SELF']);
 require_once '../connection/config.php';
 
-$sql = "SELECT subject, start_date FROM goals WHERE user_id = ? AND start_date >= CURDATE() ORDER BY start_date ASC LIMIT 5";
+$sql = "SELECT subject, start_date FROM goals WHERE user_id = ? AND start_date >= CURDATE() AND date != '0000-00-00' ORDER BY start_date ASC LIMIT 5";
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die('MySQL prepare error: ' . $conn->error);
@@ -59,12 +59,14 @@ if ($user && $user['user_dp']) {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body class="container">
-    <?php include 'navbar.php'; ?>
+<body>
+    <?php include('navbar-mobile.php'); ?>
+    <div class="container">
+        <?php include ('navbar.php'); ?>
 
-    <div class="content">
-        <div class="right-container">
-            <div class="main-content">
+        <div class="content">
+            <div class="right-container">
+                <div class="main-content">
                 <!-- Grouped Sections in Row (Pending Tasks and Quick Report) -->
                 <div class="horizontal-sections">
                     <!-- Pending Tasks Section -->
@@ -162,13 +164,19 @@ if ($user && $user['user_dp']) {
                             </tbody>
                         </table>
                     </div>
-                    <script src="../js/quickreport.js"></script>
-                    <?php include('modals/modal-expense.php'); ?>
-                    <?php include('modals/modal-income.php'); ?>
-                    <?php include('modals/modal-goals.php'); ?>
-                    <?php include('modals/modal-savings.php'); ?>
-                    <?php include('modals/modal-allocate.php'); ?>
-                    <script src="../js/modal.js"></script>
+        <?php include('modals/modal-expense.php'); ?>
+        <?php include('modals/modal-income.php'); ?>
+        <?php include('modals/modal-goals.php'); ?>
+        <?php include("modals/modal-savings.php"); ?>
+        <?php include("../APIS/init.php"); ?>
+        <?php include("../APIS/savings_api.php"); ?>
+        <?php include("../APIS/expense_api.php"); ?>
+        <?php include('modals/modal-expense-row.php'); ?>
+        <?php include("../APIS/goals_api.php"); ?>
+        <?php include("../APIS/income_api.php"); ?>
+        <script src="../js/quickreport.js"></script>
+        <script src="../js/modal.js"></script>
+        <script src="../js/savings.js"></script>
+        <script src="../js/expense.js"></script>
 </body>
-
 </html>

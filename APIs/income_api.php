@@ -1,6 +1,8 @@
 <?php
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $user_id = $_SESSION['user_id'];
 $username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);

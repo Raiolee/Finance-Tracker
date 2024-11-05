@@ -47,6 +47,7 @@ if ($user['user_dp']) {
 </head>
 
 <body>
+    <?php include('navbar-mobile.php'); ?>
     <!-- All content is stored in container -->
     <div class="container">
         <?php include('navbar.php'); ?>
