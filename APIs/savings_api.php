@@ -78,12 +78,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $category = $_POST['frequency'] ?? '';
             $date = $_POST['allocate-date'] ?? '';
             $bank = $_POST['bank'] ?? '';
+            $bank_id = $_POST['bank_id'] ?? '';
 
             // Ensure $uid is defined; this should be set earlier in your code
             if (isset($uid)) {
                 // Prepare the SQL statement to check the balance
-                $stmtBalance = $conn->prepare("SELECT balance FROM user_db.bank WHERE user_id = ? AND bank = ?");
-                $stmtBalance->bind_param("is", $uid, $bank);
+                $stmtBalance = $conn->prepare("SELECT balance FROM user_db.bank WHERE user_id = ? AND bank_id = ?");
+                $stmtBalance->bind_param("ii", $uid, $bank_id); // Bind user_id as integer and bank_id as integer
                 $stmtBalance->execute();
                 $stmtBalance->bind_result($balance);
                 $stmtBalance->fetch();
@@ -98,8 +99,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Execute the insert statement
                     if ($stmt->execute()) {
                         // Prepare the SQL statement to update the balance
-                        $stmt2 = $conn->prepare("UPDATE user_db.bank SET balance = balance - ? WHERE user_id = ? AND bank = ?");
-                        $stmt2->bind_param("dis", $amount, $uid, $bank); // Bind parameters for the update
+                        if (empty($bank_id)) {
+                            echo "Error: bank_id is required.";
+                            exit();
+                        }
+
+                        $stmt2 = $conn->prepare("UPDATE user_db.bank SET balance = balance - ? WHERE user_id = ? AND bank_id = ?");
+                        $stmt2->bind_param("dis", $amount, $uid, $bank_id); // Bind parameters for the update
 
                         // Execute the update statement
                         if ($stmt2->execute()) {
@@ -151,12 +157,20 @@ $sql = "SELECT bank_id, bank, balance FROM user_db.bank WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
 
 if ($stmt) {
+    // Bind the parameter
     $stmt->bind_param("i", $uid);
-    $stmt->execute();
-    $result = $stmt->get_result();
+
+    // Execute the statement and check for errors
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        // Process the result here, e.g., fetch rows
+    } else {
+        $error_message = "Error executing statement: {$stmt->error}";
+    }
 } else {
     $error_message = "Error preparing statement: {$conn->error}";
 }
+
 
 // Fetch existing savings for the income
 $sql2 = "SELECT total FROM user_db.income WHERE user_id = ?";
@@ -182,4 +196,3 @@ if ($stmt3) {
     $error_message = "Error preparing statement: {$conn->error}";
 }
 
-?>

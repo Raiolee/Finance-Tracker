@@ -62,7 +62,7 @@ function closeModal() {
 }
 
 // Show Allocate Modal and populate it with data
-function BankForm(bank, balance) {
+function BankForm(bank, balance, bank_id) {
     // Set up the modal for allocation (bankModalAllocate)
     bankModalAllocate = document.getElementById('bankModalAllocate'); // ID of the new modal
     if (bankModalAllocate) {
@@ -71,6 +71,7 @@ function BankForm(bank, balance) {
         // Populate fields
         document.querySelector('input[name="bank"]').value = bank; // Set bank name
         document.querySelector('input[name="bank-balance"]').value = balance; // Set balance
+        document.querySelector('input[name="bank_id"]').value = bank_id;
     }
 }
 

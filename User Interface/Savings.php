@@ -47,7 +47,7 @@
                                                 <td>" . htmlspecialchars($row['bank']) . "</td>
                                                 <td>" . htmlspecialchars($row['balance']) . "</td>
                                                 <td>
-                                                    <button onclick=\"BankForm('" . htmlspecialchars($row['bank']) . "', '" . htmlspecialchars($row['balance']) . "')\">Allocate</button>
+                                                    <button onclick=\"BankForm('" . htmlspecialchars($row['bank']) . "', '" . htmlspecialchars($row['balance']) . "', '" . htmlspecialchars($row['bank_id']) . "')\">Allocate</button>
                                                 </td>
                                             </tr>";
                                 }
