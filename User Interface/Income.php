@@ -13,7 +13,6 @@ include '../APIs/income_api.php';
     <title>Income List</title>
     <link rel="stylesheet" href="../Styles/styles.css">
     <link rel="stylesheet" href="../Styles/custom-style.css">
-    <link rel="stylesheet" href="../Styles/ViewIncome.css">
     <link href='https://fonts.googleapis.com/css?family=Cabin Condensed' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>

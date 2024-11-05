@@ -47,8 +47,7 @@ CREATE TABLE `expenses` (
     `date` DATE NOT NULL,
     `next_occurrence` DATE,
     `bank` varchar(255) not null,
-    `frequency`  VARCHAR(255) NOT NULL,
-    `recurrence_type` ENUM('weekly', 'monthly', 'custom') NOT NULL,
+    `recurrence_type` ENUM('Weekly', 'Monthly', 'Custom') NOT NULL,
     `category` VARCHAR(255) NOT NULL,
     `reimbursable` ENUM('yes','no') NOT NULL DEFAULT 'no',
     `merchant` VARCHAR(255) NOT NULL,
@@ -101,7 +100,4 @@ BEGIN
 END //
 
 DELIMITER ;
-
-INSERT INTO bank (user_id, bank, balance, date) VALUES
-(1, 'PNC Bank', 10000, '2024-05-30');
 
