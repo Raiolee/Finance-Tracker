@@ -3,7 +3,7 @@
 <div id="goalRowModal" class="modal">
     <div class="modal-content">
         <span class="close-button" onclick="closeGoalRowModal()">&times;</span>
-        <h3 class="header">Add to Goals</h3>
+        <h3 class="header">Edit Goal</h3>
         <hr class="bottom-line">
         <form class="form-container" id="goalRowForm" method="POST" action="">
             <div class="big-divider full">

@@ -3,7 +3,7 @@
 <div id="incomeRowModal" class="modal">
     <div class="modal-content">
         <span class="close-button" onclick="closeIncomeRowModal()">&times;</span>
-        <h3 class="header">Add an Income</h3>
+        <h3 class="header">Edit Income</h3>
         <hr class="bottom-line">
         <form class="form-container" id="SavingForm" method="post" action="">
             <div class="big-divider full">

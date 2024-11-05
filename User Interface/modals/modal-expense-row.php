@@ -3,7 +3,7 @@
 <div id="expenseRowModal" class="modal">
     <div class="modal-content">
         <span class="close-button" onclick="closeExpenseRowModal()">&times;</span>
-        <h3 class="header">Edit</h3>
+        <h3 class="header">Edit Expense</h3>
         <hr class="bottom-line">
         <form class="form-container" id="expenseForm" method="post" action="">
             <div class="big-divider full">
