@@ -5,6 +5,7 @@ include("../APIS/expense_api.php");
 include("../APIS/goals_api.php"); 
 include("../APIS/income_api.php");
 include("../APIS/pending_goals_api.php");
+d
 ?>
 
 <!DOCTYPE html>
