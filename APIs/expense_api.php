@@ -87,7 +87,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "User ID is not set.";
             }
         } // <-- End of insert_expense action block
-
         elseif ($action === 'edit-action') {
             // Collect form data for editing the expense
             $expense_id = $_POST['expense-id']; // Ensure you pass the expense_id from the form
@@ -100,7 +99,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $amount = $_POST['amount'];
             $description = $_POST['description'];
             $reimbursable = $_POST['reimbursable'];
-            
+
+
             // Ensure $uid is defined, and that you have a valid expense ID
             if (empty($expense_id)) {
                 echo "Error: Missing required fields.";
@@ -109,27 +109,81 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Prepare the SQL statement to update the expense record
             $stmt = $conn->prepare("UPDATE user_db.expenses SET subject = ?, category = ?, date = ?, recurrence_type = ?, merchant = ?, bank = ?, amount = ?, description = ?, reimbursable = ? WHERE expense_id = ?");
-            
+
             // Bind the parameters (s = string, d = decimal, i = integer)
-            $stmt->bind_param("ssssssdsdi", 
-                $subject, $category, $expense_date, $recurrence_type, $merchant, $bank_id, $amount, $description, $reimbursable, $expense_id);
-            
+            $stmt->bind_param(
+                "ssssssdsdi",
+                $subject,
+                $category,
+                $expense_date,
+                $recurrence_type,
+                $merchant,
+                $bank_id,
+                $amount,
+                $description,
+                $reimbursable,
+                $expense_id
+            );
+
             // Execute the prepared statement
             if ($stmt->execute()) {
-                // If the update is successful, redirect or show a success message
-                header("Location: Expense.php?edit_success=1");
-                exit();
+                // Check if the amount has been updated
+                if ($current_amount != $amount) {
+                    // Step 4: If the amount has been updated, update the bank balance accordingly
+                    $stmt_balance = $conn->prepare("UPDATE user_db.bank SET balance = balance + ? - ? WHERE bank_id = ? AND user_id = ?");
+                    // We need to adjust the balance by subtracting the old amount and adding the new one
+                    $stmt_balance->bind_param("disi", $current_amount, $amount, $current_bank_id, $uid);
+
+                    if ($stmt_balance->execute()) {
+                        // If both updates are successful, redirect or show a success message
+                        header("Location: Expense.php?edit_success=1");
+                        exit();
+                    } else {
+                        echo "Error updating bank balance: " . $stmt_balance->error;
+                    }
+                    $stmt_balance->close();
+                } else {
+                    // If the amount is not updated, just redirect
+                    header("Location: Expense.php?edit_success=1");
+                    exit();
+                }
             } else {
-                // If there is an error, show the error message
+                // If there is an error with the first update, show the error message
                 echo "Error updating expense record: " . $stmt->error;
             }
             $stmt->close();
         } // <-- End of edit-expense action block
+        elseif ($action === 'delete-action') {
+            // Get the expense ID from the form submission
+            $expense_id = $_POST['expense-id'];
 
-        else {
+            // Ensure the expense ID is not empty
+            if (empty($expense_id)) {
+                echo "Error: Missing expense ID.";
+                exit();
+            }
+
+            // Prepare the SQL statement to delete the expense record
+            $stmt = $conn->prepare("DELETE FROM user_db.expenses WHERE expense_id = ?");
+            $stmt->bind_param("i", $expense_id);  // 'i' for integer (expense_id is assumed to be an integer)
+
+            // Execute the statement
+            if ($stmt->execute()) {
+                // If the deletion is successful, redirect to the Expense page with a success message
+                header("Location: Expense.php?delete_success=1");
+                exit();
+            } else {
+                // If there is an error, show the error message
+                echo "Error deleting expense record: " . $stmt->error;
+            }
+
+            // Close the statement
+            $stmt->close();
+        } else {
             echo "Invalid action.";
         }
     } // <-- End of isset($_POST['action']) block
 }
+
 
 ?>

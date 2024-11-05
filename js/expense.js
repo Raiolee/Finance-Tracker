@@ -51,6 +51,7 @@ function expenseRowClick(expenseId) {
             document.getElementById("reimbursable-yes-row").checked = data.reimbursable === "yes";
             document.getElementById("reimbursable-no-row").checked = data.reimbursable === "no";
             document.getElementById("expense-id").value = expenseId;
+            ocument.getElementById("delete-expense-id").value = expenseId;
         })
         .catch(error => console.error('Error fetching expense data:', error));
 }

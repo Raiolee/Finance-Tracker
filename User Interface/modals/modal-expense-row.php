@@ -7,9 +7,9 @@
         <hr class="bottom-line">
         <form class="form-container" id="SavingForm" method="post" action="">
             <input type="hidden" name="action" value='edit-action'>
-            <input type="hidden"  id="expense-id" name="expense-id">
+            <input type="hidden" id="expense-id" name="expense-id">
             <div class="big-divider full">
-                
+
                 <!-- label and input for subject -->
                 <label for="subject" class="form-labels row">Subject</label>
                 <input type="text" class="var-input medium" id="subject-row" name="subject">
@@ -26,7 +26,7 @@
 
                 <!-- label and input for date -->
                 <label for="expense-date" class="form-labels row">Date</label>
-                <input type="date" class="var-input" id="expense-date-row" name="expense-date" >
+                <input type="date" class="var-input" id="expense-date-row" name="expense-date">
 
                 <!-- label and input for recurrence type -->
                 <label for="recurrence_type" class="form-labels row">Frequency</label>
@@ -46,22 +46,22 @@
                 <select class="var-input large pointer" name="bank" id="bank-row">
                     <option value="CHANGE ME">Bank 1</option> <!-- Change the code to get the bank based on user_id -->
                     <?php
-                        $uid = $_SESSION["user_id"];
-                        // Fetch bank names from the database
-                        $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";
-                        $bankStmt = $conn->prepare($bankQuery);
-                        $bankStmt->bind_param("i", $uid);
-                        $bankStmt->execute();
-                        $bankResult = $bankStmt->get_result();
-                        while ($row = $bankResult->fetch_assoc()) {
-                            echo '<option value="' . htmlspecialchars($row['bank']) . '">' . htmlspecialchars($row['bank']) . '</option>';
-                        }
-                        $bankStmt->close();
+                    $uid = $_SESSION["user_id"];
+                    // Fetch bank names from the database
+                    $bankQuery = "SELECT bank FROM bank WHERE user_id = ?";
+                    $bankStmt = $conn->prepare($bankQuery);
+                    $bankStmt->bind_param("i", $uid);
+                    $bankStmt->execute();
+                    $bankResult = $bankStmt->get_result();
+                    while ($row = $bankResult->fetch_assoc()) {
+                        echo '<option value="' . htmlspecialchars($row['bank']) . '">' . htmlspecialchars($row['bank']) . '</option>';
+                    }
+                    $bankStmt->close();
                     ?>
                 </select>
 
                 <label for="amount" class="form-labels">Amount*</label>
-                <input type="number" class="var-input" id="amount-row" name="amount" required>
+                <input type="number" class="var-input" id="amount-row" name="amount" readonly>
                 <!-- Description -->
                 <label for="description" class="form-labels">Description</label>
                 <textarea class="var-input" name="description" id="description-row"></textarea>
@@ -81,11 +81,15 @@
                     <input class="file-input" type="file" name="attachment" accept="image/*" id="file-input">
                 </div>
 
-                <div class="btn-options">
-                    <button type="button" class="link-btn cancel" onclick="closeModalExpense()">Delete</button> <!-- Paedit na lang din ng delete button to work with the delete expense-->
-                    <button type="submit2" class="save">Save</button> <!-- Paedit na lang din ng save button to work with the edit expense-->
+                <div class="btn-options"><!-- Paedit na lang din ng delete button to work with the delete expense-->
+                    <button type="submit2" class="save">Save</button>
+
+                    <form action="" id="SavingForm" method="post">
+                        <input type="hidden" name="action" value='delete-action'>
+                        <button type="sumbit" class="link-btn cancel" onclick="closeModalExpense()">Delete</button>
+                    </form> <!-- Paedit na lang din ng save button to work with the edit expense-->
                 </div>
             </div>
-        </for>
+        </form>
     </div>
 </div>
