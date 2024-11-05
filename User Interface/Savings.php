@@ -29,10 +29,10 @@
                         <thead>
                             <tr>
                                 <th class="th-interact" onclick="sortTable('subject')">
-                                    Number
+                                    Bank
                                 </th>
                                 <th>
-                                    Bank
+                                    Amount
                                 </th>
                                 <th class="th-interact" onclick="sortTable('accomplishment_date')">
                                     Manage
