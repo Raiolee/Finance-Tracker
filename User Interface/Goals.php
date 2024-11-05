@@ -15,6 +15,7 @@ include '../APIs/goals_api.php'; // Include the new API file
 </head>
 
 <body>
+    <?php include('navbar-mobile.php'); ?>
     <div class="container">
         <?php include('navbar.php'); ?>
 

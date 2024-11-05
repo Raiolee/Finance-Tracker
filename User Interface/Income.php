@@ -19,8 +19,9 @@ include '../APIs/income_api.php';
 </head>
 
 <body>
+    <?php include 'navbar-mobile.php'; ?>
     <div class="container">
-        <?php include '../User Interface/navbar.php'; ?>
+        <?php include 'navbar.php'; ?>
         <section class="main-section">
             <div class="main-container">
                 <div class="content">

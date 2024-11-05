@@ -60,7 +60,7 @@ if ($user && $user['user_dp']) {
 </head>
 
 <body class="container">
-    <?php include 'navbar.php'; ?>
+    <?php include ('navbar.php'); ?>
 
     <div class="content">
         <div class="right-container">

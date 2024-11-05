@@ -1,182 +1,55 @@
-.burger
-{
-    display: none;
-}
-.table-approval th:nth-child(6),
-.table-approval td:nth-child(6)
-{
-    display: none;
-}
-
-@media only screen and (min-width: 375px) and (max-width: 768px)
-{
-    .table-approval th:nth-child(6),
-    .table-approval td:nth-child(6)
-    {
+@media only screen and (min-width: 425px) and (max-width: 767px) {
+  body {
+    background-color: #1b1b1b;
+    height: 100vh;
+    width: 100vw;
+    font-family: "Atkinson Hyperlegible", sans-serif;
+    overflow-y: auto;
+    margin: 0px;
+    .navbar-mobile {
+      display: block;
+      overflow: hidden;
+      background-color: #00bfa5;
+      position: relative;
+      margin: 0%;
+      padding: 0%;
+      height: 3rem;
+      transition: height 0.3s ease; 
+      .active {
+        color: white;
+      }
+      .navbarLinks {
+        margin: 0;
+        display: none;
+        .navbarItems {
+          color: white;
+          padding: 14px 16px;
+          text-decoration: none;
+          font-size: 17px;
+          display: block;
+          &:hover {
+            background-color: #ddd;
+            color: black;
+          }
+        }
+      }
+      .icon {
+        text-decoration: none;
+        color: white;
+        background: #00bfa5;
         display: block;
+        position: absolute;
+        height: 2rem;
+        margin: 0.5rem 1rem 0 0;
+        right: 0;
+        top: 0;
+        .fa-bars {
+            font-size: 1.5rem;
+        }
+      }
     }
-        #burger-nav-bar
-    {
+    .navbar-custom {
         display: none;
     }
-    #mobile-burger-hide
-    {
-        display: block;
-    }
-    .burger
-    {
-        display: block;
-        cursor: pointer;
-        width: 85vw;
-            .burger-outer
-            {
-                display: flex;
-                justify-content: space-between;
-                margin: 2vw 0;
-            }
-    }
-
-    body
-    {
-        .container
-        {
-            display: flex;
-            flex-direction: column;
-            height: auto;
-            margin-left: 5%;
-            margin-right: 5%;
-        }
-
-        .main-section
-        {
-            margin-top: 0;
-            width: 85vw;
-            overflow-x: auto;
-        } 
-
-    }
-    #savings-main-section
-    {
-        .main-container
-        {
-
-            .content
-            {
-                .Lower-content
-                {
-                    .table-approval thead th
-                    {
-                        width: 25% !important;
-                        text-align: center !important;
-                    }
-                    .table-approval td
-                    {
-                        width: 25% !important;
-                        text-align: center !important;
-                    }
-                    .table-approval th:nth-child(2),
-                    .table-approval td:nth-child(2),
-                    .table-approval th:nth-child(3),
-                    .table-approval td:nth-child(3)
-                    {
-                        display: none;
-                    }
-                }
-            }
-        }
-    }
-
+  }
 }
-
-@media only screen and (min-width: 300px) and (max-width: 349px)
-{
-    .table-approval th:nth-child(6),
-    .table-approval td:nth-child(6)
-    {
-        display: block;
-    }
-        #burger-nav-bar
-    {
-        display: none;
-    }
-    #mobile-burger-hide
-    {
-        display: block;
-    }
-    .burger
-    {
-        display: block;
-        cursor: pointer;
-        width: 85vw;
-            .burger-outer
-            {
-                display: flex;
-                justify-content: space-between;
-                margin: 2vw 0;
-            }
-            .table-approval thead td
-            {
-                width: 33.33%;
-            }
-            
-    }
-
-    body
-    {
-        .container
-        {
-            display: flex;
-            flex-direction: column;
-            height: auto;
-            margin-left: 5%;
-            margin-right: 5%;
-            
-        }
-
-        .main-section
-        {
-            margin-top: 0;
-            width: 85vw;
-            overflow-x: auto;
-        } 
-
-    }
-
-    #savings-main-section
-    {
-        .main-container
-        {
-
-            .content
-            {
-                .Lower-content
-                {
-                    .table-approval th
-                    {
-                        width: 33.33% !important;
-                        text-align: center !important;
-                    }
-                    .table-approval td
-                    {
-                        width: 33.33% !important;
-                        text-align: center !important;
-                    }
-                        .table-approval th:nth-child(2),
-                        .table-approval td:nth-child(2),
-                        .table-approval th:nth-child(3),
-                        .table-approval td:nth-child(3),
-                        .table-approval th:nth-child(4),
-                        .table-approval td:nth-child(4)
-                        {
-                            display: none;
-                        }
-                }
-            }
-        }
-    }
-    
-    
-}
-
-
-

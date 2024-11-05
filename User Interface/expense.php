@@ -102,6 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
+    <?php include('navbar-mobile.php'); ?>
     <!-- All content is stored in container -->
     <div class="container">
         <!-- Include the Navbar -->
