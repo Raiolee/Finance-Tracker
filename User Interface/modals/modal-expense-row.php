@@ -5,9 +5,11 @@
         <span class="close-button" onclick="closeExpenseRowModal()">&times;</span>
         <h3 class="header">Edit</h3>
         <hr class="bottom-line">
-        <form class="form-container" id="expenseForm" method="post" action="">
+        <form class="form-container" id="SavingForm" method="post" action="">
+            <input type="hidden" name="action" value='edit-action'>
+            <input type="hidden"  id="expense-id" name="expense-id">
             <div class="big-divider full">
-
+                
                 <!-- label and input for subject -->
                 <label for="subject" class="form-labels row">Subject</label>
                 <input type="text" class="var-input medium" id="subject-row" name="subject">
@@ -81,9 +83,9 @@
 
                 <div class="btn-options">
                     <button type="button" class="link-btn cancel" onclick="closeModalExpense()">Delete</button> <!-- Paedit na lang din ng delete button to work with the delete expense-->
-                    <button type="Edit" class="save">Save</button> <!-- Paedit na lang din ng save button to work with the edit expense-->
+                    <button type="submit2" class="save">Save</button> <!-- Paedit na lang din ng save button to work with the edit expense-->
                 </div>
             </div>
-        </form>
+        </for>
     </div>
 </div>
