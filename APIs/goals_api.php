@@ -303,7 +303,7 @@ function searchGoals($conn, $userId, $searchQuery) {
 }
 
 function filterCategory($conn, $userId, $filterCategory) {
-    $sql = "SELECT subject, category FROM goals WHERE user_id = ? AND category = ?";
+    $sql = "SELECT * FROM goals WHERE user_id = ? AND category = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bind_param("is", $userId, $filterCategory);
