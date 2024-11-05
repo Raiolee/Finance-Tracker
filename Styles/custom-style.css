@@ -1,61 +1,61 @@
-.search-form input {
+.search-form {
+    display: flex;
+    align-items: center;
     background-color: transparent;
-    width: 100%;
-    height: 42.5px;
-    line-height: 30px;
-    outline: 0;
-    border: 0;
-    display: none;
-    font-size: 1em;
     border-radius: 20px;
-    padding: 0 20px;
-    color: white;
+    width: 42.5px; /* Initial width for icon only */
+    transition: width 0.3s ease; /* Smooth transition for width expansion */
+    overflow: hidden;
+
+    input {
+        background-color: transparent;
+        width: 100%;
+        height: 42.5px;
+        line-height: 30px;
+        outline: none;
+        border: none;
+        font-size: 1em;
+        color: white;
+        padding: 0 20px;
+        display: none; /* Hidden by default */
+        transition: display 0.3s ease; /* Transition effect */
+    }
+
+    .fa, button {
+        box-sizing: border-box;
+        width: 42.5px;
+        height: 42.5px;
+        border-radius: 50%;
+        color: #8c52ff;
+        text-align: center;
+        font-size: 1.2em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    &:hover {
+        width: 200px; /* Expand width on hover */
+    }
+
+    &:hover input {
+        display: block; /* Show input on hover */
+    }
+
+    &:hover .fa {
+        background: transparent; /* Keep background transparent */
+        color: white; /* Adjust color if needed */
+    }
 }
 
-.search-form .fa {
-    box-sizing: border-box;
-    padding: 10px;
-    width: 42.5px;
-    height: 42.5px;
-    border-radius: 50%;
-    color: #8c52ff;
-    text-align: center;
-    font-size: 1.2em;
-    transition: all 1s;
-    display: flex;
-    /* Add flexbox */
-    align-items: center;
-    /* Center icon vertically */
-    justify-content: center;
-    /* Center icon horizontally */
-}
-
-.search-form:hover {
-    width: 200px;
-    cursor: pointer;
-}
-
-.search-form:hover input {
-    display: block;
-}
-
-.search-form:hover .fa {
-    background: black;
-    color: transparent;
-}
-
-.search-form button {
-    background-color: transparent;
-    color: transparent;
-    width: 42.5px;
-    height: 42.5px;
-    /* Match the form's height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 25px;
-    border: none;
-    margin: 0;
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .search-form {
+        display: none;
+    }
 }
 
 /* General styles for the filter form */

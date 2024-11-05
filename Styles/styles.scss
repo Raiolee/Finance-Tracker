@@ -172,6 +172,44 @@ body {
             }
           }
         }
+        .table-custom {
+          width: 100%;
+          border-collapse: separate;
+          border-spacing: 0 5px;
+          thead {
+            background-color: transparent;
+            th {
+              padding: 10px;
+              color: white;
+              font-size: 16px;
+              font-family: "Atkinson Hyperlegible", sans-serif;
+              text-align: left;
+            }
+            &:hover {
+              padding: 10px;
+              background-color: #00bfa5;
+              font-size: 16px;
+              font-family: "Atkinson Hyperlegible", sans-serif;
+            }
+          }
+          tbody {
+            tr:nth-child(even) {
+              background-color: #1b1b1b;
+              cursor: pointer;
+            }
+            tr:nth-child(odd) {
+              background-color: #28282a;
+              cursor: pointer;
+            }
+            td {
+              padding: 10px;
+              color: white;
+              font-size: 16px;
+              font-family: "Atkinson Hyperlegible", sans-serif;
+              width: 14.2857%;
+            }
+          }
+        }
       }
       .cabin-condensed-h2 {
         font: 20px "Atkinson Hyperlegible", sans-serif;
