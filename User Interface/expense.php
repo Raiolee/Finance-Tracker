@@ -63,8 +63,8 @@ include("../APIS/expense_api.php");
                             <tr>
                                 <th>Details</th>
                                 <th>Merchant</th>
-                                <th>Bank</th>
                                 <th>Amount</th>
+                                <th>Bank</th>
                                 <th>Reimbursable</th>
                             </tr>
                         </thead>
@@ -85,8 +85,8 @@ include("../APIS/expense_api.php");
                                     echo "<tr class='row-interact' onclick='expenseRowClick(" . $row['expense_id'] . ")'>";
                                     echo "<td>" . htmlspecialchars($row['details']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['merchant']) . "</td>";
-                                    echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['amount']) . "</td>";
+                                    echo "<td>" . htmlspecialchars($row['bank']) . "</td>";
                                     echo "<td>" . htmlspecialchars($row['reimbursable']) . "</td>";
                                     echo "</tr>";
                                 }
