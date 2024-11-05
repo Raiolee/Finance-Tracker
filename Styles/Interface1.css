@@ -952,7 +952,8 @@ button {
 @media only screen and (min-width: 425px) and (max-width: 767px)  {
     /* Right Container - Prevents unnecessary expansion */
     .right-container {
-        margin-top: 70px;
+        margin-top: 90px;
+        margin-left: -22%;
     }
 
         .collapse:not(.show) {
@@ -982,7 +983,8 @@ button {
     @media only screen and (min-width: 768px) and (max-width: 1023px) {
 
         .right-container {
-            margin-top: 70px;
+            margin-top: 90px;
+            margin-left: -10%;
         }
         .navbar-items {
             display: none; /* Hide nav items by default on smaller screens */
