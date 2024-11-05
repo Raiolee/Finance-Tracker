@@ -19,7 +19,7 @@
                 <label class="form-labels" for="bank-amount">Amount</label>
                 <input class="var-input" type="number" name="bank-amount" placeholder="0.00" id="bankAmountRow" required>
                 <div class="btn-options">
-                    <button type="button" class="link-btn cancel" id="Delete_Bank">Delete</button> <!-- PALAGYAN NA LANG NG BACKEND CODE -->
+                    <button type="submit" class="link-btn cancel" id="Delete_Bank" name="action" value="dbank_action">Delete</button> <!-- PALAGYAN NA LANG NG BACKEND CODE -->
                     <button type="submit" class="save">Save</button>
                 </div>
             </div>

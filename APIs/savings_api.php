@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 if (!isset($_SESSION["user"])) {
     header("Location: ../Login.php");
-    exit();   
+    exit();
 }
 
 
@@ -163,6 +163,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Bind the parameters (s = string, d = decimal, i = integer)
             $stmt->bind_param("ssdi", $purpose, $bank, $balance, $bank_id);
+
+            // Execute the prepared statement
+            if ($stmt->execute()) {
+                // If the update is successful, redirect or show a success message
+                header("Location: Savings.php?success=1");
+                exit();
+            } else {
+                // If there is an error, show the error message
+                echo "Error updating bank record: " . $stmt->error;
+            }
+
+            // Close the statement
+            $stmt->close();
+        }elseif ($action === 'dbank_action') {
+
+
+            $bank_id = $_POST['bank_id'];
+
+            // Ensure $bank_id and $uid are already defined earlier in your code
+            if (empty($bank_id)) {
+                echo "Error: Missing required fields.";
+                exit();
+            }
+
+            // Prepare the SQL statement to update purpose, bank, and balance
+            $stmt = $conn->prepare("DELETE FROM user_db.bank WHERE bank_id = ? ");
+
+            // Bind the parameters (s = string, d = decimal, i = integer)
+            $stmt->bind_param("i", $bank_id);
 
             // Execute the prepared statement
             if ($stmt->execute()) {
