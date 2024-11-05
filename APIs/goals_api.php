@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 $conn = new mysqli($DB_Host, $DB_User, $DB_Password, $DB_Name);
 
 // Check connection
