@@ -1,6 +1,6 @@
 <?php
 // Include database connection
-include '../connection/config.php';
+require('../config/connection.php');
 $uid = $_SESSION['user_id'];
 
 // Fetch existing goals for the user

@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-include '../connection/config.php';
+require_once 'init.php';
 
 if (!isset($_SESSION["user_id"])) {
     echo json_encode(["error" => "User not logged in."]);

@@ -1,6 +1,6 @@
 <?php
-include '../connection/config.php';
-include '../APIs/goals_api.php'; // Include the new API file
+require_once '../APIS/init.php';
+require '../APIs/goals_api.php'; // Include the new API file
 ?>
 
 <!DOCTYPE html>

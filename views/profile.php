@@ -1,32 +1,6 @@
 <?php
 // Include database connection
-include('../connection/config.php');
-
-// Start session and fetch user data from session
-session_start();
-$username = $_SESSION["name"];
-$current_page = basename($_SERVER['PHP_SELF']);
-$user_id = $_SESSION['user_id'];
-
-// Fetch user data, including the profile picture (user_dp) from the database
-$query = "SELECT first_name, last_name, email, user_dp FROM user WHERE user_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-$stmt->close();
-
-// Prepare the profile picture for display
-if ($user['user_dp']) {
-    // Convert BLOB to base64-encoded image
-    $profile_pic = 'data:image/jpeg;base64,' . base64_encode($user['user_dp']);
-} else {
-    // If no profile picture is found, use a placeholder image
-    $profile_pic = 'https://picsum.photos/100/100';
-}
-
-$current_page = 'profile.php';
+require_once '../APIs/init.php';
 ?>
 
 <!DOCTYPE html>
@@ -101,8 +75,6 @@ if (!isset($_SESSION["user"])) {
     header("Location: ../Login.php");
 }
 
-// Include database connection
-include('../connection/config.php');
 
 // Fetch user data from the database
 $user_id = $_SESSION['user_id'];

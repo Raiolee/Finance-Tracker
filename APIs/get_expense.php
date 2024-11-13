@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require_once "../connection/config.php";
+require_once 'init.php';
 
 $expense_id = $_GET['id'] ?? null;
 

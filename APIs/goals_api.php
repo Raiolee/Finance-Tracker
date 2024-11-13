@@ -118,7 +118,7 @@ if (isset($_GET['sort'])) {
     }
 }
 
-include '../connection/config.php';
+require_once 'init.php';
 // Fetch goals and savings
 function fetchGoals($conn, $userId)
 {

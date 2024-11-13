@@ -10,7 +10,7 @@ if (!isset($_SESSION["user"])) {
 $username = $_SESSION["name"];
 $user_id = $_SESSION["user_id"];
 $current_page = basename($_SERVER['PHP_SELF']);
-require_once '../connection/config.php';
+require_once 'init.php';
 
 $sql = "SELECT subject, start_date FROM goals WHERE user_id = ? AND start_date >= CURDATE() AND date != '0000-00-00' ORDER BY start_date ASC LIMIT 5";
 $stmt = $conn->prepare($sql);

@@ -1,6 +1,6 @@
 <?php
 // Include database connection
-include('../connection/config.php');
+require_once ('../config/connection.php');
 
 // Start session and fetch user data from session
 session_start();

@@ -1,4 +1,4 @@
-<?php include("../APIS/savings_api.php"); ?>
+<?php require "../APIS/savings_api.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 

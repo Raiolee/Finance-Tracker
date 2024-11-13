@@ -1,6 +1,5 @@
 <?php
-session_start();
-require_once "../connection/config.php";
+require 'init.php';
 
 // Check connection
 if ($conn->connect_error) {

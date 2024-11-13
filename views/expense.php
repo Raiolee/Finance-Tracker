@@ -1,6 +1,6 @@
 <?php 
-include('../APIs/init.php');
-include("../APIS/expense_api.php"); 
+require_once("../APIs/init.php");
+require("../APIS/expense_api.php"); 
 ?>
 
 <!DOCTYPE html>
@@ -70,7 +70,6 @@ include("../APIS/expense_api.php");
                         </thead>
                         <tbody>
                             <?php
-                            require_once "../connection/config.php";
 
                             // Query to fetch the required details from the expenses table
                             $query = "SELECT expense_id, subject AS details, merchant, bank, amount, reimbursable FROM expenses WHERE user_id = ?";

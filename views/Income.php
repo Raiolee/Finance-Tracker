@@ -1,6 +1,6 @@
 <?php
-include '../connection/config.php';
-include '../APIs/income_api.php';
+require_once '../APIs/init.php';
+require '../APIs/income_api.php';
 
 ?>
 

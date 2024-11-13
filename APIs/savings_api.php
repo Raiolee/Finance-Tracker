@@ -15,7 +15,7 @@ $username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);
 
 // Include database connection
-include '../connection/config.php';
+require_once 'init.php';
 
 // Check the connection immediately after including config
 if ($conn->connect_error) {

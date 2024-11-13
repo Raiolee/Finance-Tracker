@@ -9,7 +9,7 @@ $username = $_SESSION["name"];
 $current_page = basename($_SERVER['PHP_SELF']);
 
 // Include database connection
-include('../connection/config.php');
+require_once('../config/connection.php');
 
 // Fetch only the user_dp (profile picture) from the database
 $user_id = $_SESSION['user_id'];

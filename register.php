@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "connection/config.php";
+require_once "config/connection.php";
 require 'vendor/autoload.php'; // Load PHPMailer
 
 use PHPMailer\PHPMailer\PHPMailer;
