@@ -2,7 +2,7 @@
 session_start();
 // If the user is already logged in, redirect to the dashboard
 if (isset($_SESSION["user"])) {
-    header("Location: User Interface/Dashboard.php");
+    header("Location: views/Dashboard.php");
     exit();
 }
 
@@ -25,7 +25,7 @@ if (isset($_POST["Login"])) {
             $_SESSION["user"] = "yes"; // Mark user as logged in
             $_SESSION["user_id"] = $user["user_id"]; // Store the user ID
             $_SESSION["name"] = $user["first_name"] . ' ' . $user["last_name"]; // Store full name          
-            header("Location: User Interface/Dashboard.php"); // Redirect to Dashboard
+            header("Location: views/Dashboard.php"); // Redirect to Dashboard
             exit();
         } else {
             $error_message = "Invalid email or password.";

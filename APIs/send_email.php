@@ -43,6 +43,6 @@ try {
 }
 
 // Redirect after submission
-header("Location: ../User Interface/report_submitted.php");
+header("Location: ../views/report_submitted.php");
 exit;
 ?>
